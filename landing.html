@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ReValue Hub | From Unused to Essential</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary-fixed-dim": "#ffb95f",
+                  "inverse-surface": "#2e3039",
+                  "primary-fixed-dim": "#b4c5ff",
+                  "tertiary-container": "#996100",
+                  "on-tertiary-container": "#ffeedd",
+                  "surface-container-lowest": "#ffffff",
+                  "primary": "#004ac6",
+                  "on-surface": "#191b23",
+                  "surface-dim": "#d9d9e5",
+                  "background": "#faf8ff",
+                  "on-background": "#191b23",
+                  "on-tertiary": "#ffffff",
+                  "on-error-container": "#93000a",
+                  "on-error": "#ffffff",
+                  "surface-variant": "#e1e2ed",
+                  "on-secondary-fixed-variant": "#005321",
+                  "secondary-fixed-dim": "#4ae176",
+                  "on-tertiary-fixed-variant": "#653e00",
+                  "error-container": "#ffdad6",
+                  "primary-fixed": "#dbe1ff",
+                  "inverse-on-surface": "#f0f0fb",
+                  "outline": "#737686",
+                  "outline-variant": "#c3c6d7",
+                  "surface-container-high": "#e7e7f3",
+                  "on-primary": "#ffffff",
+                  "inverse-primary": "#b4c5ff",
+                  "surface-container": "#ededf9",
+                  "secondary-fixed": "#6bff8f",
+                  "secondary": "#006e2f",
+                  "on-secondary": "#ffffff",
+                  "error": "#ba1a1a",
+                  "on-secondary-fixed": "#002109",
+                  "on-primary-fixed-variant": "#003ea8",
+                  "surface-bright": "#faf8ff",
+                  "on-surface-variant": "#434655",
+                  "tertiary": "#784b00",
+                  "on-tertiary-fixed": "#2a1700",
+                  "tertiary-fixed": "#ffddb8",
+                  "surface-container-low": "#f3f3fe",
+                  "surface-container-highest": "#e1e2ed",
+                  "on-primary-fixed": "#00174b",
+                  "surface": "#faf8ff",
+                  "on-secondary-container": "#007432",
+                  "surface-tint": "#0053db",
+                  "secondary-container": "#6bff8f"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "lg": "24px",
+                  "xs": "4px",
+                  "md": "16px",
+                  "2xl": "64px",
+                  "gutter": "24px",
+                  "base": "4px",
+                  "sm": "8px",
+                  "xl": "40px",
+                  "container-max": "1280px"
+          },
+          "fontFamily": {
+                  "label-md": ["Manrope"],
+                  "headline-lg": ["Manrope"],
+                  "body-md": ["Manrope"],
+                  "body-sm": ["Manrope"],
+                  "display-lg": ["Manrope"],
+                  "body-lg": ["Manrope"],
+                  "headline-xl": ["Manrope"],
+                  "label-sm": ["Manrope"],
+                  "headline-md": ["Manrope"]
+          },
+          "fontSize": {
+                  "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                  "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                  "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                  "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                  "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                  "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-effect {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .typing-cursor::after {
+      content: "";
+      display: inline-block;
+      width: 0.08em;
+      height: 0.95em;
+      margin-left: 0.08em;
+      background: currentColor;
+      vertical-align: -0.08em;
+      animation: typing-cursor-blink 0.9s steps(1) infinite;
+    }
+    @keyframes typing-cursor-blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar Section -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-2xl pb-xl">
+<div class="max-w-[1280px] mx-auto px-10 grid lg:grid-cols-2 gap-xl items-center">
+<div class="z-10">
+<span class="inline-block py-1 px-4 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-md">Sustainability First</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-md min-h-[160px] sm:min-h-[106px]" data-typing-phrases='["From unused to essential.","your old wardrobe can be someone new."]'>From unused to essential.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-xl">Join a community dedicated to revaluing items. Give your forgotten treasures a second life and help build a circular economy right in your neighborhood.</p>
+<div class="flex flex-wrap gap-md">
+<button onclick="window.location.href='browse.html'" class="bg-primary text-on-primary px-8 py-4 rounded-xl font-headline-md text-headline-md shadow-lg shadow-primary/20 hover:-translate-y-1 transition-all">Browse Items</button>
+<button onclick="window.location.href='list-item.html'" class="border-2 border-primary text-primary px-8 py-4 rounded-xl font-headline-md text-headline-md hover:bg-primary/5 transition-all">Start Donating</button>
+</div>
+<div class="mt-xl flex items-center gap-sm">
+<div class="flex -space-x-3">
+<img class="w-10 h-10 rounded-full border-2 border-white" data-alt="Close-up portrait of a cheerful young woman with curly hair, smiling broadly. The background is a soft, sunlit park setting, conveying a sense of happiness and community involvement. The lighting is golden-hour soft, highlighting her friendly expression and the vibrant, high-trust mood of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8OJq6Hxp_8T62kVPLMMbbqS09W1s81JuGmOy7-2nV7HIbIocJd8f5tCAEHQgp9AzXTK2mmmJDif_taX5-okL4ZmuEf7A82mf3UcXVNJpSSFkYxIqUc3d4ak3oGtvlvNX4W4e6Vkuf_6omzTFJ_ynrPL7D4RbObl167PncfN8kxMPsott5F1JpzZANuuhzmrVo6K9kbJZWADBtl6qFC677t6eu9b8clLllfcQwkvVFwqDF951dsYIh1jz4Sy59P8_RnkNYZB_5ADQ"/>
+<img class="w-10 h-10 rounded-full border-2 border-white" data-alt="Portrait of a smiling man in casual attire, looking directly at the camera with a confident yet approachable demeanor. The setting is a bright, modern interior with natural light pouring in from large windows. The overall aesthetic is clean, professional, and reflects the reliable nature of the ReValue community members." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVIfvI2s4_dCTEvohGmOhd6ucdNJPqd5H5D8ZSVXcbeqIaDclExITxTAKVSkb61DGrR1EmBD7XlOJTyVMpS_NEAgYmOgMSGnvC-qBcDRcpFHow_7ecimoC8Rdwon8VIOj9Vk0eGEVhzxHWU-NJZuXGrwCzk1hfc69LyOnQaCmmN1GsqHeNfXl0AHjuAdjKqdycXyvEGbFQ_pxeSsTrjiwHLKFkaTAN5WIJbNqiXAxOuJ3svBmF3xSbm-Gew06CKx1fAmcx8oChShA"/>
+<img class="w-10 h-10 rounded-full border-2 border-white" data-alt="Medium shot of a smiling professional woman with glasses, representing a diverse and engaged community member. The background is a minimalist, light-filled studio space. The visual style is crisp and high-resolution, emphasizing the high-end, sophisticated feel of the platform's user base." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_jSYV6gU6QP_KlNBjzC4facyMoT4X38Z7B2jhi3pSse6Gzb7I3IS4he0xe_TNAHiDJKo60xqiQvlAu4L3av6_HoPeqB-9ex9YYXZ8LJz70yL2BKpOpewWlFmA1X_GgdI9cBvq7UB9zsYBgDLJzpG1g2kYa-SchOaPZEqLpXDrWueYX3w02x8WrHZoxatEKentFPnB1OcXGYnNFzfAkpZPZ6LJQP7gSrpuYZAEFduCnXdsHS8YZFPngpq6hTac8P_g9ZqhacEnG8U"/>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant">Joined by 8.5k+ locals this month</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-10 -right-10 w-64 h-64 bg-secondary-fixed-dim/20 rounded-full blur-3xl animate-pulse"></div>
+<div class="absolute -bottom-10 -left-10 w-64 h-64 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+<img class="rounded-[32px] shadow-2xl relative z-10 w-full object-cover aspect-[4/3]" data-alt="A high-quality, candid photograph of a diverse group of neighbors happily exchanging a box of household items and a vintage lamp in a sunny, green suburban neighborhood. The lighting is bright and natural, creating a warm, inviting atmosphere. The style is modern lifestyle photography, capturing a genuine moment of community connection and sustainable living." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWKxodB9_Ttksj4P8P6Ax4K7dpvVHMww34KXRa34diJ4vVFqGpryXN7VkW-TeqTBDjotXH6XYCGwgK0m8fRokbg9IuVS005_MgzC_qq4C4e6BiOtMnsF12ikD59L0h1602H3akyVb8fLQokB1kwyFc2w1CFLINDEd6KXcGhKa3J4uvI5fGTpTWNc6pCQXK5Uf7aghJ9F6Vc7gFtf_yudqcMA1PdvXBLp-TltWIYyWCQyD_zDR2u8cmHtxybxZrTkxI7L7eQumtr7o"/>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-2xl bg-surface-container-lowest">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-sm">How ReValue Works</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl mx-auto">Three simple steps to reduce waste and strengthen your local community.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-lg">
+<div class="p-lg bg-white rounded-2xl border border-outline-variant hover:shadow-lg transition-all text-center">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mx-auto mb-md">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="add_box">add_box</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Post</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">List items you no longer use with a few clicks. Take a photo, add a description, and set it live.</p>
+</div>
+<div class="p-lg bg-white rounded-2xl border border-outline-variant hover:shadow-lg transition-all text-center">
+<div class="w-16 h-16 bg-secondary-fixed rounded-full flex items-center justify-center mx-auto mb-md">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="search_check">search_check</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Request</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">Browse essentials shared by neighbors. From furniture to tools, find what you need for free.</p>
+</div>
+<div class="p-lg bg-white rounded-2xl border border-outline-variant hover:shadow-lg transition-all text-center">
+<div class="w-16 h-16 bg-tertiary-fixed rounded-full flex items-center justify-center mx-auto mb-md">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="handshake">handshake</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Share</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">Arrange a secure pickup through our platform and complete the cycle of revaluing treasures.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Section (Bento Style) -->
+<section class="py-2xl">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Explore Categories</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Find exactly what you're looking for.</p>
+</div>
+<button onclick="window.location.href='browse.html'" class="text-primary font-label-md text-label-md flex items-center gap-xs hover:gap-sm transition-all">View all <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-md h-[500px]">
+<div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl cursor-pointer">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A beautifully styled home interior featuring modern furniture and soft lighting. The scene highlights premium furniture pieces like a sleek wooden coffee table and a minimalist sofa. The overall atmosphere is serene, high-end, and perfectly aligned with the ReValue Hub's aesthetic of professional yet warm living spaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4f83yGKrv7c7-0bfgp2ycKE2srMd0FytN5dTaA3XqR804zib_M9ZtNuYzfA3V4LuYthdImJII5_jXet_280-PzL-HkbcxzlwiwEXRG4iVuPaskmlExwya1v2EhIe4Yy8xyMt7R4C3E3ZC8d4rUmP26qZ2JSA73Q-fzRs_5UjxqmtMyeXdLPsJHuGI0ukjNtQZMKC1QnjdeAxSFvbEJo2ZYFUrGUxfE8yePRA6Z78ohXVupVg2YuZWnV_J1TydDhQ317LEL7Hwej0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+<div class="absolute bottom-6 left-6 text-white">
+<h3 class="font-headline-lg text-headline-lg">Home &amp; Garden</h3>
+<p class="font-body-sm text-body-sm opacity-90">2,400+ items available</p>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of modern gadgets and electronics, including a stylish watch and sleek headphones, arranged on a clean white surface. The lighting is crisp and bright, reflecting a high-tech, minimalist vibe. This image represents the electronics category with a focus on quality and modern design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjWm9dYJ4pLcPrsNeBN6UGPDQwvg-3ow2zE0sPTCIjzf2NiGvFqzUWvWVYAkK_9Jz3J0woqVG4xgwgT1bixXDTOwJ4zv373hpY0m2QZD7yWKJSQHpTcCw4-A2RuoTGK-WLNOxzxeDNc1L6jSS2p5yYpOqSjT3Vo9Fm4ThSKzz4WJW2ba_FV8PyvuAnM6IGLtz7Olw4vK2PJWk7GpeIDzQnnb4-t_UvbXCD_I2Q8Ie3xiXQlb_QS-mXqDbfbjUXzodT8cj_daW6Jqc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h3 class="font-headline-md text-headline-md">Electronics</h3>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A curated selection of high-quality apparel hanging on a wooden rack in a brightly lit boutique-style setting. The clothes are in soft neutral tones, emphasizing the brand's commitment to sustainable, high-value fashion exchanges within the community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP1B5DEBcIHccmyEKft3mBYm9rB77cE6oGUjQ8bOXqFzRe1eiAeo-OWd0FFKFQdat8CwZ4v-R2TYNrQh9fd_2WnRMGuAsEjXeE7y-r-hq_Ilio6WJIShpNGxUW9SP3gHH-ls_LXaQGxoqrrUWlhY8e0_WJKVYXOSsTlp0Y-O1lH3VeT-Rwkti0_v80hKrpBIoK8f1ntJPSs4Vs3B0-YwvkHXJlVMffbmGFFzLAlA4quvu_zrpLHT3QBPUVf8rKa6gztRNKOGIYJyY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h3 class="font-headline-md text-headline-md">Clothes</h3>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A cozy reading nook with stacks of hardcover books and a comfortable chair, illuminated by soft lamp light. The scene evokes a sense of knowledge sharing and community wisdom. The lighting is warm and inviting, highlighting the textures of the book spines and the peaceful atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA33j4bUC5jFoNg62EX2dyBw6QZvNonLgFhe5g7ZlLe_3Bkc58lOAw8Phs651l-iEk0SW0DqfIYG7PNbkfHnxFhmKaq8O-xtwQaB4hEh7BYb3jQZenZZ-Kw_-FLjWuwwriGGycMm1Uk7vDwVqmj1qbJjTRFzF-eX6p_E5M6ClaJNRY_qSoJt6sqGHcsay592oHbv_pNR9ytPcmZj2Ifp61jouTGaKxy6dYGnavr5TentTqjXaSZE8bphvvf1BJ-NEWb3SVPpnQPETA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h3 class="font-headline-md text-headline-md">Books &amp; Media</h3>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, minimalist arrangement of wellness products like yoga mats, essential oils, and organic supplements on a white wooden surface. The lighting is bright and natural, creating a peaceful and health-conscious vibe. This represents the health and personal care category with a focus on holistic well-being." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHX1k2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h3 class="font-headline-md text-headline-md">Health</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Items Grid -->
+<section class="py-2xl bg-surface-container-low">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Newly Listed Treasures</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Don't miss out on these local finds.</p>
+</div>
+          <div id="recent-items-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+            <!-- Dynamic items will load here -->
+          </div>
+</div>
+</section>
+<!-- Impact & Testimonials -->
+<section class="py-2xl">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="grid lg:grid-cols-2 gap-2xl items-center">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-md">Small acts, huge impact.</h2>
+<div class="grid grid-cols-2 gap-lg mt-xl">
+<div class="p-md rounded-2xl bg-primary-container text-on-primary-container">
+<p class="font-display-lg text-[40px]">12k+</p>
+<p class="font-label-md text-label-md opacity-90">Items Shared</p>
+</div>
+<div class="p-md rounded-2xl bg-secondary-container text-on-secondary-container">
+<p class="font-display-lg text-[40px]">8.5k</p>
+<p class="font-label-md text-label-md opacity-90">Members</p>
+</div>
+</div>
+</div>
+<div class="bg-white p-xl rounded-[32px] border border-outline-variant shadow-lg relative">
+<span class="material-symbols-outlined text-primary text-5xl absolute -top-6 -left-6 bg-white p-2 rounded-full" data-icon="format_quote" data-weight="fill">format_quote</span>
+<p class="font-body-lg text-body-lg text-on-surface mb-xl italic">"ReValue Hub has completely changed how I think about my 'clutter'. I've given away things I didn't need and found a beautiful desk for my home office. It's not just a platform; it's a neighborhood family."</p>
+<div class="flex items-center gap-md">
+<img class="w-14 h-14 rounded-full" data-alt="Close-up portrait of a thoughtful woman with a gentle smile, looking away from the camera. The setting is a cozy, naturally lit living room. The visual style is warm and authentic, emphasizing the real human connections and testimonials that form the heart of the ReValue community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-nLBmSXqNueOU_tU27kjlNGXFOgyZY94QlEeDHW_Gzs0-RR0oCv-K1xiad3_QjN73A-WLSAfps_OLHKmG5SwKpLpEHVgenw-frEJX0f7Dh4Iu_sW4Ytw8uq3h5MSzUX7xsTMFcLSvCEOgaV1pFga-BRJrufSVni07oOg9GllVPl5yOQ_w8G_NVQO1yOiqrGokpzoYKLf6tdOUMpnZvCHxwOWTaqSNG7VYANplXdzEN7XorsPB9O_I_bPVWizSAJ4CMpS_DKKOW3w"/>
+<div>
+<h4 class="font-headline-md text-headline-md">Sarah Jenkins</h4>
+<p class="text-label-md font-label-md text-on-surface-variant">Active Member since 2023</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-2xl">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="bg-primary rounded-[32px] p-2xl text-center text-on-primary relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+<h2 class="font-display-lg text-display-lg mb-md relative z-10">Ready to revalue your world?</h2>
+<p class="font-body-lg text-body-lg opacity-90 mb-xl max-w-xl mx-auto relative z-10">Join thousands of neighbors making the world a more sustainable place, one item at a time.</p>
+<div class="flex justify-center gap-md relative z-10">
+<button onclick="window.location.href='register.html'" class="bg-white text-primary px-8 py-4 rounded-xl font-headline-md text-headline-md hover:scale-105 transition-all">Create Free Account</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Section -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col md:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-sm">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="login.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how-it-works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety.html">Safety</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms.html">Terms</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy.html">Privacy</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+<script src="js/app.js?v=5"></script>
+</footer>
+</body></html>

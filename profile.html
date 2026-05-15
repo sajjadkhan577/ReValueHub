@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Profile | ReValue Hub</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#004ac6",
+                        "on-primary": "#ffffff",
+                        "surface": "#faf8ff",
+                        "on-surface": "#191b23",
+                        "surface-container": "#ededf9",
+                        "outline-variant": "#c3c6d7",
+                        "on-surface-variant": "#434655"
+                    },
+                    fontFamily: {
+                        "manrope": ["Manrope", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+    <!-- Header -->
+    <header class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+            <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary">
+                <img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-12 w-auto object-contain" />
+            </a>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='browse.html'" class="text-sm font-semibold hover:text-primary">Browse</button>
+                <div id="user-nav-avatar" class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant cursor-pointer">
+                    <img id="nav-avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ" alt="User avatar">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[1280px] mx-auto px-10 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            <!-- Left Profile Card -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white rounded-3xl p-8 border border-outline-variant shadow-sm text-center">
+                    <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6 border-4 border-primary/10">
+                        <img id="profile-avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ" alt="Profile image">
+                    </div>
+                    <h1 id="profile-name" class="text-2xl font-bold mb-2">User Name</h1>
+                    <p id="profile-joined" class="text-sm text-on-surface-variant mb-6">Joined May 2024</p>
+                    <div class="flex items-center justify-center gap-1 text-primary font-bold mb-6">
+                        <span class="material-symbols-outlined text-sm">stars</span>
+                        <span>Verified Donor</span>
+                    </div>
+                    <button class="w-full py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Message</button>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 border border-outline-variant shadow-sm">
+                    <h3 class="font-bold mb-4">About</h3>
+                    <p id="profile-bio" class="text-on-surface-variant text-sm leading-relaxed">This user hasn't added a bio yet.</p>
+                </div>
+            </div>
+
+            <!-- Right Items List -->
+            <div class="lg:col-span-3 space-y-8">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Active Listings</h2>
+                    <p class="text-on-surface-variant">Items currently being donated by this user</p>
+                </div>
+                <div id="profile-items-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dynamic items will load here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = new URLSearchParams(window.location.search).get('id');
+            if (!userId) return window.location.href = 'browse.html';
+            
+            try {
+                const data = await apiRequest(`profile?id=${userId}`);
+                renderProfile(data);
+            } catch (err) {
+                console.error(err);
+                alert('User not found');
+                window.location.href = 'browse.html';
+            }
+        });
+
+        function renderProfile(data) {
+            const { user, items } = data;
+            document.getElementById('profile-name').textContent = user.name;
+            document.getElementById('profile-joined').textContent = `Joined ${new Date(user.joined_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`;
+            document.getElementById('profile-avatar').src = user.avatar || DEFAULT_AVATAR;
+            document.getElementById('profile-bio').textContent = user.bio || `${user.name} is a valued member of the ReValue community.`;
+            
+            const grid = document.getElementById('profile-items-grid');
+            if (items.length === 0) {
+                grid.innerHTML = '<p class="text-on-surface-variant">No active listings found.</p>';
+            } else {
+                grid.innerHTML = items.map(item => itemCard(item)).join('');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+RewriteEngine On
+
+# Pass Authorization Header to PHP
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Redirect to add .php if the file exists
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Prevent directory listing
+Options -Indexes
+
+# Redirect old filenames to new ones
+Redirect 301 "/Admin dashboard.html" "/admin-dashboard.html"
+Redirect 301 "/User dashboard.html" "/dashboard.html"
+Redirect 301 "/Landing page.html" "/landing.html"
+Redirect 301 "/Login page.html" "/login.html"
+Redirect 301 "/Register page.html" "/register.html"
+Redirect 301 "/List new item.html" "/list-item.html"
+Redirect 301 "/Browse items.html" "/browse.html"
+Redirect 301 "/Item detail.html" "/item-detail.html"
+Redirect 301 "/Discovery feed.html" "/discovery.html"
+Redirect 301 "/How it works.html" "/how-it-works.html"
+Redirect 301 "/Our Mission.html" "/mission.html"

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Dashboard | ReValue Hub</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#434655",
+                    "on-secondary-fixed-variant": "#005321",
+                    "on-surface": "#191b23",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#006e2f",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f0fb",
+                    "surface-tint": "#0053db",
+                    "inverse-primary": "#b4c5ff",
+                    "primary": "#004ac6",
+                    "on-secondary-fixed": "#002109",
+                    "inverse-surface": "#2e3039",
+                    "secondary-container": "#6bff8f",
+                    "surface-dim": "#d9d9e5",
+                    "secondary-fixed-dim": "#4ae176",
+                    "error": "#ba1a1a",
+                    "tertiary": "#784b00",
+                    "surface-bright": "#faf8ff",
+                    "error-container": "#ffdad6",
+                    "background": "#faf8ff",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "surface-variant": "#e1e2ed",
+                    "outline": "#737686",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-tertiary-container": "#ffeedd",
+                    "surface-container-low": "#f3f3fe",
+                    "surface": "#faf8ff",
+                    "on-primary-fixed": "#00174b",
+                    "outline-variant": "#c3c6d7",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-container-highest": "#e1e2ed",
+                    "secondary-fixed": "#6bff8f",
+                    "on-secondary-container": "#007432",
+                    "surface-container": "#ededf9",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary": "#ffffff",
+                    "primary-container": "#2563eb",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "tertiary-container": "#996100",
+                    "on-primary-container": "#eeefff",
+                    "on-background": "#191b23",
+                    "tertiary-fixed-dim": "#ffb95f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "2xl": "64px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-md": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "display-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F8FAFC;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-50 bg-white border-r border-slate-200 shadow-xl flex flex-col p-6 space-y-2">
+<div class="mb-8">
+<a href="landing.html"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<p class="text-slate-500 font-label-sm">Community Marketplace</p>
+</div>
+<nav id="dashboard-nav" class="flex-grow space-y-2">
+<a class="nav-link flex items-center gap-3 bg-blue-50 text-blue-600 font-bold rounded-lg px-4 py-3 transition-all" href="#" onclick="showSection('dashboard', this)">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="nav-link flex items-center gap-3 text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg px-4 py-3 transition-all" href="#" onclick="showSection('donations', this)">
+<span class="material-symbols-outlined" data-icon="volunteer_activism">volunteer_activism</span>
+<span class="font-label-md">My Donations</span>
+</a>
+<a class="nav-link flex items-center gap-3 text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg px-4 py-3 transition-all" href="#" onclick="showSection('requests', this)">
+<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-label-md">My Requests</span>
+</a>
+<a class="nav-link flex items-center gap-3 text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg px-4 py-3 transition-all" href="#" onclick="showSection('history', this)">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md">History</span>
+</a>
+<a class="nav-link flex items-center gap-3 text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg px-4 py-3 transition-all" href="#" onclick="showSection('settings', this)">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200 shadow-sm flex justify-between items-center h-16 px-6">
+<div class="flex items-center bg-slate-100 rounded-full px-4 py-2 w-96">
+<span class="material-symbols-outlined text-slate-400 mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-slate-400" placeholder="Search for items..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button onclick="window.location.href='list-item.html'" class="text-blue-600 font-manrope text-sm font-medium hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors active:scale-95 duration-200">
+                    Create Listing
+                </button>
+<div class="flex gap-2">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full cursor-pointer transition-colors" aria-label="Open notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<span class="material-symbols-outlined p-2 text-slate-500 hover:bg-slate-50 rounded-full cursor-pointer transition-colors" data-icon="help_outline">help_outline</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 overflow-hidden">
+<img alt="User avatar" data-user-avatar class="w-full h-full object-cover" src=""/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-lg max-w-[1280px] mx-auto">
+
+<!-- Dashboard Section -->
+<div id="dashboard-section" class="dashboard-view space-y-2xl">
+    <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-lg">
+        <div class="flex items-center gap-lg">
+            <div class="w-20 h-20 rounded-full bg-blue-100 border border-blue-200 overflow-hidden shrink-0">
+                <img data-user-avatar alt="User avatar" class="w-full h-full object-cover" src=""/>
+            </div>
+            <div>
+                <h2 id="welcome-name" class="font-headline-xl text-blue-900">Welcome back</h2>
+                <p class="text-body-lg text-slate-500">Here's what's happening with your community contributions.</p>
+            </div>
+        </div>
+    </section>
+    <!-- Status Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+        <div class="bg-white p-lg rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-slate-500 font-label-md uppercase">Total Items Donated</p>
+            <h3 class="text-display-lg font-extrabold text-blue-900">42</h3>
+        </div>
+        <div class="bg-white p-lg rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-slate-500 font-label-md uppercase">Active Requests</p>
+            <h3 class="text-display-lg font-extrabold text-blue-900">07</h3>
+        </div>
+        <div class="bg-white p-lg rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-slate-500 font-label-md uppercase">Impact Points</p>
+            <h3 class="text-display-lg font-extrabold text-blue-900">1,240</h3>
+        </div>
+    </section>
+    <!-- Recent Activity Summary -->
+    <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-lg">
+        <h4 class="font-headline-lg text-blue-900 mb-4">Recent Activity</h4>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <tbody id="dashboard-activity-tbody" class="divide-y divide-slate-100">
+                    <!-- Dynamic Content -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<!-- Donations Section -->
+<section id="donations-section" class="dashboard-view hidden space-y-lg">
+    <h4 class="font-headline-lg text-blue-900">My Donations</h4>
+    <div id="user-items-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <!-- Dynamic Content -->
+    </div>
+</section>
+
+<!-- Requests Section -->
+<section id="requests-section" class="dashboard-view hidden space-y-lg">
+    <h4 class="font-headline-lg text-blue-900">My Requests</h4>
+    <div id="user-requests-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <!-- Dynamic Content -->
+    </div>
+</section>
+
+<!-- History Section -->
+<section id="history-section" class="dashboard-view hidden space-y-lg">
+    <h4 class="font-headline-lg text-blue-900">Activity History</h4>
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-slate-50 border-b border-slate-100">
+                <tr>
+                    <th class="px-lg py-4 font-label-md text-slate-500 uppercase">Activity</th>
+                    <th class="px-lg py-4 font-label-md text-slate-500 uppercase">Status</th>
+                    <th class="px-lg py-4 font-label-md text-slate-500 uppercase">Date</th>
+                </tr>
+            </thead>
+            <tbody id="history-tbody" class="divide-y divide-slate-100">
+                <!-- Dynamic Content -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Settings Section -->
+<section id="settings-section" class="dashboard-view hidden space-y-2xl">
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-lg">
+        <h3 class="font-headline-lg text-blue-900 mb-8">Profile Settings</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-lg items-start">
+            <div class="flex items-start gap-lg">
+                <div class="relative shrink-0">
+                    <img id="profile-avatar-preview" data-user-avatar alt="User avatar" class="w-32 h-32 rounded-full object-cover border-4 border-blue-50 shadow-sm" src=""/>
+                    <button id="profile-avatar-button" type="button" class="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+                    </button>
+                    <input id="profile-avatar-input" type="file" accept="image/*" hidden/>
+                </div>
+                <div>
+                    <h2 id="user-name" class="font-headline-xl text-blue-900">User Profile</h2>
+                    <p class="text-body-lg text-slate-500">Update your photo and personal details.</p>
+                </div>
+            </div>
+            <form id="profile-form" class="grid grid-cols-1 gap-md">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2" for="profile-name">Name</label>
+                    <input id="profile-name" name="name" class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring-blue-500" type="text" required/>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2" for="profile-email">Email</label>
+                    <input id="profile-email" name="email" class="w-full rounded-lg border-slate-200 focus:border-blue-500 focus:ring-blue-500" type="email" required/>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button type="submit" class="bg-blue-600 text-white font-label-md py-3 px-5 rounded-lg shadow-sm hover:bg-blue-700 active:scale-95 transition-all">Save Changes</button>
+                    <p id="profile-status" class="hidden text-sm text-green-700 font-semibold"></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-lg right-lg bg-primary-container text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50" onclick="window.location.href='list-item.html'" aria-label="List new item">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<script src="js/app.js?v=6"></script>
+</body></html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>How it Works - ReValue Hub</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#004ac6",
+                        "surface-container-low": "#f3f3fe",
+                        "on-surface": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "surface-container": "#ededf9",
+                        "outline-variant": "#c3c6d7",
+                    },
+                    fontFamily: {
+                        "body-md": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#faf8ff] text-[#191b23]">
+    <header class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+            <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-slate-600 hover:text-blue-600 font-semibold text-sm" href="browse.html">Browse</a>
+            </nav>
+            <button onclick="window.location.href='login.html'" class="bg-[#004ac6] text-white px-6 py-2.5 rounded-lg text-sm font-semibold">Donate</button>
+        </div>
+    </header>
+
+    <main class="max-w-[800px] mx-auto px-10 py-20 min-h-screen">
+        <h1 class="text-4xl font-extrabold mb-8">How it Works</h1>
+        <div class="space-y-6 text-lg text-slate-600">
+            <p>ReValue Hub is designed to make sharing items within your community simple and secure.</p>
+            <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4">1. Create an Account</h2>
+            <p>Sign up using your email. A verified account ensures trust and safety within our community network.</p>
+            <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4">2. List or Request Items</h2>
+            <p>Got something you don't need? List it in minutes! Need something for a short time? Browse and request it from a neighbor.</p>
+            <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Connect & Exchange</h2>
+            <p>Once a request is accepted, you can securely message the donor and arrange a safe pick-up location.</p>
+        </div>
+    </main>
+
+    <footer class="bg-slate-50 py-16 border-t border-slate-200 text-center">
+        <p class="text-slate-500 text-sm">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+    </footer>
+    <script src="js/app.js"></script>
+</body>
+</html>

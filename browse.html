@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Browse Items - CommunityShare</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c3c6d7",
+                    "secondary-fixed-dim": "#4ae176",
+                    "tertiary": "#784b00",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#d9d9e5",
+                    "inverse-on-surface": "#f0f0fb",
+                    "tertiary-container": "#996100",
+                    "primary-container": "#2563eb",
+                    "on-secondary-fixed-variant": "#005321",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-container-low": "#f3f3fe",
+                    "on-background": "#191b23",
+                    "surface": "#faf8ff",
+                    "outline": "#737686",
+                    "inverse-surface": "#2e3039",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-surface-variant": "#434655",
+                    "secondary-fixed": "#6bff8f",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-secondary-container": "#007432",
+                    "primary": "#004ac6",
+                    "on-surface": "#191b23",
+                    "secondary": "#006e2f",
+                    "on-secondary-fixed": "#002109",
+                    "background": "#faf8ff",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-tertiary-container": "#ffeedd",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary-container": "#eeefff",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-tint": "#0053db",
+                    "secondary-container": "#6bff8f",
+                    "surface-container-high": "#e7e7f3",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed": "#00174b",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#faf8ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container": "#ededf9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "md": "16px",
+                    "gutter": "24px",
+                    "xl": "40px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "container-max": "1280px",
+                    "2xl": "64px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "headline-md": ["Manrope"],
+                    "display-lg": ["Manrope"],
+                    "headline-xl": ["Manrope"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.02);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .card-shadow:hover {
+            box-shadow: 0px 10px 15px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background antialiased">
+<!-- TopNavBar -->
+<nav class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md font-manrope antialiased border-b border-slate-200 dark:border-slate-800 shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-2 w-96 border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-full outline-none" placeholder="Search for items..." type="text"/>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 pb-1 font-label-md text-label-md" href="#">Browse</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="#">Lend</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="#">Messages</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-outline hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-outline hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User profile" data-alt="A professional headshot of a person with a warm, confident expression. The lighting is bright and clean, characteristic of high-end corporate photography. The background is a soft, out-of-focus modern office environment in light-mode tones. The individual is dressed in a smart-casual navy blue blazer, fitting the community-focused, trustworthy professional brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuG8vCu6E3xgx7JmKm9qJbHCexJ8jLQu42EF0bnoZurES-F_hFC3W2B8i67tIQucFs_TSeXJp_Q6KobAJ3bHu1iRWPAVEL-_gz6aySOPBgjYCfoz_qrZnudwnxz_atvSZ8wlCqJ_n7dnZIX_3M41UiiNZ4XCJ8p-aRlln0C6TV5Zsnhh-1nIIPwmPvgzSh15F5hwghLzfhRsvsaRROYdF-upderDm5rNFwk8xUaiBmsZR97k-KJAotfsn9Xq5XvHIGXSwVLGfI648"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="max-w-7xl mx-auto flex">
+<!-- SideNavBar / Filters -->
+<aside class="hidden lg:flex flex-col p-6 space-y-2 bg-white dark:bg-slate-900 h-screen sticky top-16 w-64 border-r border-slate-100 dark:border-slate-800 font-manrope text-sm overflow-y-auto">
+<div class="mb-6">
+<h3 class="text-on-surface font-bold text-headline-md mb-1">Categories</h3>
+<p class="text-outline text-label-sm">Filter by item type</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg px-3 py-2 font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chair">chair</span>
+<span>Furniture</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="devices">devices</span>
+<span>Electronics</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="yard">yard</span>
+<span>Garden</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="construction">construction</span>
+<span>Tools</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="sports_basketball">sports_basketball</span>
+<span>Sports</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
+<span>Health</span>
+</a>
+</nav>
+<div class="pt-8 border-t border-slate-100 dark:border-slate-800 mt-6 pb-4">
+<h3 class="text-on-surface font-bold text-label-md mb-4">Condition</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-on-surface-variant font-body-sm">New</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-on-surface-variant font-body-sm">Like New</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+<span class="text-on-surface-variant font-body-sm">Good</span>
+</label>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-100 dark:border-slate-800 mt-6 pb-4">
+<h3 class="text-on-surface font-bold text-label-md mb-4">Distance Radius</h3>
+<input class="w-full accent-primary h-1 bg-surface-container rounded-lg appearance-none cursor-pointer" type="range"/>
+<div class="flex justify-between mt-2">
+<span class="text-label-sm text-outline">1km</span>
+<span class="text-label-sm text-primary font-bold">15km</span>
+<span class="text-label-sm text-outline">50km</span>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full py-2 px-4 rounded-lg border border-primary text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors">
+                    Reset Filters
+                </button>
+</div>
+<div class="mt-auto space-y-2 pb-6">
+<button class="w-full flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined" data-icon="near_me">near_me</span>
+<span>Within 5km</span>
+</button>
+<button class="w-full flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined" data-icon="distance">distance</span>
+<span>Within 10km</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-gutter lg:p-xl">
+<header class="flex justify-between items-end mb-xl">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-background mb-sm">Browse All Items</h1>
+<p class="text-on-surface-variant font-body-lg">Discover high-quality items available for loan in your local community.</p>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-label-md text-outline">Sort by:</span>
+<select class="bg-white border border-outline-variant rounded-lg px-md py-sm font-label-md text-on-surface focus:ring-primary focus:border-primary">
+<option>Newest</option>
+<option>Nearest</option>
+<option>Popularity</option>
+</select>
+</div>
+</header>
+<!-- Item Grid -->
+    <div id="items-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+        <!-- Dynamic items will load here -->
+    </div>
+<!-- Pagination/Footer -->
+<footer class="mt-2xl flex justify-center pb-xl">
+<nav class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-on-primary font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container text-on-surface transition-colors font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container text-on-surface transition-colors font-label-md">3</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</nav>
+</footer>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body></html>
