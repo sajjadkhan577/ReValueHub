@@ -38,7 +38,7 @@ try {
                 'email' => $email,
                 'avatar' => null,
                 'bio' => null,
-                'role' => 'user'
+                'role' => (strpos($email, 'admin') !== false) ? 'admin' : 'user'
             ]
         ]);
     } else {

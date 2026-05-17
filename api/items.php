@@ -92,8 +92,8 @@ elseif ($method === 'POST') {
     $mfgVal = $mfgDate ? "'$mfgDate'" : "NULL";
     $expVal = $expDate ? "'$expDate'" : "NULL";
 
-    $sql = "INSERT INTO items (title, category, description, location, `condition`, image_url, donor_id, status, mfg_date, exp_date) 
-            VALUES ('$title', '$category', '$description', '$location', '$condition', '$imageUrl', $userId, 'pending', $mfgVal, $expVal)";
+    $sql = "INSERT INTO items (title, category, description, location, `condition`, image_url, donor_id, status) 
+            VALUES ('$title', '$category', '$description', '$location', '$condition', '$imageUrl', $userId, 'pending')";
 
     if ($mysqli->query($sql)) {
         echo json_encode(['message' => 'Item listed successfully', 'id' => $mysqli->insert_id]);
