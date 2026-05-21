@@ -7,9 +7,14 @@ $configs = [
 
 $mysqli = null;
 foreach ($configs as $c) {
-    $mysqli = @new mysqli($c['host'], $c['user'], $c['pass'], $c['db']);
-    if (!$mysqli->connect_error) {
-        break;
+    try {
+        $mysqli = @new mysqli($c['host'], $c['user'], $c['pass'], $c['db']);
+        if (!$mysqli->connect_error) {
+            break;
+        }
+    } catch (mysqli_sql_exception $e) {
+        $mysqli = null;
+        continue;
     }
 }
 

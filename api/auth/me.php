@@ -17,7 +17,7 @@ $authHeader = getAuthHeader();
 
 if (preg_match('/Bearer (?:dummy-token-)?(\d+)/', $authHeader, $matches)) {
     $userId = $matches[1];
-    $result = $mysqli->query("SELECT id, name, email FROM users WHERE id = " . intval($userId));
+    $result = $mysqli->query("SELECT id, name, email, avatar, bio FROM users WHERE id = " . intval($userId));
     if ($result) {
         $user = $result->fetch_assoc();
         

@@ -630,6 +630,7 @@ function setupSearchAndFilters() {
 
 async function loadItems(containerId, filters = {}) {
   const container = document.getElementById(containerId);
+  console.log('loadItems called for', containerId);
   if (!container) return;
 
   try {
@@ -642,6 +643,23 @@ async function loadItems(containerId, filters = {}) {
     }
 
     container.innerHTML = items.map(itemCard).join('');
+    console.log(`loaded ${items.length} items into ${containerId}`);
+
+    // Add delegated click handler so clicking anywhere on a card navigates to details
+    if (!container._cardClickHandlerInstalled) {
+      container.addEventListener('click', (e) => {
+        // ignore clicks on interactive elements
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+        const card = e.target.closest('[data-item-id]');
+        if (card) {
+          const id = card.getAttribute('data-item-id');
+          console.log('card clicked, id=', id);
+          if (id) window.location.href = `item-detail.html?id=${encodeURIComponent(id)}`;
+        }
+      });
+      container._cardClickHandlerInstalled = true;
+      console.log('installed card click delegation on', containerId);
+    }
   } catch (err) {
     container.innerHTML = '<p class="col-span-full text-center text-error">Error loading items.</p>';
   }
@@ -650,7 +668,7 @@ async function loadItems(containerId, filters = {}) {
 function itemCard(item) {
   const condition = escapeHtml((item.condition || 'good').replace('_', ' '));
   return `
-    <div class="bg-white rounded-2xl overflow-hidden border border-outline-variant hover:shadow-xl transition-all group flex flex-col h-full">
+    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-2xl overflow-hidden border border-outline-variant hover:shadow-xl transition-all group flex flex-col h-full no-underline text-inherit cursor-pointer">
       <div class="relative h-56 shrink-0">
         <span class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-label-sm font-label-sm text-primary z-10">${condition}</span>
         <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
@@ -663,16 +681,16 @@ function itemCard(item) {
           <span class="material-symbols-outlined text-sm">location_on</span> ${escapeHtml(item.location)}
         </p>
         <p class="text-body-sm font-body-sm text-on-surface-variant mb-md line-clamp-2">${escapeHtml(item.description || '')}</p>
-        
+
         <div class="mt-auto pt-md border-t border-outline-variant flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="${escapeHtml(item.donor_avatar || DEFAULT_AVATAR)}" class="w-8 h-8 rounded-full object-cover border border-primary/10">
             <span class="text-xs font-bold text-on-surface truncate max-w-[100px]">${escapeHtml(item.donor_name || 'Donor')}</span>
           </div>
-          <a href="item-detail.html?id=${item.id}" class="bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold hover:opacity-90 transition-all">View</a>
+          <span class="bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold">View</span>
         </div>
       </div>
-    </div>
+    </a>
   `;
 }
 
@@ -730,7 +748,7 @@ function renderItemDetail(item, isFallback = false) {
   
   const viewProfileBtn = document.getElementById('view-profile-btn');
   if (viewProfileBtn && item.donor_id) {
-    viewProfileBtn.onclick = () => redirect(`profile.html?id=${item.donor_id}`);
+    viewProfileBtn.onclick = () => redirect(`profile.html?userId=${item.donor_id}`);
   }
 
   document.getElementById('detail-condition').textContent = (item.condition || 'good').replace('_', ' ');
@@ -817,6 +835,18 @@ async function loadUserDashboard() {
         <span class="font-label-md">List New Item</span>
       </a>
     `;
+    // Delegated click handler for the user items grid
+    if (!container._cardClickHandlerInstalled) {
+      container.addEventListener('click', (e) => {
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+        const card = e.target.closest('[data-item-id]');
+        if (card) {
+          const id = card.getAttribute('data-item-id');
+          if (id) window.location.href = `item-detail.html?id=${encodeURIComponent(id)}`;
+        }
+      });
+      container._cardClickHandlerInstalled = true;
+    }
   } catch (err) {
     console.error('Error loading dashboard items:', err);
   }
@@ -902,7 +932,7 @@ function updateDashboardCounts(count) {
 
 function userItemCard(item) {
   return `
-    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all">
+    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all no-underline text-inherit">
       <div class="h-48 relative overflow-hidden">
         <img alt="${escapeHtml(item.title)}" class="w-full h-full object-cover" src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}">
         <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-600 shadow-sm">${escapeHtml(item.category)}</div>
@@ -914,13 +944,13 @@ function userItemCard(item) {
           <span class="text-body-sm">${escapeHtml(item.location)}</span>
         </div>
         <div class="flex gap-2">
-          <a href="item-detail.html?id=${item.id}" class="flex-grow bg-blue-50 text-blue-600 font-label-md py-2 rounded-lg hover:bg-blue-100 transition-colors text-center">Details</a>
+          <span class="flex-grow bg-blue-50 text-blue-600 font-label-md py-2 rounded-lg text-center">Details</span>
           <button onclick="deleteItem(${item.id})" class="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-error hover:border-error transition-colors">
             <span class="material-symbols-outlined" data-icon="delete">delete</span>
           </button>
         </div>
       </div>
-    </div>
+    </a>
   `;
 }
 

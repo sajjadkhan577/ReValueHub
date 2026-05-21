@@ -3,6 +3,12 @@ require_once 'db.php';
 header('Content-Type: application/json');
 
 $id = intval($_GET['id'] ?? 0);
+if (!$id && isset($_GET['userId'])) {
+    $id = intval($_GET['userId']);
+}
+if (!$id && isset($_GET['userid'])) {
+    $id = intval($_GET['userid']);
+}
 
 if (!$id) {
     http_response_code(400);

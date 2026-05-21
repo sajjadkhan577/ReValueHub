@@ -356,16 +356,20 @@
 </main>
 
 <!-- Item Detail Modal -->
-<div id="item-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+<div id="item-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden overflow-y-auto py-6 px-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[calc(100vh-4rem)]">
         <div class="relative h-64">
             <img id="modal-item-image" class="w-full h-full object-cover" src="assets/placeholder.png">
             <button onclick="closeItemModal()" class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-md transition-colors">
                 <span class="material-symbols-outlined">close</span>
             </button>
+            <button onclick="closeItemModal()" class="absolute top-4 left-4 inline-flex items-center gap-2 bg-white/90 text-slate-700 hover:text-slate-900 px-3 py-2 rounded-full shadow-sm transition-colors backdrop-blur-md">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Back to items
+            </button>
         </div>
-        <div class="p-8 space-y-6">
-            <div class="flex justify-between items-start">
+        <div class="p-8 space-y-6 overflow-y-auto">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                 <div>
                     <h3 id="modal-item-title" class="text-2xl font-bold text-slate-900 dark:text-white">Item Title</h3>
                     <p id="modal-item-category" class="text-primary font-bold text-sm uppercase tracking-wider mt-1">Category</p>
@@ -378,7 +382,7 @@
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Description</label>
                     <textarea id="modal-item-desc" class="w-full rounded-xl border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-sm h-24 focus:ring-primary"></textarea>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Location</label>
                         <input id="modal-item-location" type="text" class="w-full rounded-xl border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-sm">
@@ -390,7 +394,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button id="modal-approve-btn" class="flex-1 bg-secondary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-md shadow-secondary/20">Approve</button>
                 <button id="modal-save-btn" class="flex-1 bg-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-md shadow-primary/20">Save Changes</button>
                 <button id="modal-delete-btn" class="flex-1 bg-error/10 text-error py-3 rounded-xl font-bold hover:bg-error hover:text-white transition-all">Delete</button>

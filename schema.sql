@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     status ENUM('Active','Flagged','Pending') DEFAULT 'Active',
+    avatar VARCHAR(255) DEFAULT NULL,
+    bio TEXT DEFAULT NULL,
     joined_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
