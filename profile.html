@@ -63,7 +63,7 @@
                         <span class="material-symbols-outlined text-sm">stars</span>
                         <span>Verified Donor</span>
                     </div>
-                    <button class="w-full py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Message</button>
+                    <button id="message-profile-btn" class="w-full py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Message</button>
                     <button data-action="logout" class="w-full mt-4 py-3 bg-slate-200 text-slate-900 rounded-xl font-bold hover:bg-slate-300 transition-all">Logout</button>
                 </div>
 
@@ -111,6 +111,17 @@
             document.getElementById('profile-joined').textContent = `Joined ${new Date(user.joined_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`;
             document.getElementById('profile-avatar').src = user.avatar || DEFAULT_AVATAR;
             document.getElementById('profile-bio').textContent = user.bio || `${user.name} is a valued member of the ReValue community.`;
+            
+            const msgBtn = document.getElementById('message-profile-btn');
+            if (msgBtn) {
+                msgBtn.onclick = () => {
+                    if (typeof openMessageModal === 'function') {
+                        openMessageModal(user.id, user.name);
+                    } else {
+                        alert('Messaging system is initializing...');
+                    }
+                };
+            }
             
             const grid = document.getElementById('profile-items-grid');
                         if (items.length === 0) {

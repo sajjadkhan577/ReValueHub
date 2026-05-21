@@ -282,41 +282,212 @@ function placePopup(anchor, popup) {
   popup.style.zIndex = '80';
 }
 
-function toggleNotificationPopup(anchor) {
+async function toggleNotificationPopup(anchor) {
   const existing = document.getElementById('notification-popup');
   closeFloatingPopups();
   if (existing) return;
 
-  const count = document.querySelectorAll('#user-requests-tbody tr').length || 0;
   const popup = document.createElement('div');
   popup.id = 'notification-popup';
   popup.dataset.floatingPopup = 'true';
-  popup.className = 'w-80 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-slate-900';
+  popup.className = 'w-80 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-slate-900 z-50';
+  
   popup.innerHTML = `
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-bold text-blue-900">Notifications</h3>
-      <span class="text-xs font-bold text-blue-600 bg-blue-50 rounded-full px-2 py-1">${count} updates</span>
+      <span id="notif-popup-count" class="text-xs font-bold text-blue-600 bg-blue-50 rounded-full px-2 py-1">Loading...</span>
     </div>
-    <div class="space-y-3">
-      <div class="flex gap-3">
-        <span class="material-symbols-outlined text-blue-600 bg-blue-50 rounded-lg p-2 h-10">inventory_2</span>
-        <div>
-          <p class="text-sm font-semibold">Your listings are visible</p>
-          <p class="text-xs text-slate-500">People can request items from your active posts.</p>
+    <div id="notif-list-container" class="space-y-3 max-h-60 overflow-y-auto">
+      <p class="text-xs text-slate-400 text-center py-4">Fetching updates...</p>
+    </div>
+  `;
+  
+  popup.addEventListener('click', (e) => e.stopPropagation());
+  placePopup(anchor, popup);
+  
+  if (!token) {
+    const container = document.getElementById('notif-list-container');
+    if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Join ReValue Hub to see notifications.</p>';
+    const countSpan = document.getElementById('notif-popup-count');
+    if (countSpan) countSpan.textContent = '0 updates';
+    return;
+  }
+  
+  try {
+    const notifs = await apiRequest('notifications');
+    const container = document.getElementById('notif-list-container');
+    const countSpan = document.getElementById('notif-popup-count');
+    
+    const unreadNotifs = notifs.filter(n => !n.is_read);
+    if (countSpan) countSpan.textContent = `${unreadNotifs.length} new`;
+    
+    if (!notifs.length) {
+      container.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-6 text-slate-400">
+          <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">notifications_off</span>
+          <p class="text-xs font-semibold">You're all caught up!</p>
         </div>
+      `;
+      return;
+    }
+    
+    container.innerHTML = notifs.map(notif => {
+      const isUnread = !notif.is_read;
+      let icon = 'notifications';
+      let iconBg = 'bg-blue-50 text-blue-600';
+      if (notif.message.toLowerCase().includes('message')) {
+        icon = 'mail';
+        iconBg = 'bg-orange-50 text-orange-600';
+      } else if (notif.message.toLowerCase().includes('request')) {
+        icon = 'inventory_2';
+        iconBg = 'bg-green-50 text-green-700';
+      } else if (notif.message.toLowerCase().includes('profile')) {
+        icon = 'person';
+        iconBg = 'bg-purple-50 text-purple-600';
+      }
+      
+      const timeStr = formatDate(notif.created_at);
+      
+      return `
+        <div class="flex gap-3 items-start p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer ${isUnread ? 'bg-blue-50/30 font-semibold' : ''}" onclick="markNotificationRead(${notif.id}, this)">
+          <span class="material-symbols-outlined rounded-lg p-2 h-10 ${iconBg}">${icon}</span>
+          <div class="flex-grow min-w-0">
+            <p class="text-xs text-slate-800 leading-tight">${escapeHtml(notif.message)}</p>
+            <p class="text-[10px] text-slate-400 mt-1">${timeStr}</p>
+          </div>
+          ${isUnread ? '<span class="w-2.5 h-2.5 rounded-full bg-blue-600 mt-2 shrink-0"></span>' : ''}
+        </div>
+      `;
+    }).join('');
+    
+    if (unreadNotifs.length > 0) {
+      const markAllBtn = document.createElement('button');
+      markAllBtn.className = 'w-full text-center text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline pt-2 mt-2 border-t border-slate-100 block';
+      markAllBtn.textContent = 'Mark all as read';
+      markAllBtn.onclick = async () => {
+        for (const notif of unreadNotifs) {
+          await apiRequest('notifications', {
+            method: 'POST',
+            body: JSON.stringify({ id: notif.id })
+          }).catch(console.error);
+        }
+        checkNotifications();
+        closeFloatingPopups();
+      };
+      container.appendChild(markAllBtn);
+    }
+    
+  } catch (err) {
+    console.error('Error rendering notification popup:', err);
+    const container = document.getElementById('notif-list-container');
+    if (container) container.innerHTML = '<p class="text-xs text-error text-center py-4">Error loading updates.</p>';
+  }
+}
+
+window.markNotificationRead = async (id, element) => {
+  try {
+    await apiRequest('notifications', {
+      method: 'POST',
+      body: JSON.stringify({ id })
+    });
+    element.classList.remove('bg-blue-50/30', 'font-semibold');
+    const dot = element.querySelector('.bg-blue-600');
+    if (dot) dot.remove();
+    checkNotifications();
+    
+    const text = element.querySelector('p')?.textContent || '';
+    if (text.toLowerCase().includes('message')) {
+      closeFloatingPopups();
+      redirect('messages.html');
+    }
+  } catch (err) {
+    console.error('Failed to mark notification read:', err);
+  }
+};
+
+function openMessageModal(receiverId, receiverName, itemId = null) {
+  if (!token) {
+    alert('Join ReValue Hub to message members! Please create an account to continue.');
+    return redirect('register.html');
+  }
+  
+  if (currentUser && parseInt(receiverId) === parseInt(currentUser.id)) {
+    alert('This listing belongs to you!');
+    return;
+  }
+
+  const oldModal = document.getElementById('message-dialog-modal');
+  if (oldModal) oldModal.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'message-dialog-modal';
+  modal.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4';
+  modal.innerHTML = `
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform scale-95 transition-all duration-300 flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center px-8 py-6 border-b border-slate-100">
+        <h3 class="font-bold text-lg text-slate-800">Message ${escapeHtml(receiverName)}</h3>
+        <button onclick="closeMessageModal()" class="material-symbols-outlined text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors">close</button>
       </div>
-      <div class="flex gap-3">
-        <span class="material-symbols-outlined text-green-700 bg-green-50 rounded-lg p-2 h-10">person</span>
-        <div>
-          <p class="text-sm font-semibold">Profile ready</p>
-          <p class="text-xs text-slate-500">Keep your name, email and photo updated for trust.</p>
-        </div>
+      <div class="px-8 py-6">
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Compose message</label>
+        <textarea id="modal-message-text" class="w-full h-32 px-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm placeholder:text-slate-400" placeholder="Hello! I am interested in your item..."></textarea>
+      </div>
+      <div class="px-8 py-5 bg-slate-50 flex justify-end gap-3 border-t border-slate-100">
+        <button onclick="closeMessageModal()" class="px-5 py-2.5 text-slate-500 font-semibold rounded-xl hover:bg-slate-100 transition-colors text-sm">Cancel</button>
+        <button id="modal-send-btn" onclick="submitMessageModal(${receiverId}, ${itemId ? itemId : 'null'})" class="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all text-sm flex items-center gap-2">
+          Send Message
+          <span class="material-symbols-outlined text-sm">send</span>
+        </button>
       </div>
     </div>
   `;
-  popup.addEventListener('click', (e) => e.stopPropagation());
-  placePopup(anchor, popup);
+
+  document.body.appendChild(modal);
+  document.getElementById('modal-message-text')?.focus();
+  modal.onclick = closeMessageModal;
 }
+
+window.openMessageModal = openMessageModal;
+
+window.closeMessageModal = () => {
+  const modal = document.getElementById('message-dialog-modal');
+  if (modal) modal.remove();
+};
+
+window.submitMessageModal = async (receiverId, itemId) => {
+  const textarea = document.getElementById('modal-message-text');
+  const message = textarea?.value.trim();
+  if (!message) {
+    return alert('Please write a message before sending.');
+  }
+
+  const sendBtn = document.getElementById('modal-send-btn');
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = 'Sending... <span class="material-symbols-outlined text-sm animate-spin">sync</span>';
+  }
+
+  try {
+    await apiRequest('messages', {
+      method: 'POST',
+      body: JSON.stringify({
+        receiver_id: receiverId,
+        message: message,
+        item_id: itemId
+      })
+    });
+    
+    closeMessageModal();
+    redirect(`messages.html?userId=${receiverId}`);
+  } catch (err) {
+    console.error('Error sending modal message:', err);
+    alert(err.message || 'Failed to send message. Please try again.');
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = 'Send Message <span class="material-symbols-outlined text-sm">send</span>';
+    }
+  }
+};
 
 function toggleProfilePopup(anchor) {
   const existing = document.getElementById('profile-popup');
@@ -749,6 +920,11 @@ function renderItemDetail(item, isFallback = false) {
   const viewProfileBtn = document.getElementById('view-profile-btn');
   if (viewProfileBtn && item.donor_id) {
     viewProfileBtn.onclick = () => redirect(`profile.html?userId=${item.donor_id}`);
+  }
+
+  const messageDonorBtn = document.getElementById('message-donor-btn');
+  if (messageDonorBtn && item.donor_id) {
+    messageDonorBtn.onclick = () => openMessageModal(item.donor_id, item.donor_name, item.id);
   }
 
   document.getElementById('detail-condition').textContent = (item.condition || 'good').replace('_', ' ');

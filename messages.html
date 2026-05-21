@@ -1,86 +1,444 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Messages | ReValue Hub</title>
+<title>Inbox Messages | ReValue Hub</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#004ac6",
+            "on-primary": "#ffffff",
+            "surface": "#faf8ff",
+            "on-surface": "#191b23",
+            "surface-container": "#ededf9",
+            "outline-variant": "#c3c6d7",
+            "on-surface-variant": "#434655"
+          },
+          fontFamily: {
+            "manrope": ["Manrope", "sans-serif"]
+          }
+        }
+      }
+    }
+</script>
+<style>
+    body { font-family: 'Manrope', sans-serif; }
+    /* Hide scrollbar utility */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 </head>
-<body class="bg-white text-slate-900 antialiased">
-<div class="min-h-screen flex flex-col">
-<header class="border-b border-slate-200 py-6">
-<div class="max-w-[1280px] mx-auto px-10 flex flex-wrap items-center justify-between gap-4">
-<a href="browse.html" class="flex items-center gap-3"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-10" /><span class="font-semibold text-lg">ReValue Hub</span></a>
-<nav class="flex flex-wrap items-center gap-6 text-sm font-medium text-slate-600">
-<a href="browse.html" class="hover:text-blue-600 transition-colors">Browse</a>
-<a href="lend.html" class="hover:text-blue-600 transition-colors">Lend</a>
-<a href="messages.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1">Messages</a>
-<a href="community.html" class="hover:text-blue-600 transition-colors">Community</a>
-</nav>
-</div>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+  <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+    <div class="flex items-center gap-8">
+      <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary">
+        <img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-12 w-auto object-contain" />
+      </a>
+      <nav class="hidden md:flex items-center gap-6">
+        <a class="text-slate-600 hover:text-primary font-manrope font-medium text-sm transition-colors" href="browse.html">Browse</a>
+        <a class="text-primary border-b-2 border-primary font-semibold pb-1 font-manrope text-sm" href="messages.html">Messages</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="relative material-symbols-outlined p-2 text-on-surface-variant hover:bg-slate-100 rounded-lg transition-all duration-200">
+        notifications
+        <span id="notif-badge" class="absolute top-1.5 right-1.5 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+      </button>
+      <button class="bg-primary text-on-primary px-5 py-2 rounded-xl font-semibold text-sm hover:opacity-90 transition-all active:scale-95">Donate</button>
+      <div id="nav-avatar-container" class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant cursor-pointer">
+        <img id="nav-avatar-img" alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ"/>
+      </div>
+    </div>
+  </div>
 </header>
-<main class="flex-1">
-<section class="max-w-[1080px] mx-auto px-10 py-16">
-<div class="text-center">
-<p class="text-sm uppercase tracking-[0.3em] text-blue-600 font-semibold">Conversations</p>
-<h1 class="mt-4 text-4xl font-extrabold text-slate-900">Stay in touch with your fellow community members.</h1>
-<p class="mt-6 text-lg leading-8 text-slate-600">Manage requests, coordinate pickups, and keep every item exchange clear with secure messaging designed for the ReValue community.</p>
-</div>
-<div class="mt-12 grid gap-8 lg:grid-cols-2">
-<div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-<h2 class="text-xl font-semibold text-slate-900">No messages yet?</h2>
-<p class="mt-4 text-slate-600">When someone requests one of your shared items, their message will appear here. Until then, browse items and keep your lending profile updated.</p>
-</div>
-<div class="rounded-3xl border border-slate-200 bg-slate-50 p-8">
-<h2 class="text-xl font-semibold text-slate-900">How to send a message</h2>
-<ul class="mt-4 space-y-4 text-slate-600">
-<li>1. Browse item listings.</li>
-<li>2. Open the item detail page.</li>
-<li>3. Use the contact button to request a loan or ask questions.</li>
-</ul>
-</div>
-</div>
-</section>
+
+<!-- Main Workspace (Inbox Split View) -->
+<main class="flex-1 max-w-[1280px] w-full mx-auto px-10 py-8 flex flex-col">
+  <div class="flex-1 bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm flex min-h-[600px] h-[calc(100vh-12rem)]">
+    
+    <!-- Left Sidebar: Active Conversations List -->
+    <div class="w-full md:w-80 lg:w-96 border-r border-slate-100 flex flex-col bg-slate-50/50">
+      <div class="p-6 border-b border-slate-100 bg-white flex items-center justify-between">
+        <h1 class="text-xl font-bold text-slate-800">Inbox Messages</h1>
+        <span id="unread-conversations-badge" class="hidden text-xs bg-orange-500 text-white font-bold rounded-full px-2.5 py-0.5 shadow-sm">0 new</span>
+      </div>
+      
+      <!-- Conversations scroll area -->
+      <div id="conversations-list" class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
+        <!-- Dynamic conversations list will render here -->
+        <p class="text-xs text-slate-400 text-center py-12">Loading conversations...</p>
+      </div>
+    </div>
+    
+    <!-- Right Sidebar: Selected Active Chat Pane -->
+    <div id="chat-pane" class="hidden md:flex flex-1 flex-col bg-white">
+      <!-- Active Chat Header -->
+      <div class="p-6 border-b border-slate-100 bg-white flex items-center justify-between shadow-sm shadow-slate-100/30">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img id="chat-header-avatar" class="w-11 h-11 rounded-full object-cover border border-slate-100" src="" alt="Active partner" />
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+          </div>
+          <div>
+            <h2 id="chat-header-name" class="font-bold text-slate-800 text-base leading-tight">Chat Partner</h2>
+            <p class="text-xs text-slate-400 font-medium">ReValue Community Member</p>
+          </div>
+        </div>
+        
+        <!-- Actions (Close or Info) -->
+        <button onclick="closeActiveChat()" class="md:hidden material-symbols-outlined p-2 hover:bg-slate-100 rounded-full text-slate-500">arrow_back</button>
+      </div>
+      
+      <!-- Messages List area -->
+      <div id="messages-container" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30 no-scrollbar">
+        <!-- Dynamic chat history bubbles will render here -->
+      </div>
+      
+      <!-- Send Message form -->
+      <form id="message-form" class="p-4 border-t border-slate-100 bg-white flex gap-3 items-center">
+        <textarea id="message-input" class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none h-12 no-scrollbar placeholder:text-slate-400" placeholder="Type a message..."></textarea>
+        <button type="submit" class="bg-primary text-white p-3 rounded-2xl hover:opacity-95 shadow-md shadow-primary/15 active:scale-95 transition-all flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-xl">send</span>
+        </button>
+      </form>
+    </div>
+    
+    <!-- Empty State Placeholder (Visible when no chat is open) -->
+    <div id="chat-empty-state" class="flex-1 flex flex-col items-center justify-center text-center p-8 bg-white">
+      <div class="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center text-primary mb-6 shadow-sm">
+        <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'wght' 300;">chat_bubble_outline</span>
+      </div>
+      <h2 class="text-xl font-bold text-slate-800 mb-2">Your Conversations</h2>
+      <p class="text-sm text-slate-400 max-w-sm leading-relaxed">Select a conversation from the list to view listings detail, coordinate item collection or reply to questions.</p>
+    </div>
+
+  </div>
 </main>
-<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800">
-<div class="max-w-[1280px] mx-auto px-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 text-sm text-slate-600 dark:text-slate-300">
-<div>
-<img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-10 mb-4" />
-<p class="max-w-sm text-slate-500 dark:text-slate-400">Empowering neighborhood sharing with thoughtful lending, trustworthy connections, and sustainable reuse.</p>
-</div>
-<div>
-<h4 class="font-bold text-slate-900 dark:text-white mb-4">Platform</h4>
-<ul class="space-y-3">
-<li><a class="hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="lend.html">Donate / Lend</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="how-it-works.html">How it Works</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold text-slate-900 dark:text-white mb-4">Community</h4>
-<ul class="space-y-3">
-<li><a class="hover:text-blue-600 transition-colors" href="community.html">Community</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="mission.html">Our Mission</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="guidelines.html">Guidelines</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="safety.html">Safety</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold text-slate-900 dark:text-white mb-4">Legal</h4>
-<ul class="space-y-3">
-<li><a class="hover:text-blue-600 transition-colors" href="terms.html">Terms</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="privacy.html">Privacy</a></li>
-</ul>
-</div>
-</div>
-<div class="max-w-[1280px] mx-auto px-10 mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400">
-<p>© 2026 ReValue Hub. Built for sustainable communities and trusted sharing.</p>
-</div>
-</footer>
+
 <script src="js/app.js"></script>
+<script>
+let activePartnerId = null;
+let activePartnerName = '';
+let activePartnerAvatar = '';
+let messagePolling = null;
+const DEFAULT_AVATAR = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Wait briefly to let App Auth complete
+    setTimeout(async () => {
+        if (!localStorage.getItem('token')) {
+            alert('Please login or create an account to access messages.');
+            window.location.href = 'register.html';
+            return;
+        }
+        
+        // Load initial inbox conversations
+        await loadInbox();
+        
+        // 2. Check for redirect query parameters (?userId=X)
+        const params = new URLSearchParams(window.location.search);
+        const queryUserId = params.get('userId');
+        if (queryUserId) {
+            const partnerId = parseInt(queryUserId);
+            // Verify if we already have this conversation loaded
+            const existing = document.querySelector(`[data-chat-partner-id="${partnerId}"]`);
+            if (existing) {
+                existing.click();
+            } else {
+                // If it's a new conversation, fetch partner's public info to initialize the screen
+                try {
+                    const res = await fetch(`api/profile.php?id=${partnerId}`);
+                    const data = await res.json();
+                    if (res.ok && data.user) {
+                        setupTemporaryChatPartner(data.user);
+                    }
+                } catch (e) {
+                    console.error('Failed to pre-load chat user info:', e);
+                }
+            }
+        }
+        
+        // 3. Set up polling interval for real-time messages
+        messagePolling = setInterval(pollInboxAndActiveThread, 3000);
+    }, 400);
+
+    // 4. Form submission handler
+    const form = document.getElementById('message-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await handleSendMessage();
+    });
+
+    // Handle enter key on textarea to send message (instead of manual newline)
+    const textarea = document.getElementById('message-input');
+    textarea.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.requestSubmit();
+        }
+    });
+});
+
+async function loadInbox() {
+    try {
+        const inbox = await apiRequest('messages');
+        const listContainer = document.getElementById('conversations-list');
+        const totalUnreadBadge = document.getElementById('unread-conversations-badge');
+        
+        if (!inbox.length) {
+            // Keep pending chat if loaded
+            if (activePartnerId && !inbox.some(c => c.partner.id === activePartnerId)) {
+                // It means we have a temporary chat active, don't clear completely
+            } else {
+                listContainer.innerHTML = `
+                    <div class="text-center py-16 px-4">
+                        <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">forum</span>
+                        <p class="text-xs text-slate-400 font-medium">No messages yet.</p>
+                        <p class="text-[10px] text-slate-400 max-w-[180px] mx-auto mt-1">When someone requests an item or answers a question, it will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+        }
+        
+        let totalUnread = 0;
+        let html = '';
+        
+        // If we have an active temporary partner not in inbox yet, keep it at top
+        if (activePartnerId && !inbox.some(c => c.partner.id === activePartnerId)) {
+            html += renderConversationItem({
+                partner: {
+                    id: activePartnerId,
+                    name: activePartnerName,
+                    avatar: activePartnerAvatar
+                },
+                latest_message: 'Draft message...',
+                unread_count: 0,
+                created_at: new Date().toISOString()
+            }, true);
+        }
+        
+        inbox.forEach(conv => {
+            totalUnread += conv.unread_count;
+            html += renderConversationItem(conv, activePartnerId === conv.partner.id);
+        });
+        
+        listContainer.innerHTML = html;
+        
+        if (totalUnread > 0) {
+            totalUnreadBadge.textContent = `${totalUnread} new`;
+            totalUnreadBadge.classList.remove('hidden');
+        } else {
+            totalUnreadBadge.classList.add('hidden');
+        }
+    } catch (e) {
+        console.error('Failed to load inbox:', e);
+    }
+}
+
+function renderConversationItem(conv, isActive) {
+    const avatar = conv.partner.avatar || DEFAULT_AVATAR;
+    const activeClass = isActive ? 'bg-blue-50 border-blue-100 shadow-sm' : 'bg-white border-slate-100 hover:bg-slate-50/70';
+    const fontClass = conv.unread_count > 0 ? 'font-bold text-slate-900' : 'text-slate-500';
+    const unreadBadge = conv.unread_count > 0 ? `
+        <span class="w-5 h-5 bg-orange-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center shrink-0 shadow-sm">${conv.unread_count}</span>
+    ` : '';
+    
+    // Parse time
+    let timeStr = '';
+    if (conv.created_at) {
+        const d = new Date(conv.created_at);
+        timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Truncate latest message
+    const msgPreview = conv.latest_message ? conv.latest_message.substring(0, 45) + (conv.latest_message.length > 45 ? '...' : '') : '';
+    
+    return `
+        <div onclick="selectConversation(${conv.partner.id}, '${escapeHtml(conv.partner.name)}', '${avatar}')" 
+             data-chat-partner-id="${conv.partner.id}"
+             class="flex gap-3.5 p-4 rounded-2xl border transition-all cursor-pointer items-start ${activeClass}">
+            <img class="w-11 h-11 rounded-full object-cover border border-slate-100 shadow-sm" src="${avatar}" alt="${escapeHtml(conv.partner.name)}" />
+            <div class="flex-grow min-w-0">
+                <div class="flex justify-between items-baseline mb-1">
+                    <h4 class="text-sm font-bold text-slate-800 truncate">${escapeHtml(conv.partner.name)}</h4>
+                    <span class="text-[10px] text-slate-400 font-medium whitespace-nowrap">${timeStr}</span>
+                </div>
+                <p class="text-xs truncate ${fontClass} leading-tight">${escapeHtml(msgPreview)}</p>
+            </div>
+            ${unreadBadge}
+        </div>
+    `;
+}
+
+function setupTemporaryChatPartner(user) {
+    activePartnerId = user.id;
+    activePartnerName = user.name;
+    activePartnerAvatar = user.avatar || DEFAULT_AVATAR;
+    
+    // Switch views to show chat pane
+    document.getElementById('chat-empty-state').classList.add('hidden');
+    document.getElementById('chat-pane').classList.remove('hidden');
+    
+    // Set active header
+    document.getElementById('chat-header-name').textContent = activePartnerName;
+    document.getElementById('chat-header-avatar').src = activePartnerAvatar;
+    
+    // Render blank message stream
+    const container = document.getElementById('messages-container');
+    container.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+            <span class="material-symbols-outlined text-4xl mb-2 text-slate-300">chat</span>
+            <p class="text-xs font-semibold">Start your conversation!</p>
+            <p class="text-[10px] text-slate-400 mt-1">Send a message to introduce yourself and coordinate exchanges.</p>
+        </div>
+    `;
+    
+    loadInbox();
+}
+
+async function selectConversation(partnerId, name, avatar) {
+    activePartnerId = partnerId;
+    activePartnerName = name;
+    activePartnerAvatar = avatar;
+    
+    // Display Chat area, hide empty placeholder
+    document.getElementById('chat-empty-state').classList.add('hidden');
+    document.getElementById('chat-pane').classList.remove('hidden');
+    
+    // Set active partner header
+    document.getElementById('chat-header-name').textContent = name;
+    document.getElementById('chat-header-avatar').src = avatar;
+    
+    // Highlight list item in sidebar
+    document.querySelectorAll('[data-chat-partner-id]').forEach(item => {
+        const itemPartnerId = parseInt(item.getAttribute('data-chat-partner-id'));
+        if (itemPartnerId === partnerId) {
+            item.className = item.className.replace(/bg-white border-slate-100 hover:bg-slate-50\/70/g, 'bg-blue-50 border-blue-100 shadow-sm');
+            // Remove unread indicators immediately
+            const unreadBadge = item.querySelector('.bg-orange-500');
+            if (unreadBadge) unreadBadge.remove();
+        } else {
+            // Restore normal style if not active
+            if (!item.className.includes('bg-white')) {
+                item.className = item.className.replace(/bg-blue-50 border-blue-100 shadow-sm/g, 'bg-white border-slate-100 hover:bg-slate-50\/70');
+            }
+        }
+    });
+
+    await fetchActiveThread();
+}
+
+async function fetchActiveThread() {
+    if (!activePartnerId) return;
+    try {
+        const thread = await apiRequest(`messages?userId=${activePartnerId}`);
+        const container = document.getElementById('messages-container');
+        
+        if (!thread.length) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+                    <span class="material-symbols-outlined text-4xl mb-2 text-slate-300">chat</span>
+                    <p class="text-xs font-semibold">No messages in this chat thread.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        thread.forEach(msg => {
+            const isMe = msg.sender_id === currentUser.id;
+            const bubbleClass = isMe 
+                ? 'bg-primary text-white rounded-l-2xl rounded-tr-2xl' 
+                : 'bg-slate-100 text-slate-800 rounded-r-2xl rounded-tl-2xl';
+            const alignClass = isMe ? 'justify-end' : 'justify-start';
+            const textClass = isMe ? 'text-right' : 'text-left';
+            
+            const time = new Date(msg.created_at);
+            const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            html += `
+                <div class="flex ${alignClass} w-full">
+                    <div class="max-w-[70%] flex flex-col">
+                        <div class="px-5 py-3 text-sm shadow-sm ${bubbleClass} leading-relaxed break-words">
+                            ${escapeHtml(msg.message)}
+                        </div>
+                        <span class="text-[9px] text-slate-400 mt-1 font-semibold px-2 ${textClass}">${timeStr}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Cache scroll height before render
+        const wasAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+        
+        container.innerHTML = html;
+        
+        // Auto scroll to bottom
+        if (wasAtBottom || container.innerHTML.length < 500) {
+            container.scrollTop = container.scrollHeight;
+        }
+    } catch (e) {
+        console.error('Failed to load chat thread:', e);
+    }
+}
+
+async function handleSendMessage() {
+    const input = document.getElementById('message-input');
+    const messageText = input.value.trim();
+    if (!messageText || !activePartnerId) return;
+    
+    // Clear input immediately to make it feel fast
+    input.value = '';
+    
+    try {
+        await apiRequest('messages', {
+            method: 'POST',
+            body: JSON.stringify({
+                receiver_id: activePartnerId,
+                message: messageText
+            })
+        });
+        
+        // Refresh conversations & thread list
+        await fetchActiveThread();
+        await loadInbox();
+    } catch (e) {
+        console.error('Failed to send message:', e);
+        alert('Failed to send message. Please try again.');
+        input.value = messageText; // Restore text
+    }
+}
+
+function closeActiveChat() {
+    activePartnerId = null;
+    document.getElementById('chat-pane').classList.add('hidden');
+    document.getElementById('chat-empty-state').classList.remove('hidden');
+    loadInbox();
+}
+
+async function pollInboxAndActiveThread() {
+    // 1. Sync active inbox listing
+    await loadInbox();
+    
+    // 2. If thread is open, sync active chat messages
+    if (activePartnerId) {
+        await fetchActiveThread();
+    }
+}
+</script>
 </body>
 </html>
