@@ -1,18 +1,20 @@
 // ReValue Hub application glue. It attaches behavior to the existing HTML only.
 const API_BASE = 'api';
-const PLACEHOLDER_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD4f83yGKrv7c7-0bfgp2ycKE2srMd0FytN5dTaA3XqR804zib_M9ZtNuYzfA3V4LuYthdImJII5_jXet_280-PzL-HkbcxzlwiwEXRG4iVuPaskmlExwya1v2EhIe4Yy8xyMt7R4C3E3ZC8d4rUmP26qZ2JSA73Q-fzRs_5UjxqmtMyeXdLPsJHuGI0ukjNtQZMKC1QnjdeAxSFvbEJo2ZYFUrGUxfE8yePRA6Z78ohXVupVg2YuZWnV_J1TydDhQ317LEL7Hwej0';
-const DEFAULT_AVATAR = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ';
+const PLACEHOLDER_IMAGE = 'assets/logo.png?v=2';
+const DEFAULT_AVATAR = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%23f8fafc%22/%3E%3Ccircle cx=%2240%22 cy=%2224%22 r=%2214%22 fill=%22%23cbd5e1%22/%3E%3Cpath d=%22M24 60c0-10 12-13 16-13s16 3 16 13%22 stroke=%22%239ca3af%22 stroke-width=%226%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E';
 
 
 let currentUser = null;
 let selectedImageFiles = [];
 let token = localStorage.getItem('token');
 let profileAvatarFile = null;
+let previousNotificationCount = null;
 
 document.addEventListener('DOMContentLoaded', initApp);
 
 async function initApp() {
   await checkAuth();
+  insertGlobalHeaderFooter();
   setupNav();
   setupHeaderActions();
   setupForms();
@@ -157,7 +159,7 @@ async function apiRequest(endpoint, options = {}) {
   const url = `${API_BASE}/${phpEndpoint}`;
   console.log(`API Request: ${url}`);
 
-  const res = await fetch(url, { ...options, headers });
+  const res = await fetch(url, { cache: 'no-store', ...options, headers });
   if (res.status === 204) return null;
 
   const data = await res.json().catch(() => ({}));
@@ -166,13 +168,17 @@ async function apiRequest(endpoint, options = {}) {
 }
 
 async function checkAuth() {
-  if (!token) return updateUI();
+  if (!token) {
+    localStorage.removeItem('profileAvatar');
+    return updateUI();
+  }
   try {
     const res = await apiRequest('auth/me');
     currentUser = res.user;
   } catch (err) {
     setToken(null);
     currentUser = null;
+    localStorage.removeItem('profileAvatar');
   }
   updateUI();
 }
@@ -196,8 +202,105 @@ function updateUI() {
 }
 
 function getUserAvatar() {
+  if (!currentUser) return DEFAULT_AVATAR;
   const localAvatar = localStorage.getItem('profileAvatar');
-  return currentUser?.avatar || localAvatar || DEFAULT_AVATAR;
+  return currentUser.avatar || localAvatar || DEFAULT_AVATAR;
+}
+
+function insertGlobalHeaderFooter() {
+  const page = window.location.pathname.toLowerCase();
+  if (page.includes('dashboard.html') || page.includes('admin-dashboard.html')) return;
+
+  const headerHtml = `
+    <header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none">
+      <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+        <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+          <div class="relative group">
+            <input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+          </div>
+        </nav>
+        <div class="flex items-center gap-6">
+          <div class="flex gap-4">
+            <button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+          </div>
+          <button type="button" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+          <button type="button" data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-sm">
+            <img alt="User avatar" data-alt="A professional headshot of a friendly community member" src="${DEFAULT_AVATAR}" class="w-full h-full object-cover" />
+          </button>
+        </div>
+      </div>
+    </header>
+  `;
+
+  const footerHtml = `
+    <footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800">
+      <div class="max-w-[1280px] mx-auto px-10 flex flex-col md:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+        <div class="max-w-sm">
+          <img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+          <p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+          <div class="flex gap-4">
+            <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+              <span class="material-symbols-outlined text-sm">public</span>
+            </a>
+            <a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#">
+              <span class="material-symbols-outlined text-sm">share</span>
+            </a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="login.html">Donate</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how-it-works.html">How it Works</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission.html">Our Mission</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="guidelines.html">Guidelines</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety.html">Safety</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms.html">Terms</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy.html">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+        <p class="text-slate-500 dark:text-slate-400">© 2026 ReValue Hub. Empowering communities through sustainable sharing.</p>
+      </div>
+    </footer>
+  `;
+
+  const existingHeader = document.querySelector('header') || document.querySelector('nav');
+  const headerContainer = document.createElement('div');
+  headerContainer.innerHTML = headerHtml;
+  const newHeader = headerContainer.firstElementChild;
+  if (existingHeader) {
+    existingHeader.replaceWith(newHeader);
+  } else {
+    document.body.insertBefore(newHeader, document.body.firstChild);
+  }
+
+  const existingFooter = document.querySelector('footer');
+  const footerContainer = document.createElement('div');
+  footerContainer.innerHTML = footerHtml;
+  const newFooter = footerContainer.firstElementChild;
+  if (existingFooter) {
+    existingFooter.replaceWith(newFooter);
+  } else {
+    document.body.appendChild(newFooter);
+  }
 }
 
 function setupNav() {
@@ -251,8 +354,13 @@ function setupNotifications() {
 }
 
 function setupProfileMenu() {
+  const seenTriggers = new Set();
+
   document.querySelectorAll('img[alt*="User avatar"], img[alt*="User profile"], [data-profile-trigger]').forEach((avatar) => {
     const trigger = avatar.closest('button') || avatar.parentElement || avatar;
+    if (seenTriggers.has(trigger)) return;
+    seenTriggers.add(trigger);
+
     trigger.classList.add('cursor-pointer');
     trigger.setAttribute('role', 'button');
     trigger.setAttribute('tabindex', '0');
@@ -498,16 +606,34 @@ function toggleProfilePopup(anchor) {
   popup.id = 'profile-popup';
   popup.dataset.floatingPopup = 'true';
   popup.className = 'w-72 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-slate-900';
-  popup.innerHTML = `
-    <div class="flex items-center gap-3 mb-4">
-      <img src="${escapeHtml(getUserAvatar())}" alt="Profile avatar" class="w-12 h-12 rounded-full object-cover border border-blue-100">
-      <div>
-        <p class="text-sm font-bold">${escapeHtml(currentUser?.name || 'Guest user')}</p>
-        <p class="text-xs text-slate-500">${escapeHtml(currentUser?.email || 'Sign in to manage profile')}</p>
+  if (currentUser) {
+    popup.innerHTML = `
+      <div class="flex items-center gap-3 mb-4">
+        <img src="${escapeHtml(getUserAvatar())}" alt="Profile avatar" class="w-12 h-12 rounded-full object-cover border border-blue-100">
+        <div>
+          <p class="text-sm font-bold">${escapeHtml(currentUser.name)}</p>
+          <p class="text-xs text-slate-500">${escapeHtml(currentUser.email || 'Profile member')}</p>
+        </div>
       </div>
-    </div>
-    <a href="dashboard.html#profile-panel" class="block text-center bg-blue-600 text-white rounded-lg py-2 text-sm font-semibold">Open Profile</a>
-  `;
+      <a href="dashboard.html#profile-panel" class="block text-center bg-blue-600 text-white rounded-lg py-2 text-sm font-semibold">Open Profile</a>
+    `;
+  } else {
+    popup.innerHTML = `
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+          <span class="material-symbols-outlined">person</span>
+        </div>
+        <div>
+          <p class="text-sm font-bold">Welcome to ReValue Hub</p>
+          <p class="text-xs text-slate-500">Sign in or create an account to start donating and messaging neighbors.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <a href="login.html" class="block text-center bg-slate-900 text-white rounded-lg py-2 text-sm font-semibold">Sign in</a>
+        <a href="register.html" class="block text-center bg-blue-50 text-blue-700 rounded-lg py-2 text-sm font-semibold hover:bg-blue-100">Create Account</a>
+      </div>
+    `;
+  }
   popup.addEventListener('click', (e) => e.stopPropagation());
   placePopup(anchor, popup);
 }
@@ -540,6 +666,7 @@ async function logout() {
   }
   setToken(null);
   currentUser = null;
+  localStorage.removeItem('profileAvatar');
   redirect('landing.html');
 }
 
@@ -765,7 +892,7 @@ function setupSearchAndFilters() {
   if (!decodeURIComponent(window.location.pathname).includes('browse.html')) return;
 
   const searchInput = document.querySelector('nav input[placeholder*="Search"]');
-  const categoryLinks = document.querySelectorAll('aside nav a');
+  const categoryLinks = document.querySelectorAll('aside nav a[data-category]');
   const resetButton = Array.from(document.querySelectorAll('aside button')).find((btn) => btn.textContent.trim().toLowerCase().includes('reset'));
   const state = { search: '', category: '', location: '' };
   let timer;
@@ -780,10 +907,27 @@ function setupSearchAndFilters() {
     });
   }
 
+  const updateCategoryHighlight = (activeCategory = '') => {
+    categoryLinks.forEach((link) => {
+      const isActive = (link.dataset.category || '') === activeCategory;
+      link.classList.toggle('bg-blue-50', isActive);
+      link.classList.toggle('dark:bg-blue-900/20', isActive);
+      link.classList.toggle('text-blue-700', isActive);
+      link.classList.toggle('dark:text-blue-300', isActive);
+      link.classList.toggle('text-slate-500', !isActive);
+      link.classList.toggle('dark:text-slate-400', !isActive);
+      link.classList.toggle('hover:bg-slate-50', !isActive);
+      link.classList.toggle('dark:hover:bg-slate-800', !isActive);
+    });
+  };
+
+  updateCategoryHighlight(state.category);
+
   categoryLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      state.category = link.textContent.trim().toLowerCase().replace('garden', 'home').replace('tools', 'other');
+      state.category = link.dataset.category || '';
+      updateCategoryHighlight(state.category);
       loadItems('items-grid', state);
     });
   });
@@ -794,6 +938,7 @@ function setupSearchAndFilters() {
       state.category = '';
       state.location = '';
       if (searchInput) searchInput.value = '';
+      updateCategoryHighlight('');
       loadItems('items-grid');
     });
   }
@@ -872,7 +1017,7 @@ async function loadItemDetail() {
   if (!itemId) return redirect('browse.html');
 
   try {
-    const item = await apiRequest(`items?id=${itemId}`);
+    const item = await apiRequest(`items?id=${encodeURIComponent(itemId)}&t=${Date.now()}`);
     renderItemDetail(item);
     
     const requestBtn = document.getElementById('request-btn');
@@ -891,7 +1036,7 @@ async function loadItemDetail() {
 async function requestItem(itemId) {
   if (!token) {
     alert('Join ReValue Hub to request items! Please create an account to continue.');
-    return redirect('register.html');
+    return redirect('login.html');
   }
 
   try {
@@ -906,10 +1051,12 @@ async function requestItem(itemId) {
 }
 
 function renderItemDetail(item, isFallback = false) {
-  document.getElementById('detail-title').textContent = item.title;
-  document.getElementById('detail-category').textContent = item.category;
-  document.getElementById('detail-description').textContent = item.description;
-  document.getElementById('detail-location').textContent = item.location;
+  document.getElementById('detail-title').textContent = item.title || 'Item details';
+  document.getElementById('detail-breadcrumb-current').textContent = item.title || 'Item details';
+  document.getElementById('detail-category').textContent = item.category || 'Category';
+  document.getElementById('detail-status-chip').textContent = (item.condition || 'good').replace('_', ' ');
+  document.getElementById('detail-description').textContent = item.description || 'No description provided yet.';
+  document.getElementById('detail-location').textContent = item.location || 'Location shared after request is accepted.';
   document.getElementById('detail-owner').textContent = item.donor_name || 'ReValue member';
   
   const donorAvatar = document.getElementById('detail-donor-avatar');
@@ -930,12 +1077,14 @@ function renderItemDetail(item, isFallback = false) {
   document.getElementById('detail-condition').textContent = (item.condition || 'good').replace('_', ' ');
   document.getElementById('detail-posted').textContent = formatDate(item.created_at);
 
-  // Hide dummy fields
-  document.querySelectorAll('li').forEach(li => {
-    if (li.textContent.includes('Brand') || li.textContent.includes('Color')) {
-      li.style.display = 'none';
-    }
-  });
+  const brandRow = document.getElementById('detail-brand-row');
+  const colorRow = document.getElementById('detail-color-row');
+  const brandValue = item.brand || '';
+  const colorValue = item.color || '';
+  document.getElementById('detail-brand').textContent = brandValue || '—';
+  document.getElementById('detail-color').textContent = colorValue || '—';
+  if (brandRow) brandRow.classList.toggle('hidden', !brandValue);
+  if (colorRow) colorRow.classList.toggle('hidden', !colorValue);
   
   const imgUrl = item.image_url || PLACEHOLDER_IMAGE;
   document.getElementById('detail-image').src = imgUrl;
@@ -973,7 +1122,7 @@ function renderItemDetail(item, isFallback = false) {
   const requestBtn = document.getElementById('request-btn');
   if (requestBtn) {
     requestBtn.onclick = async () => {
-      if (!currentUser) return redirect('register.html');
+      if (!currentUser) return redirect('login.html');
       if (false) {
         // Removed demo logic
       }
@@ -1224,9 +1373,53 @@ async function checkNotifications() {
         badge.classList.add('hidden');
       }
     }
+
+    if (previousNotificationCount !== null && unread > previousNotificationCount) {
+      const newCount = unread - previousNotificationCount;
+      const newMessageNotif = notifs.find(n => !n.is_read && n.message.toLowerCase().includes('message'));
+      if (newMessageNotif) {
+        showNotificationToast(`New message: ${newMessageNotif.message}`);
+      } else if (newCount > 0) {
+        showNotificationToast(`You have ${newCount} new notification${newCount > 1 ? 's' : ''}`);
+      }
+    }
+
+    previousNotificationCount = unread;
   } catch (err) {
     console.error('Error checking notifications:', err);
   }
+}
+
+function showNotificationToast(message) {
+  const existingToast = document.getElementById('notification-toast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'notification-toast';
+  toast.className = 'fixed bottom-4 right-4 max-w-sm bg-slate-950/95 text-white rounded-2xl shadow-2xl p-4 z-50 ring-1 ring-white/10 cursor-pointer';
+  toast.innerHTML = `
+    <div class="flex items-start gap-3">
+      <span class="material-symbols-outlined text-white text-2xl">mail</span>
+      <div class="flex-grow text-sm leading-relaxed">${escapeHtml(message)}</div>
+      <button class="text-slate-300 hover:text-white text-sm" aria-label="Dismiss notification">✕</button>
+    </div>
+  `;
+
+  const dismissButton = toast.querySelector('button');
+  if (dismissButton) {
+    dismissButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toast.remove();
+    });
+  }
+
+  toast.addEventListener('click', () => {
+    toast.remove();
+    redirect('messages.html');
+  });
+
+  document.body.appendChild(toast);
+  window.setTimeout(() => toast.remove(), 7000);
 }
 
 // Check every 30 seconds

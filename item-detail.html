@@ -130,7 +130,7 @@
 <button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-slate-50 rounded-lg transition-all duration-200">notifications</button>
 <button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90 transition-all Active:scale-95">Donate</button>
 <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
-<img alt="User avatar" data-alt="A professional studio headshot of a friendly user for a high-end service platform. The subject is a person with a warm smile, set against a soft, out-of-focus interior background with natural morning light. The overall aesthetic is clean and modern, following the professional corporate minimalism style with high-key lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9qdJ9nERdVp9Hq8pU_p0sqfZohF5Ob-Je9wtUawWjpoZzhdufy-Ta1-kbF2yo9Ou9CkSct4JS5ZrwQ7Diw9H1YoyCbb1bvkAFkX7z-kbhAV03xuIKcNqj_W4bQLOShXIqlOCSvAF8omVqoKf0hrjKRWJEu4hwZW4eeVuSb0UrsSNBA2k_MVcIsY4NMu_UziTXS-a_c_i5ox2HmE_hMXPDuKA0XZgy3UejjfdwVTqhg-WfOICsVuRWq5GGl3wZ_2uM_iVwZkLK5OY"/>
+<img alt="User avatar" src="assets/logo.png?v=2"/>
 </div>
 </div>
 </div>
@@ -138,18 +138,16 @@
 <main class="max-w-[1280px] mx-auto px-10 py-12">
 <!-- Breadcrumbs -->
 <nav class="flex items-center gap-2 mb-8 text-outline font-label-md text-label-md">
-<a class="hover:text-primary transition-colors" href="#">Home</a>
+<a class="hover:text-primary transition-colors" href="browse.html">Browse</a>
 <span class="material-symbols-outlined text-sm">chevron_right</span>
-<a class="hover:text-primary transition-colors" href="#">Lighting</a>
-<span class="material-symbols-outlined text-sm">chevron_right</span>
-<span class="text-on-surface">Minimalist Desk Lamp</span>
+<span id="detail-breadcrumb-current" class="text-on-surface">Loading item...</span>
 </nav>
 <!-- Split Screen Layout -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 <!-- Left Column: Visual Assets -->
 <div class="lg:col-span-7 space-y-6">
 <div class="rounded-3xl overflow-hidden shadow-sm border border-outline-variant aspect-[4/3] bg-surface-container">
-<img id="detail-image" class="w-full h-full object-cover" data-alt="A premium, minimalist matte black desk lamp with a slim adjustable arm and a circular base, standing on a clean white oak desk. The background is a bright, airy modern office space with soft daylight filtering through sheer curtains. The composition is clean and focused, reflecting a sophisticated corporate minimalist aesthetic with high-end photographic quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOAuimiFkOtfoe-ys0pZkiY12ssLWrTezacxKE7lqC1WHZPLmizYcGadcIVDHB6Cad2JiDKzzGJsHgyXZM_zD2fzBbXcvjY0OVXWYauCZKVnJ0duAeBFQgXHeUZM1d6zfqjPajccDvuqQP5tIqIKhv4tBIngJh2hroSWzXxeg_4ILmxxgeUzQRJsWIXnAwtGy_Jb0Di0RQCp5U0BOYUlCSeTAoCy7I-yFvxDKzR8x3oA9beXhJKMB4mceYtQyBzA14AOzJfYg-iAo"/>
+<img id="detail-image" class="w-full h-full object-cover" alt="Loading item image" src="assets/logo.png?v=2"/>
 </div>
 <div id="detail-thumbnails" class="grid grid-cols-4 gap-4">
     <!-- Dynamic thumbnails will load here if available -->
@@ -159,18 +157,18 @@
 <div class="lg:col-span-5 space-y-8">
 <div class="space-y-4">
 <div class="flex items-center gap-2">
-<span id="detail-category" class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Home &amp; Office</span>
-<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Like New</span>
+<span id="detail-category" class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Loading category...</span>
+<span id="detail-status-chip" class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Loading status...</span>
 </div>
-<h1 id="detail-title" class="font-display-lg text-display-lg text-on-surface">Minimalist Desk Lamp</h1>
-<p id="detail-description" class="text-outline font-body-lg text-body-lg">A sleek, architectural piece designed for modern productivity. Features dimmable LED and a swivel head.</p>
+<h1 id="detail-title" class="font-display-lg text-display-lg text-on-surface">Loading item details...</h1>
+<p id="detail-description" class="text-outline font-body-lg text-body-lg">Loading description...</p>
 </div>
 <!-- Donor Profile Card -->
 <div class="p-6 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-between shadow-sm">
 <div class="flex items-center gap-4">
-<img id="detail-donor-avatar" class="w-12 h-12 rounded-full object-cover" data-alt="Avatar of a verified community donor. A professional and trustworthy man in his 30s smiling gently. The image has a soft, studio-quality feel with bright, clean lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxKB7AzM8hD6CCEWX6Fy9AOsqQR3fJnWWFewthbIa693EdfoWIv8_ipcHOBMva1lyqj08ogJgASwZlIr_8-BHChg3njgkZHUhDDaLRGMIrR39wpdy2P0NTfzf5EiOdTckczPcEWoRZHYnypEAgLZY62cS8mqZFTiMrsYbdZ8qDBv4v_CEF05tafL_aNt-vTupe2--hcOGbwXTYc3RRA63rlmlHq_28JpuHcxAKwuYMioz-ET_htOVcui4mLiKiiCMYca89B5VQI0Y"/>
+<img id="detail-donor-avatar" class="w-12 h-12 rounded-full object-cover" alt="Loading donor avatar" src="assets/logo.png?v=2"/>
 <div>
-<p id="detail-owner" class="font-headline-md text-headline-md text-on-surface">David Chen</p>
+<p id="detail-owner" class="font-headline-md text-headline-md text-on-surface">Loading donor...</p>
 <div class="flex items-center gap-1 text-primary">
 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
 <span class="font-label-md text-label-sm">Verified Donor • 4.9 Rating</span>
@@ -186,19 +184,19 @@
 <ul class="space-y-3 text-on-surface-variant font-body-md text-body-md">
 <li class="flex justify-between">
 <span class="text-outline">Condition</span>
-<span id="detail-condition" class="font-semibold capitalize">Good</span>
+<span id="detail-condition" class="font-semibold capitalize">Loading...</span>
 </li>
-<li class="flex justify-between">
+<li id="detail-brand-row" class="flex justify-between hidden">
 <span class="text-outline">Brand</span>
-<span class="font-semibold">Lumina Arc</span>
+<span id="detail-brand" class="font-semibold">—</span>
 </li>
-<li class="flex justify-between">
+<li id="detail-color-row" class="flex justify-between hidden">
 <span class="text-outline">Color</span>
-<span class="font-semibold">Matte Black</span>
+<span id="detail-color" class="font-semibold">—</span>
 </li>
 <li class="flex justify-between">
 <span class="text-outline">Posted</span>
-<span id="detail-posted" class="font-semibold">Just now</span>
+<span id="detail-posted" class="font-semibold">Loading...</span>
 </li>
 </ul>
 </div>
@@ -208,7 +206,7 @@
 </div>
 <p class="mt-3 text-body-sm text-outline flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">info</span>
-              Exact address will be shared after request is accepted. (<span id="detail-location"></span>)
+              Exact address will be shared after request is accepted. (<span id="detail-location">Loading location...</span>)
             </p>
 </div>
 </div>
@@ -264,5 +262,5 @@
 </div>
 </div>
 </footer>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20260609-2"></script>
 </body></html>

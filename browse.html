@@ -133,7 +133,7 @@
 </div>
 <div class="hidden md:flex items-center gap-8">
 <a class="text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 pb-1 font-label-md text-label-md" href="browse.html">Browse</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="lend.html">Lend</a>
+
 <a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="messages.html">Messages</a>
 <a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors font-label-md text-label-md" href="community.html">Community</a>
 </div>
@@ -158,27 +158,28 @@
 <p class="text-outline text-label-sm">Filter by item type</p>
 </div>
 <nav class="space-y-1">
-<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg px-3 py-2 font-medium hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg px-3 py-2 font-medium hover:translate-x-1 transition-transform duration-200" href="#" data-category="">All</a>
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="furniture">
 <span class="material-symbols-outlined" data-icon="chair">chair</span>
 <span>Furniture</span>
 </a>
-<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="electronics">
 <span class="material-symbols-outlined" data-icon="devices">devices</span>
 <span>Electronics</span>
 </a>
-<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="garden">
 <span class="material-symbols-outlined" data-icon="yard">yard</span>
 <span>Garden</span>
 </a>
-<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="tools">
 <span class="material-symbols-outlined" data-icon="construction">construction</span>
 <span>Tools</span>
 </a>
-<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="sports">
 <span class="material-symbols-outlined" data-icon="sports_basketball">sports_basketball</span>
 <span>Sports</span>
 </a>
-<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#">
+<a class="flex items-center gap-3 w-full cursor-pointer text-slate-500 dark:text-slate-400 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg hover:translate-x-1 transition-transform duration-200" href="#" data-category="health">
 <span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
 <span>Health</span>
 </a>
@@ -227,7 +228,7 @@
 </aside>
 <!-- Main Content -->
 <main class="flex-1 p-gutter lg:p-xl">
-<header class="flex justify-between items-end mb-xl">
+<div class="flex justify-between items-end mb-xl">
 <div>
 <h1 class="font-display-lg text-display-lg text-on-background mb-sm">Browse All Items</h1>
 <p class="text-on-surface-variant font-body-lg">Discover high-quality items available for loan in your local community.</p>
@@ -240,13 +241,13 @@
 <option>Popularity</option>
 </select>
 </div>
-</header>
+</div>
 <!-- Item Grid -->
     <div id="items-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
         <!-- Dynamic items will load here -->
     </div>
-<!-- Pagination/Footer -->
-<footer class="mt-2xl flex justify-center pb-xl">
+<!-- Pagination -->
+<div class="mt-2xl flex justify-center pb-xl">
 <nav class="flex gap-2">
 <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
 <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
@@ -258,7 +259,7 @@
 <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
 </button>
 </nav>
-</footer>
+</div>
 </main>
 </div>
 <footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800 mt-2xl">
@@ -271,7 +272,7 @@
 <h4 class="font-bold text-slate-900 dark:text-white mb-4">Platform</h4>
 <ul class="space-y-3">
 <li><a class="hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
-<li><a class="hover:text-blue-600 transition-colors" href="lend.html">Donate / Lend</a></li>
+<li><a class="hover:text-blue-600 transition-colors" href="login.html">Donate</a></li>
 <li><a class="hover:text-blue-600 transition-colors" href="how-it-works.html">How it Works</a></li>
 </ul>
 </div>
@@ -296,5 +297,5 @@
 <p>© 2026 ReValue Hub. Built for sustainable communities and trusted sharing.</p>
 </div>
 </footer>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20260610"></script>
 </body></html>

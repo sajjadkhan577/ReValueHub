@@ -36,6 +36,46 @@
     /* Hide scrollbar utility */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .chat-bubble-incoming {
+        background-color: #f8fafc;
+        color: #0f172a;
+        border-radius: 1.5rem 1.5rem 1.5rem 0.75rem;
+    }
+
+    .chat-bubble-outgoing {
+        background-color: #004ac6;
+        color: #ffffff;
+        border-radius: 1.5rem 1.5rem 0.75rem 1.5rem;
+    }
+
+    .message-row.incoming { justify-content: flex-start; }
+    .message-row.outgoing { justify-content: flex-end; }
+    .message-avatar { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; border: 1px solid rgba(148,163,184,.25); }
+    .message-time { font-size: 0.7rem; color: #94a3b8; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .message-status { font-size: 0.9rem; color: #cbd5e1; }
+    .message-status.read { color: #bae6fd; }
+
+    .chat-bubble-incoming, .chat-bubble-outgoing { position: relative; }
+    .chat-bubble-incoming::after,
+    .chat-bubble-outgoing::after {
+        content: '';
+        position: absolute;
+        bottom: 0.4rem;
+        width: 0.9rem;
+        height: 0.9rem;
+        border-radius: 50%;
+    }
+    .chat-bubble-incoming::after {
+        left: -0.42rem;
+        background: #f8fafc;
+        box-shadow: 6px 0 0 0 #f8fafc;
+    }
+    .chat-bubble-outgoing::after {
+        right: -0.42rem;
+        background: #004ac6;
+        box-shadow: -6px 0 0 0 #004ac6;
+    }
 </style>
 </head>
 <body class="bg-surface text-on-surface flex flex-col min-h-screen">
@@ -128,13 +168,13 @@
   </div>
 </main>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20260609"></script>
 <script>
 let activePartnerId = null;
 let activePartnerName = '';
 let activePartnerAvatar = '';
 let messagePolling = null;
-const DEFAULT_AVATAR = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFK3hyHBvRE5TAliCTcBV-PMBGOtI_LZmJSQprUaY5ycVMpBQnGkhrB22qNmSgDAtkOiV8vroMNGzPYsDLqj1DncZb80kFQLhqQLFth79NwNaEeUWOq2XczMKwknemb3PlrR4G4E5CDTfpefienp7M1Bzp5WXA91GxutTH21i7zCCfLwxNNQJsRy0MZHdMt9paOUy9ELtdE4s5Z8dBqF19exVwVS9bqLa0lCkQCd3JfCRC789a5RFYj4TfXOA9UtA6-BpakRIMZNQ';
+// DEFAULT_AVATAR is already defined in app.js — do not redeclare
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Wait briefly to let App Auth complete
@@ -360,23 +400,27 @@ async function fetchActiveThread() {
         
         let html = '';
         thread.forEach(msg => {
-            const isMe = msg.sender_id === currentUser.id;
+            const isMe = Number(msg.sender_id) === Number(currentUser?.id);
             const bubbleClass = isMe 
-                ? 'bg-primary text-white rounded-l-2xl rounded-tr-2xl' 
-                : 'bg-slate-100 text-slate-800 rounded-r-2xl rounded-tl-2xl';
-            const alignClass = isMe ? 'justify-end' : 'justify-start';
-            const textClass = isMe ? 'text-right' : 'text-left';
-            
+                ? 'chat-bubble-outgoing px-5 py-3 text-sm shadow-sm leading-relaxed break-words'
+                : 'chat-bubble-incoming px-5 py-3 text-sm shadow-sm leading-relaxed break-words';
+            const rowClass = isMe ? 'message-row outgoing gap-3 items-end w-full' : 'message-row incoming gap-3 items-end w-full';
+            const textAlign = isMe ? 'text-right' : 'text-left';
+            const avatarSrc = msg.sender_avatar || activePartnerAvatar || DEFAULT_AVATAR;
+            const senderName = escapeHtml(msg.sender_name || activePartnerName || 'Partner');
+
             const time = new Date(msg.created_at);
             const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             html += `
-                <div class="flex ${alignClass} w-full">
-                    <div class="max-w-[70%] flex flex-col">
-                        <div class="px-5 py-3 text-sm shadow-sm ${bubbleClass} leading-relaxed break-words">
-                            ${escapeHtml(msg.message)}
-                        </div>
-                        <span class="text-[9px] text-slate-400 mt-1 font-semibold px-2 ${textClass}">${timeStr}</span>
+                <div class="${rowClass}">
+                    ${!isMe ? `<img class="message-avatar" src="${avatarSrc}" alt="${senderName}" />` : ''}
+                    <div class="max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                        <div class="${bubbleClass}">${escapeHtml(msg.message)}</div>
+                        <span class="message-time mt-1 ${textAlign}">
+                            ${timeStr}
+                            ${isMe ? `<span class="message-status ${msg.is_read ? 'read' : 'sent'} material-symbols-outlined">${msg.is_read ? 'done_all' : 'done'}</span>` : ''}
+                        </span>
                     </div>
                 </div>
             `;
