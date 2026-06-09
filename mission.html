@@ -1,37 +1,168 @@
 <!DOCTYPE html>
 <html class="light" lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Our Mission - ReValue Hub</title>
-<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-    <style> body { font-family: 'Manrope', sans-serif; } </style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Our Mission - ReValue Hub</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png?v=2"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary-fixed-dim": "#ffb95f",
+                  "inverse-surface": "#2e3039",
+                  "primary-fixed-dim": "#b4c5ff",
+                  "tertiary-container": "#996100",
+                  "on-tertiary-container": "#ffeedd",
+                  "surface-container-lowest": "#ffffff",
+                  "primary": "#004ac6",
+                  "on-surface": "#191b23",
+                  "surface-dim": "#d9d9e5",
+                  "background": "#faf8ff",
+                  "on-background": "#191b23",
+                  "on-tertiary": "#ffffff",
+                  "on-error-container": "#93000a",
+                  "on-error": "#ffffff",
+                  "surface-variant": "#e1e2ed",
+                  "on-secondary-fixed-variant": "#005321",
+                  "secondary-fixed-dim": "#4ae176",
+                  "on-tertiary-fixed-variant": "#653e00",
+                  "error-container": "#ffdad6",
+                  "primary-fixed": "#dbe1ff",
+                  "inverse-on-surface": "#f0f0fb",
+                  "outline": "#737686",
+                  "outline-variant": "#c3c6d7",
+                  "surface-container-high": "#e7e7f3",
+                  "on-primary": "#ffffff",
+                  "inverse-primary": "#b4c5ff",
+                  "surface-container": "#ededf9",
+                  "secondary-fixed": "#6bff8f",
+                  "secondary": "#006e2f",
+                  "on-secondary": "#ffffff",
+                  "error": "#ba1a1a",
+                  "on-secondary-fixed": "#002109",
+                  "on-primary-fixed-variant": "#003ea8",
+                  "surface-bright": "#faf8ff",
+                  "on-surface-variant": "#434655",
+                  "tertiary": "#784b00",
+                  "on-tertiary-fixed": "#2a1700",
+                  "tertiary-fixed": "#ffddb8",
+                  "surface-container-low": "#f3f3fe",
+                  "surface-container-highest": "#e1e2ed",
+                  "on-primary-fixed": "#00174b",
+                  "surface": "#faf8ff",
+                  "on-secondary-container": "#007432",
+                  "surface-tint": "#0053db",
+                  "secondary-container": "#6bff8f"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "lg": "24px",
+                  "xs": "4px",
+                  "md": "16px",
+                  "2xl": "64px",
+                  "gutter": "24px",
+                  "base": "4px",
+                  "sm": "8px",
+                  "xl": "40px",
+                  "container-max": "1280px"
+          },
+          "fontFamily": {
+                  "label-md": ["Manrope"],
+                  "headline-lg": ["Manrope"],
+                  "body-md": ["Manrope"],
+                  "body-sm": ["Manrope"],
+                  "display-lg": ["Manrope"],
+                  "body-lg": ["Manrope"],
+                  "headline-xl": ["Manrope"],
+                  "label-sm": ["Manrope"],
+                  "headline-md": ["Manrope"]
+          },
+          "fontSize": {
+                  "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                  "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                  "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                  "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                  "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                  "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+          }
+        },
+      },
+    };
+  </script>
 </head>
-<body class="bg-[#faf8ff] text-[#191b23]">
-    <header class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
-<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
-            <nav class="hidden md:flex items-center gap-8">
-                <a class="text-slate-600 hover:text-blue-600 font-semibold text-sm" href="browse.html">Browse</a>
-            </nav>
-            <button onclick="window.location.href='login.html'" class="bg-[#004ac6] text-white px-6 py-2.5 rounded-lg text-sm font-semibold">Donate</button>
-        </div>
-    </header>
+<body class="bg-[#faf8ff] text-slate-950">
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+    <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+      <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain"/></a>
+      <nav class="hidden md:flex items-center gap-8">
 
-    <main class="max-w-[800px] mx-auto px-10 py-20 min-h-screen">
-        <h1 class="text-4xl font-extrabold mb-8">Our Mission</h1>
-        <div class="space-y-6 text-lg text-slate-600">
-            <p>At ReValue Hub, our mission is to build a sustainable, circular economy within local communities.</p>
-            <p>We believe that every unused item has value and shouldn't end up in a landfill. By connecting neighbors and facilitating the secure exchange of goods, we aim to reduce environmental impact and foster stronger community bonds.</p>
-            <p>Join us in revaluing the world around us, one item at a time.</p>
+        <a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+        <div class="relative group">
+          <input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
         </div>
-    </main>
+      </nav>
+      <div class="flex items-center gap-6">
+        <button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+        <button type="button" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+          <img alt="User avatar" src="assets/logo.png?v=2" class="w-full h-full object-cover"/>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <footer class="bg-slate-50 py-16 border-t border-slate-200 text-center">
-        <p class="text-slate-500 text-sm">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
-    </footer>
-    <script src="js/app.js?v=20260609"></script>
+  <main class="max-w-[800px] mx-auto px-10 py-20 min-h-screen">
+    <h1 class="text-4xl font-extrabold mb-8">Our Mission</h1>
+    <div class="space-y-6 text-lg text-slate-600">
+      <p>At ReValue Hub, our mission is to build a sustainable, circular economy within local communities.</p>
+      <p>We believe that every unused item has value and shouldn't end up in a landfill. By connecting neighbors and facilitating the secure exchange of goods, we aim to reduce environmental impact and foster stronger community bonds.</p>
+      <p>Join us in revaluing the world around us, one item at a time.</p>
+    </div>
+  </main>
+
+
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+
+    <div class="max-w-[1280px] mx-auto px-10 flex flex-col md:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+      <div class="max-w-sm">
+        <img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+        <p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+        <div class="flex gap-4">
+          <a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#"><span class="material-symbols-outlined text-sm">public</span></a>
+          <a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#"><span class="material-symbols-outlined text-sm">share</span></a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+        <div><h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4><ul class="space-y-4"><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="login.html">Donate</a></li><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how-it-works.html">How it Works</a></li></ul></div>
+        <div><h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4><ul class="space-y-4"><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission.html">Our Mission</a></li><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="guidelines.html">Guidelines</a></li><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety.html">Safety</a></li></ul></div>
+        <div><h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4><ul class="space-y-4"><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms.html">Terms</a></li><li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy.html">Privacy</a></li></ul></div>
+      </div>
+    </div>
+    <div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+      <p class="text-slate-500 dark:text-slate-400">&copy; 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+    </div>
+  </footer>
+  <script src="js/app.js?v=20260609-6"></script>
 </body>
 </html>
