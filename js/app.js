@@ -18,8 +18,13 @@ async function initApp() {
   setupNav();
   setupHeaderActions();
   setupForms();
+  // Attach after DOM is ready and before we potentially redirect away
+  setupPasswordToggles();
+  setupSocialLoginButtons();
+
   setupSearchAndFilters();
   setupTypingHeadlines();
+
 
   const path = decodeURIComponent(window.location.pathname);
   if (path.includes('browse.html') || path.includes('discovery.html')) {
@@ -43,9 +48,64 @@ async function initApp() {
   if (path.includes('login.html') || path.includes('register.html')) {
     if (currentUser) return redirect(currentUser.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html');
   }
+
+}
+
+
+
+
+function setupPasswordToggles() {
+  try {
+    // Support both:
+    // - input#password with sibling button containing material icon text `visibility`/`visibility_off`
+    // - any password input with an adjacent eye-toggle button in the same wrapper.
+    const passwordInputs = Array.from(document.querySelectorAll('input[type="password"]'));
+
+    passwordInputs.forEach((input) => {
+      // Only attach to inputs that look like they have an eye toggle next to them (login/register UI)
+      const container = input.closest('.relative') || input.parentElement;
+      if (!container) return;
+      const toggleButton = container.querySelector('button[type="button"] span.material-symbols-outlined, button span.material-symbols-outlined');
+
+      if (!toggleButton) return;
+      const btn = toggleButton.closest('button');
+      if (!btn) return;
+
+      // prevent double-binding
+      if (btn.dataset.passwordToggleBound === 'true') return;
+      btn.dataset.passwordToggleBound = 'true';
+
+      const syncIcon = () => {
+        const icon = toggleButton.textContent.trim();
+        // If input currently shows plain text -> visibility_off, else visibility
+        if (input.type === 'password') {
+          if (!icon || icon === 'visibility_off') toggleButton.textContent = 'visibility';
+        } else {
+          toggleButton.textContent = 'visibility_off';
+        }
+      };
+
+      // initialize state (should be password)
+      if (!input.type) input.type = 'password';
+      syncIcon();
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        input.type = input.type === 'password' ? 'text' : 'password';
+        // ensure icon matches state
+        toggleButton.textContent = input.type === 'password' ? 'visibility' : 'visibility_off';
+      });
+    });
+  } catch (err) {
+    // Non-fatal
+    console.error('setupPasswordToggles failed:', err);
+  }
 }
 
 function setupTypingHeadlines() {
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll('[data-typing-phrases]').forEach((headline) => {
@@ -214,7 +274,8 @@ function insertGlobalHeaderFooter() {
   const headerHtml = `
     <header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
       <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
-        <a href="landing.html" class="flex items-center gap-2 font-semibold text-[#004ac6]"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+        <a href="landing.html" class="flex items-center gap-2 font-semibold text-[#004ac6]"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-20 w-auto object-contain" /></a>
+
         <nav class="hidden md:flex items-center gap-8">
           <a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
           <div class="relative group">
@@ -513,7 +574,44 @@ window.markNotificationRead = async (id, element) => {
   }
 };
 
+function setupSocialLoginButtons() {
+  // register.html social buttons (UI exists already)
+  const buttons = Array.from(document.querySelectorAll('button'))
+    .filter((b) => /google/i.test(b.textContent) || /facebook/i.test(b.textContent));
+
+  buttons.forEach((btn) => {
+    const provider = /facebook/i.test(btn.textContent) ? 'facebook' : 'google';
+
+    // avoid duplicate binding
+    if (btn.dataset.socialBound === 'true') return;
+    btn.dataset.socialBound = 'true';
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const res = await apiRequest('auth/social-login', {
+          method: 'POST',
+          body: JSON.stringify({ provider })
+        });
+
+        // If configured, backend should return { token, user } similar to /auth/login.
+        if (res?.token && res?.user) {
+          setToken(res.token);
+          currentUser = res.user;
+          redirect(currentUser.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html');
+        } else {
+          alert(res?.message || 'Social login not available yet.');
+        }
+      } catch (err) {
+        alert(err.message || 'Social login failed.');
+      }
+    });
+  });
+}
+
 function openMessageModal(receiverId, receiverName, itemId = null) {
+
   if (!token) {
     alert('Join ReValue Hub to message members! Please create an account to continue.');
     return redirect('register.html');
