@@ -64,7 +64,8 @@
                         <span>Verified Donor</span>
                     </div>
                     <button id="message-profile-btn" class="w-full py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">Message</button>
-                    <button data-action="logout" class="w-full mt-4 py-3 bg-slate-200 text-slate-900 rounded-xl font-bold hover:bg-slate-300 transition-all">Logout</button>
+                    <button id="edit-profile-btn" class="w-full py-3 bg-primary/10 text-primary rounded-xl font-bold hover:bg-primary/20 transition-all hidden">Edit Profile</button>
+                    <button data-action="logout" id="logout-profile-btn" class="w-full mt-4 py-3 bg-slate-200 text-slate-900 rounded-xl font-bold hover:bg-slate-300 transition-all hidden">Logout</button>
                 </div>
 
                 <div class="bg-white rounded-3xl p-8 border border-outline-variant shadow-sm">
@@ -111,16 +112,43 @@
             document.getElementById('profile-joined').textContent = `Joined ${new Date(user.joined_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`;
             document.getElementById('profile-avatar').src = user.avatar || DEFAULT_AVATAR;
             document.getElementById('profile-bio').textContent = user.bio || `${user.name} is a valued member of the ReValue community.`;
-            
+
+            const isOwnProfile = (typeof currentUser !== 'undefined' && currentUser && parseInt(currentUser.id) === parseInt(user.id));
+
             const msgBtn = document.getElementById('message-profile-btn');
+            const logoutBtn = document.getElementById('logout-profile-btn');
+            const editBtn = document.getElementById('edit-profile-btn');
+
             if (msgBtn) {
-                msgBtn.onclick = () => {
-                    if (typeof openMessageModal === 'function') {
-                        openMessageModal(user.id, user.name);
-                    } else {
-                        alert('Messaging system is initializing...');
-                    }
-                };
+                if (isOwnProfile) {
+                    msgBtn.classList.add('hidden');
+                } else {
+                    msgBtn.classList.remove('hidden');
+                    msgBtn.onclick = () => {
+                        if (typeof openMessageModal === 'function') {
+                            openMessageModal(user.id, user.name);
+                        } else {
+                            alert('Messaging system is initializing...');
+                        }
+                    };
+                }
+            }
+
+            if (logoutBtn) {
+                if (isOwnProfile) {
+                    logoutBtn.classList.remove('hidden');
+                } else {
+                    logoutBtn.classList.add('hidden');
+                }
+            }
+
+            if (editBtn) {
+                if (isOwnProfile) {
+                    editBtn.classList.remove('hidden');
+                    editBtn.onclick = () => { window.location.href = 'dashboard.html'; };
+                } else {
+                    editBtn.classList.add('hidden');
+                }
             }
             
             const grid = document.getElementById('profile-items-grid');

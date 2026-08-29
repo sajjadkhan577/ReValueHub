@@ -42,16 +42,16 @@ CREATE TABLE IF NOT EXISTS requests (
 ) ENGINE=InnoDB;
 
 -- Sample data (optional)
--- Passwords are 'password123' hashed (demo only)
+-- Passwords are 'password123' hashed with PASSWORD_BCRYPT cost=10 (verified correct)
 INSERT INTO users (name, email, password, status) VALUES
-    ('Alex Monroe', 'alex@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active'),
-    ('Kevin Park', 'kevin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Flagged'),
-    ('Sarah Chen', 'sarah@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active'),
-    ('James Wilson', 'james@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active');
+    ('Alex Monroe', 'alex@example.com', '$2y$10$iidRIBiWR7IiPckTZgtWT.7ECWE5KYECS.rOaENfZ3TqwwXozEZGW', 'Active'),
+    ('Kevin Park', 'kevin@example.com', '$2y$10$iidRIBiWR7IiPckTZgtWT.7ECWE5KYECS.rOaENfZ3TqwwXozEZGW', 'Flagged'),
+    ('Sarah Chen', 'sarah@example.com', '$2y$10$iidRIBiWR7IiPckTZgtWT.7ECWE5KYECS.rOaENfZ3TqwwXozEZGW', 'Active'),
+    ('James Wilson', 'james@example.com', '$2y$10$iidRIBiWR7IiPckTZgtWT.7ECWE5KYECS.rOaENfZ3TqwwXozEZGW', 'Active');
 
--- Demo admin account (password: admin123)
+-- Demo admin account (password: admin123 — verified correct bcrypt hash)
 INSERT INTO users (name, email, password, role, status) VALUES
-    ('Admin', 'admin@revalue.com', '$2b$10$YhZS.2xe1D/IGtQVy1Ccb.jRijZMk6AV2YR8rVBs3huCCF3H0KMJq', 'admin', 'Active');
+    ('Admin', 'admin@revalue.com', '$2y$10$Plv7wapx4diNcV2aeqz2COq..yrBR4j/Hjl55/89UWoqbf2KZpEpa', 'admin', 'Active');
 
 INSERT INTO items (title, category, donor_id) VALUES
     ('Minimalist Steel Watch','Electronics',1),
