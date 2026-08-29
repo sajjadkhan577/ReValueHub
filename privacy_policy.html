@@ -1,0 +1,605 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<title>Privacy Policy | ReValue Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d9d9e5",
+                        "on-background": "#191b23",
+                        "secondary-fixed-dim": "#4ae176",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-surface": "#2e3039",
+                        "on-secondary-container": "#007432",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e2ed",
+                        "tertiary-fixed": "#ffddb8",
+                        "tertiary": "#784b00",
+                        "surface-tint": "#0053db",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container-low": "#f3f3fe",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f0fb",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#faf8ff",
+                        "surface-variant": "#e1e2ed",
+                        "secondary": "#006e2f",
+                        "on-tertiary-container": "#ffeedd",
+                        "outline": "#737686",
+                        "on-primary-fixed": "#00174b",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#434655",
+                        "on-primary-container": "#eeefff",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary": "#004ac6",
+                        "primary-fixed": "#dbe1ff",
+                        "on-surface": "#191b23",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#ededf9",
+                        "primary-container": "#2563eb",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "surface": "#faf8ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-container": "#996100",
+                        "surface-container-high": "#e7e7f3",
+                        "on-secondary-fixed-variant": "#005321"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "2xl": "64px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "md": "16px",
+                        "xl": "40px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-sm": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-accordion .accordion-content {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+        .accordion-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full">
+<!-- Section 1: Hero -->
+<section class="relative pt-2xl pb-xl px-gutter max-w-container-max mx-auto overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="z-10">
+<span class="inline-flex items-center px-md py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-xs mb-md">
+<span class="material-symbols-outlined text-sm mr-2" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        Secure • Transparent • Privacy Focused
+                    </span>
+<h1 class="font-display-lg text-display-lg text-on-background mb-md">Your Privacy Matters</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-xl">
+                        At ReValue Hub, protecting your personal information is one of our highest priorities. We believe in total transparency about how your data helps us build a more sustainable world.
+                    </p>
+<div class="flex flex-wrap gap-md">
+                        <button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-xl py-md rounded-xl font-bold shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98]">Start Donating</button>
+<button onclick="window.location.href='browse.html'" class="border border-outline text-primary px-xl py-md rounded-xl font-bold hover:bg-surface-container-low transition-all">Browse Items</button>
+</div>
+</div>
+<div class="relative flex justify-center lg:justify-end">
+<div class="w-full max-w-lg aspect-square relative rounded-3xl overflow-hidden shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="A high-end 3D digital illustration of a glowing blue shield protecting a translucent server cloud in a minimalist white and soft blue environment. The lighting is diffused and bright, creating a professional, clean tech aesthetic. Tiny glowing nodes connect data streams to the shield, representing secure encryption. The visual style is premium corporate minimalism with a soft-precision finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB38QHKrii1i5WQCKc1e5YMYalhYu2kYzZ3zaDciits78JVqmaS_m8tpYPv28x7P-xaNsT0wP8cxdcSGSmTvZ6Lx0rNPtcqnrQ1Vga5wZDXnzdx1Yk827MDWdgzHs1rwKqmJ-2ijm0yx78Ps9FWATUuNszzIANttEMOMyu2doiMQDy_ftVUZXEssN460Hjz5xvOX5NO0Oi9Be07KI4y0iko3rhPz3Ud87GWmfLeiPkNyiHwmS3iAbMd">
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Privacy At A Glance -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl mb-sm">Privacy At A Glance</h2>
+<div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="glass-card p-lg rounded-3xl shadow-sm hover:shadow-md transition-all group border-outline-variant/30">
+<div class="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-primary-fixed-variant">filter_list</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Minimal Collection</h3>
+<p class="text-on-surface-variant text-body-sm">We only ask for data that is strictly necessary for the platform to function effectively.</p>
+</div>
+<div class="glass-card p-lg rounded-3xl shadow-sm hover:shadow-md transition-all group border-outline-variant/30">
+<div class="w-12 h-12 bg-secondary-container rounded-xl flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container">security</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Secure Storage</h3>
+<p class="text-on-surface-variant text-body-sm">Your information is stored in military-grade encrypted servers with multi-layer defense systems.</p>
+</div>
+<div class="glass-card p-lg rounded-3xl shadow-sm hover:shadow-md transition-all group border-outline-variant/30">
+<div class="w-12 h-12 bg-tertiary-fixed rounded-xl flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">money_off</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">No Selling Data</h3>
+<p class="text-on-surface-variant text-body-sm">We never have, and never will, sell your personal information to third-party advertisers or brokers.</p>
+</div>
+<div class="glass-card p-lg rounded-3xl shadow-sm hover:shadow-md transition-all group border-outline-variant/30">
+<div class="w-12 h-12 bg-primary-fixed-dim rounded-xl flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-primary-fixed">person_pin</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">You're In Control</h3>
+<p class="text-on-surface-variant text-body-sm">Easily view, edit, or delete your data at any time through your personalized privacy dashboard.</p>
+</div>
+</div>
+</section>
+<!-- Section 3: What Information We Collect -->
+<section class="py-2xl bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="flex flex-col md:flex-row justify-between items-end mb-xl gap-md">
+<div>
+<h2 class="font-headline-xl text-headline-xl mb-sm">What Information We Collect</h2>
+<p class="text-on-surface-variant max-w-2xl">To provide the best possible experience for our community, we collect three main categories of information.</p>
+</div>
+<div class="hidden md:block h-px flex-1 bg-outline-variant/40 mx-xl mb-4"></div>
+</div>
+<div class="space-y-md">
+<!-- Accordion 1 -->
+<div class="bg-surface rounded-2xl border border-outline-variant/50 overflow-hidden accordion-item">
+<button class="w-full px-xl py-lg flex items-center justify-between hover:bg-surface-container-high transition-colors" onclick="this.parentElement.classList.toggle('active-accordion')">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+<span class="font-headline-md text-headline-md">Personal Information</span>
+</div>
+<span class="material-symbols-outlined transform transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-xl pb-lg">
+<p class="text-on-surface-variant mb-md">This includes details you provide when creating an account or updating your profile:</p>
+<ul class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Full Name</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Email Address</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Profile Photograph</span></li>
+</ul>
+</div>
+</div>
+<!-- Accordion 2 -->
+<div class="bg-surface rounded-2xl border border-outline-variant/50 overflow-hidden accordion-item">
+<button class="w-full px-xl py-lg flex items-center justify-between hover:bg-surface-container-high transition-colors" onclick="this.parentElement.classList.toggle('active-accordion')">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+<span class="font-headline-md text-headline-md">Donation &amp; Listing Data</span>
+</div>
+<span class="material-symbols-outlined transform transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-xl pb-lg">
+<p class="text-on-surface-variant mb-md">Information related to the items you list for the community:</p>
+<ul class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Item descriptions and metadata</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Uploaded item images</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Pickup location (Coordinates only)</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Listing category tags</span></li>
+</ul>
+</div>
+</div>
+<!-- Accordion 3 -->
+<div class="bg-surface rounded-2xl border border-outline-variant/50 overflow-hidden accordion-item">
+<button class="w-full px-xl py-lg flex items-center justify-between hover:bg-surface-container-high transition-colors" onclick="this.parentElement.classList.toggle('active-accordion')">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">devices</span>
+<span class="font-headline-md text-headline-md">Technical &amp; Activity Log</span>
+</div>
+<span class="material-symbols-outlined transform transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-xl pb-lg">
+<p class="text-on-surface-variant mb-md">Automated data gathered during your session to improve performance:</p>
+<ul class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Device model &amp; OS</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">Browser type</span></li>
+<li class="flex items-start gap-sm"><span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span> <span class="">App interaction logs</span></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: How We Use Information -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl mb-sm">How We Use Information</h2>
+<p class="text-on-surface-variant max-w-xl mx-auto">We use your data strictly to enhance the ReValue Hub ecosystem and ensure community safety.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">verified_user</span>
+<h4 class="font-headline-md mb-xs">Verify Accounts</h4>
+<p class="text-body-sm text-on-surface-variant">Ensuring that every member of the community is a real person to foster trust.</p>
+</div>
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">grid_view</span>
+<h4 class="font-headline-md mb-xs">Display Listings</h4>
+<p class="text-body-sm text-on-surface-variant">Presenting your items to neighbors who are looking for exactly what you're donating.</p>
+</div>
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">monitoring</span>
+<h4 class="font-headline-md mb-xs">Improve Performance</h4>
+<p class="text-body-sm text-on-surface-variant">Analyzing technical data to make the platform faster and more reliable.</p>
+</div>
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">contact_support</span>
+<h4 class="font-headline-md mb-xs">Support Requests</h4>
+<p class="text-body-sm text-on-surface-variant">Quickly resolving any issues you encounter through our personalized help desk.</p>
+</div>
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">gpp_maybe</span>
+<h4 class="font-headline-md mb-xs">Protect Against Fraud</h4>
+<p class="text-body-sm text-on-surface-variant">Detecting and preventing malicious activity before it affects our users.</p>
+</div>
+<div class="p-lg bg-surface border border-outline-variant/30 rounded-2xl shadow-sm hover:border-primary/40 transition-all flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-md">health_and_safety</span>
+<h4 class="font-headline-md mb-xs">Enhance Safety</h4>
+<p class="text-body-sm text-on-surface-variant">Refining our community guidelines based on user feedback and safety signals.</p>
+</div>
+</div>
+</section>
+<!-- Section 5: How We Protect Your Data -->
+<section class="py-2xl bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
+<div class="order-2 lg:order-1">
+<h2 class="font-headline-xl text-headline-xl mb-lg">How We Protect Your Data</h2>
+<div class="space-y-md">
+<div class="flex gap-md items-start p-md rounded-2xl bg-surface border border-outline-variant/30">
+<div class="p-sm bg-primary/10 rounded-lg"><span class="material-symbols-outlined text-primary">key</span></div>
+<div>
+<h5 class="font-headline-md text-base">Encrypted Passwords</h5>
+<p class="text-body-sm text-on-surface-variant">We use industry-standard hashing algorithms so even we can't see your password.</p>
+</div>
+</div>
+<div class="flex gap-md items-start p-md rounded-2xl bg-surface border border-outline-variant/30">
+<div class="p-sm bg-primary/10 rounded-lg"><span class="material-symbols-outlined text-primary">lock_reset</span></div>
+<div>
+<h5 class="font-headline-md text-base">Secure Authentication</h5>
+<p class="text-body-sm text-on-surface-variant">Multi-factor authentication options to keep your account entry secure.</p>
+</div>
+</div>
+<div class="flex gap-md items-start p-md rounded-2xl bg-surface border border-outline-variant/30">
+<div class="p-sm bg-primary/10 rounded-lg"><span class="material-symbols-outlined text-primary">database</span></div>
+<div>
+<h5 class="font-headline-md text-base">Protected Databases</h5>
+<p class="text-body-sm text-on-surface-variant">Cloud infrastructure with private VPCs and automated snapshot encryption.</p>
+</div>
+</div>
+<div class="flex gap-md items-start p-md rounded-2xl bg-surface border border-outline-variant/30">
+<div class="p-sm bg-primary/10 rounded-lg"><span class="material-symbols-outlined text-primary">admin_panel_settings</span></div>
+<div>
+<h5 class="font-headline-md text-base">Limited Internal Access</h5>
+<p class="text-body-sm text-on-surface-variant">Only specifically authorized staff can access limited data for support purposes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="rounded-3xl overflow-hidden shadow-xl aspect-video">
+<img class="w-full h-full object-cover" data-alt="A sophisticated digital artwork showing a series of glowing blue interconnected hexagons representing a cybersecurity firewall. Intricate white lines of code and data packets flow gracefully through the structures. The background is a deep navy with subtle primary blue lighting effects, conveying a mood of ultimate security and professional reliability. The style is ultra-modern corporate tech with soft precision edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB408M_PYH2CwlPko7bOTwoHnfizvfLwuXXLQri3CorszAfs87_J1ePluUtWSPvdMsD3tiqKURjcsvkngAnQ5hFoAn0vN7ctDeZf736nu65pXHoiW723rqEuUMnm-yZfvSITehJ-Ss0Eg7ZnyCdpKPG8_p61a7q-7p_aaCgyNMNOA2deRfOpdl8rLR7QiPcNvvUuu92zXPvqa2JHQ4dxGSGH1AyS1yDMmCQWXyk3taXoktt_hK-OwgN">
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Your Privacy Rights -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<h2 class="font-headline-xl text-headline-xl mb-xl text-center">Your Privacy Rights</h2>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-md">
+<div class="p-md text-center hover:scale-105 transition-all">
+<div class="w-16 h-16 mx-auto bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-primary">visibility</span>
+</div>
+<p class="font-label-md">View Data</p>
+</div>
+<div class="p-md text-center hover:scale-105 transition-all">
+<div class="w-16 h-16 mx-auto bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-primary">edit_square</span>
+</div>
+<p class="font-label-md">Update Info</p>
+</div>
+<div class="p-md text-center hover:scale-105 transition-all">
+<div class="w-16 h-16 mx-auto bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-error">delete_forever</span>
+</div>
+<p class="font-label-md">Delete Account</p>
+</div>
+<div class="p-md text-center hover:scale-105 transition-all">
+<div class="w-16 h-16 mx-auto bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-primary">shield_person</span>
+</div>
+<p class="font-label-md">Control Visibility</p>
+</div>
+<div class="p-md text-center hover:scale-105 transition-all">
+<div class="w-16 h-16 mx-auto bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-primary">contact_support</span>
+</div>
+<p class="font-label-md">Request Support</p>
+</div>
+</div>
+</section>
+<!-- Section 7: Cookies & Analytics -->
+<section class="py-2xl bg-surface-container">
+<div class="max-w-container-max mx-auto px-gutter">
+<h2 class="font-headline-xl text-headline-xl mb-xl text-center">Cookies &amp; Modern Analytics</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="bg-surface p-lg rounded-2xl border border-outline-variant/30">
+<h4 class="font-headline-md text-primary mb-sm">Session Sign-in</h4>
+<p class="text-body-sm text-on-surface-variant">Essential cookies that keep you logged in as you navigate between different donation categories.</p>
+</div>
+<div class="bg-surface p-lg rounded-2xl border border-outline-variant/30">
+<h4 class="font-headline-md text-primary mb-sm">Performance</h4>
+<p class="text-body-sm text-on-surface-variant">Helps us understand how fast pages load so we can optimize the experience for slower connections.</p>
+</div>
+<div class="bg-surface p-lg rounded-2xl border border-outline-variant/30">
+<h4 class="font-headline-md text-primary mb-sm">Preferences</h4>
+<p class="text-body-sm text-on-surface-variant">Remembers your preferred categories and regional settings for a more personalized dashboard.</p>
+</div>
+<div class="bg-surface p-lg rounded-2xl border border-outline-variant/30">
+<h4 class="font-headline-md text-primary mb-sm">Anonymous Analytics</h4>
+<p class="text-body-sm text-on-surface-variant">Aggregated, non-identifiable data that helps us measure the total community impact of ReValue Hub.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 8: Data Sharing Policy -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl">
+<div class="p-xl bg-primary-fixed/30 rounded-3xl border border-primary/20">
+<div class="flex items-center gap-md mb-lg">
+<span class="material-symbols-outlined text-primary text-3xl">share</span>
+<h3 class="font-headline-xl">When We May Share</h3>
+</div>
+<ul class="space-y-md">
+<li class="flex gap-md items-start">
+<span class="material-symbols-outlined text-primary mt-1">gavel</span>
+<div>
+<p class="font-bold">Legal Compliance</p>
+<p class="text-body-sm text-on-surface-variant">If required by law or a valid legal process to protect our rights or the safety of others.</p>
+</div>
+</li>
+<li class="flex gap-md items-start">
+<span class="material-symbols-outlined text-primary mt-1">hub</span>
+<div>
+<p class="font-bold">Trusted Infrastructure Providers</p>
+<p class="text-body-sm text-on-surface-variant">Cloud hosting and email service providers that enable the platform to function.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="p-xl bg-error-container/30 rounded-3xl border border-error/20">
+<div class="flex items-center gap-md mb-lg">
+<span class="material-symbols-outlined text-error text-3xl">block</span>
+<h3 class="font-headline-xl">We Never Share</h3>
+</div>
+<ul class="space-y-md">
+<li class="flex gap-md items-start">
+<span class="material-symbols-outlined text-error mt-1">ads_click</span>
+<div>
+<p class="font-bold">Third-Party Advertisers</p>
+<p class="text-body-sm text-on-surface-variant">Your data is never given to brokers or marketing agencies for advertising purposes.</p>
+</div>
+</li>
+<li class="flex gap-md items-start">
+<span class="material-symbols-outlined text-error mt-1">lock</span>
+<div>
+<p class="font-bold">Private Passwords &amp; Messages</p>
+<p class="text-body-sm text-on-surface-variant">Your credentials and private community conversations are strictly for your eyes only.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Section 9: FAQ -->
+<section class="py-2xl bg-surface-container-low px-gutter">
+<div class="max-w-3xl mx-auto">
+<h2 class="font-headline-xl text-headline-xl mb-xl text-center">Frequently Asked Questions</h2>
+<div class="space-y-md">
+<div class="accordion-item bg-surface rounded-xl border border-outline-variant/30">
+<button class="w-full text-left px-lg py-md flex justify-between items-center" onclick="this.parentElement.classList.toggle('active-accordion')">
+<span class="font-headline-md text-base">Is my personal information safe?</span>
+<span class="material-symbols-outlined transform transition-transform">add</span>
+</button>
+<div class="accordion-content px-lg pb-md">
+<p class="text-on-surface-variant">Yes. We use advanced encryption and regular security audits to ensure that your data remains protected against unauthorized access at all times.</p>
+</div>
+</div>
+<div class="accordion-item bg-surface rounded-xl border border-outline-variant/30">
+<button class="w-full text-left px-lg py-md flex justify-between items-center" onclick="this.parentElement.classList.toggle('active-accordion')">
+<span class="font-headline-md text-base">Can I completely delete my account and data?</span>
+<span class="material-symbols-outlined transform transition-transform">add</span>
+</button>
+<div class="accordion-content px-lg pb-md">
+<p class="text-on-surface-variant">Absolutely. You can request a full account deletion in your settings. Once confirmed, all your personal data is purged from our active databases within 30 days.</p>
+</div>
+</div>
+<div class="accordion-item bg-surface rounded-xl border border-outline-variant/30">
+<button class="w-full text-left px-lg py-md flex justify-between items-center" onclick="this.parentElement.classList.toggle('active-accordion')">
+<span class="font-headline-md text-base">Does ReValue Hub sell my data?</span>
+<span class="material-symbols-outlined transform transition-transform">add</span>
+</button>
+<div class="accordion-content px-lg pb-md">
+<p class="text-on-surface-variant">No. We do not sell, rent, or trade any of our users' personal information to third parties. Our business model is focused on community impact, not data harvesting.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 10: Contact About Privacy -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto text-center">
+<div class="max-w-2xl mx-auto">
+<span class="material-symbols-outlined text-primary text-5xl mb-md">help_center</span>
+<h2 class="font-headline-xl text-headline-xl mb-md">Questions About Your Privacy?</h2>
+<p class="text-on-surface-variant mb-xl font-body-lg">Our dedicated privacy team is here to help you understand how your information is handled. Reach out anytime for a detailed explanation of our practices.</p>
+<div class="flex flex-wrap justify-center gap-md">
+                <button onclick="window.location.href='contact_us.html'" class="bg-primary text-on-primary px-xl py-md rounded-xl font-bold hover:shadow-lg transition-all active:scale-[0.98]">Contact Support</button>
+<button onclick="window.location.href='terms_of_service.html'" class="bg-surface border border-outline text-on-surface px-xl py-md rounded-xl font-bold hover:bg-surface-container transition-all">View Terms of Service</button>
+</div>
+</div>
+</section>
+<!-- Section 11: Final CTA -->
+<section class="py-2xl px-gutter mb-2xl">
+<div class="max-w-container-max mx-auto bg-primary-container p-xl md:p-2xl rounded-[40px] text-center text-on-primary relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary via-primary-container to-secondary opacity-20"></div>
+<div class="relative z-10">
+<h2 class="font-display-lg text-display-lg mb-md">Privacy You Can Trust</h2>
+<p class="font-body-lg text-body-lg mb-xl max-w-2xl mx-auto text-on-primary-container">
+                        Your trust is essential to our community. Join thousands of users who are already making a difference while keeping their data safe and secure.
+                    </p>
+<div class="flex flex-wrap justify-center gap-md">
+                <button onclick="window.location.href='list-item.html'" class="bg-white text-primary px-xl py-md rounded-xl font-bold shadow-xl hover:bg-opacity-90 transition-all active:scale-[0.98]">Donate an Item</button>
+<button onclick="window.location.href='browse.html'" class="bg-transparent border-2 border-white/30 text-white px-xl py-md rounded-xl font-bold hover:bg-white/10 transition-all">Explore Donations</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for active nav highlighting based on page context
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('header nav a');
+            // This is a privacy page, but typically privacy wouldn't be in main nav.
+            // For demo, we keep the default inactive states from JSON.
+        });
+    </script>
+
+
+
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

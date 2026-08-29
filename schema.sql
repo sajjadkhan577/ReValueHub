@@ -1,0 +1,115 @@
+-- schema.sql – core tables for ReValueHub admin dashboard
+CREATE DATABASE IF NOT EXISTS revalue_hub CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE revalue_hub;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) DEFAULT 'user',
+    status ENUM('Active','Flagged','Pending') DEFAULT 'Active',
+    avatar VARCHAR(255) DEFAULT NULL,
+    bio TEXT DEFAULT NULL,
+    joined_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Items table (listings shared by users)
+CREATE TABLE IF NOT EXISTS items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description TEXT,
+    location VARCHAR(200),
+    `condition` VARCHAR(50),
+    image_url VARCHAR(255),
+    donor_id INT NOT NULL,
+    status ENUM('pending','approved','rejected','donated') DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Requests table (user requests for items)
+CREATE TABLE IF NOT EXISTS requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    requester_id INT NOT NULL,
+    status ENUM('open','closed','cancelled') DEFAULT 'open',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+    FOREIGN KEY (requester_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Sample data (optional)
+-- Passwords are 'password123' hashed (demo only)
+INSERT INTO users (name, email, password, status) VALUES
+    ('Alex Monroe', 'alex@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active'),
+    ('Kevin Park', 'kevin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Flagged'),
+    ('Sarah Chen', 'sarah@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active'),
+    ('James Wilson', 'james@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Active');
+
+-- Demo admin account (password: admin123)
+INSERT INTO users (name, email, password, role, status) VALUES
+    ('Admin', 'admin@revalue.com', '$2b$10$YhZS.2xe1D/IGtQVy1Ccb.jRijZMk6AV2YR8rVBs3huCCF3H0KMJq', 'admin', 'Active');
+
+INSERT INTO items (title, category, donor_id) VALUES
+    ('Minimalist Steel Watch','Electronics',1),
+    ('Premium Wool Blend Coat','Clothes',3);
+
+-- Notifications table
+CREATE TABLE IF NOT EXISTS notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Messages table (direct peer-to-peer chat)
+CREATE TABLE IF NOT EXISTS messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    item_id INT DEFAULT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- Volunteer applications table (submitted via become_a_volunteer.html)
+CREATE TABLE IF NOT EXISTS volunteer_applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT DEFAULT NULL,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    skills TEXT,
+    availability VARCHAR(100) DEFAULT 'Flexible',
+    motivation TEXT,
+    status ENUM('pending','approved','rejected') DEFAULT 'pending',
+    reviewed_by INT DEFAULT NULL,
+    reviewed_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- Donations table (records completed hand-offs so they can be removed from the live feed)
+CREATE TABLE IF NOT EXISTS donations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    request_id INT DEFAULT NULL,
+    donor_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    item_title VARCHAR(200) NOT NULL,
+    completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+    FOREIGN KEY (request_id) REFERENCES requests(id) ON DELETE SET NULL,
+    FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+

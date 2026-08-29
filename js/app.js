@@ -1,0 +1,1834 @@
+// ReValue Hub application glue. It attaches behavior to the existing HTML only.
+const API_BASE = 'api';
+const PLACEHOLDER_IMAGE = 'assets/logo.png?v=2';
+const DEFAULT_AVATAR = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%23f8fafc%22/%3E%3Ccircle cx=%2240%22 cy=%2224%22 r=%2214%22 fill=%22%23cbd5e1%22/%3E%3Cpath d=%22M24 60c0-10 12-13 16-13s16 3 16 13%22 stroke=%22%239ca3af%22 stroke-width=%226%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E';
+
+
+let currentUser = null;
+let selectedImageFiles = [];
+let token = localStorage.getItem('userToken');
+let profileAvatarFile = null;
+let previousNotificationCount = null;
+
+document.addEventListener('DOMContentLoaded', initApp);
+
+async function initApp() {
+  await checkAuth();
+  insertGlobalHeaderFooter();
+  setupNav();
+  setupHeaderActions();
+  setupForms();
+  // Attach after DOM is ready and before we potentially redirect away
+  setupPasswordToggles();
+  setupSocialLoginButtons();
+
+  setupSearchAndFilters();
+  setupTypingHeadlines();
+
+
+  const path = decodeURIComponent(window.location.pathname);
+  if (path.includes('browse.html') || path.includes('discovery.html')) {
+    if (!currentUser) {
+      localStorage.setItem('postAuthRedirect', path);
+      return redirect('register.html');
+    }
+    loadItems('items-grid');
+  } else if (path.includes('item-detail.html')) {
+    if (!currentUser) {
+      localStorage.setItem('postAuthRedirect', path + window.location.search);
+      return redirect('register.html');
+    }
+    loadItemDetail();
+  } else if (path.includes('dashboard.html')) {
+    if (!currentUser) return redirect('register.html');
+    loadUserDashboard();
+  } else if (path.includes('admin-dashboard.html')) {
+    // Admin dashboard has its own auth check in admin-dashboard.js
+    loadAdminDashboard();
+  } else if (path.includes('list-item.html')) {
+    if (!currentUser) {
+      localStorage.setItem('postAuthRedirect', path);
+      return redirect('register.html');
+    }
+    setupImagePicker();
+    setupLocationPicker();
+  } else if (path.includes('landing.html') || path === '/') {
+    loadItems('recent-items-grid', { limit: 4 });
+    loadHeroCarousel();
+  }
+
+  if (path.includes('login.html') || path.includes('register.html')) {
+    if (currentUser) return redirect(currentUser.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html');
+  }
+
+}
+
+
+
+
+function setupPasswordToggles() {
+  try {
+    // Support both:
+    // - input#password with sibling button containing material icon text `visibility`/`visibility_off`
+    // - any password input with an adjacent eye-toggle button in the same wrapper.
+    const passwordInputs = Array.from(document.querySelectorAll('input[type="password"]'));
+
+    passwordInputs.forEach((input) => {
+      // Only attach to inputs that look like they have an eye toggle next to them (login/register UI)
+      const container = input.closest('.relative') || input.parentElement;
+      if (!container) return;
+      const toggleButton = container.querySelector('button[type="button"] span.material-symbols-outlined, button span.material-symbols-outlined');
+
+      if (!toggleButton) return;
+      const btn = toggleButton.closest('button');
+      if (!btn) return;
+
+      // prevent double-binding
+      if (btn.dataset.passwordToggleBound === 'true') return;
+      btn.dataset.passwordToggleBound = 'true';
+
+      const syncIcon = () => {
+        const icon = toggleButton.textContent.trim();
+        // If input currently shows plain text -> visibility_off, else visibility
+        if (input.type === 'password') {
+          if (!icon || icon === 'visibility_off') toggleButton.textContent = 'visibility';
+        } else {
+          toggleButton.textContent = 'visibility_off';
+        }
+      };
+
+      // initialize state (should be password)
+      if (!input.type) input.type = 'password';
+      syncIcon();
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        input.type = input.type === 'password' ? 'text' : 'password';
+        // ensure icon matches state
+        toggleButton.textContent = input.type === 'password' ? 'visibility' : 'visibility_off';
+      });
+    });
+  } catch (err) {
+    // Non-fatal
+    console.error('setupPasswordToggles failed:', err);
+  }
+}
+
+function setupTypingHeadlines() {
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('[data-typing-phrases]').forEach((headline) => {
+    let phrases = [];
+    try {
+      phrases = JSON.parse(headline.dataset.typingPhrases || '[]');
+    } catch (err) {
+      phrases = [];
+    }
+
+    phrases = phrases.filter(Boolean);
+    if (!phrases.length) return;
+
+    if (reduceMotion || phrases.length === 1) {
+      headline.textContent = phrases[phrases.length - 1];
+      return;
+    }
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let resting = false;
+
+    headline.textContent = '';
+    headline.classList.add('typing-cursor');
+
+    const typeStep = () => {
+      const currentPhrase = phrases[phraseIndex];
+
+      if (resting) {
+        resting = false;
+        window.setTimeout(typeStep, 1100);
+        return;
+      }
+
+      if (deleting) {
+        charIndex -= 1;
+        headline.textContent = currentPhrase.slice(0, charIndex);
+
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          window.setTimeout(typeStep, 250);
+          return;
+        }
+      } else {
+        const nextPhrase = phrases[phraseIndex];
+        charIndex += 1;
+        headline.textContent = nextPhrase.slice(0, charIndex);
+
+        if (charIndex === nextPhrase.length) {
+          deleting = true;
+          resting = true;
+          window.setTimeout(typeStep, 1800);
+          return;
+        }
+      }
+
+      window.setTimeout(typeStep, deleting ? 42 : 62);
+    };
+
+    window.setTimeout(typeStep, 1200);
+  });
+}
+
+function setToken(newToken) {
+  token = newToken || null;
+  if (token) localStorage.setItem('userToken', token);
+  else localStorage.removeItem('userToken');
+}
+
+function redirect(url) {
+  // If url starts with / and we are in a subdirectory, it might fail.
+  // We'll strip leading slash to make it relative to the current folder if it's an HTML file.
+  if (url.startsWith('/') && url.endsWith('.html')) {
+    url = url.substring(1);
+  }
+  window.location.href = url;
+}
+
+function escapeHtml(value = '') {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  }[char]));
+}
+
+function formatDate(date) {
+  return date ? new Date(date).toLocaleDateString() : '';
+}
+
+async function apiRequest(endpoint, options = {}) {
+  // Defensive check for token string values
+  const effectiveToken = (token === 'null' || token === 'undefined') ? null : token;
+
+  const headers = { ...(options.headers || {}) };
+  if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
+  if (effectiveToken) headers.Authorization = `Bearer ${effectiveToken}`;
+
+  // Strip leading slash from endpoint if present to keep it relative to API_BASE
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+
+  // Ensure the endpoint has .php extension for Apache
+  const phpEndpoint = cleanEndpoint.includes('?') 
+    ? cleanEndpoint.replace('?', '.php?') 
+    : `${cleanEndpoint}.php`;
+
+  const url = `${API_BASE}/${phpEndpoint}`;
+  console.log(`API Request: ${url}`);
+
+  const res = await fetch(url, { cache: 'no-store', ...options, headers });
+  if (res.status === 204) return null;
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw data;
+  return data;
+}
+
+async function checkAuth() {
+  if (!token) {
+    localStorage.removeItem('profileAvatar');
+    return updateUI();
+  }
+  try {
+    const res = await apiRequest('auth/me');
+    currentUser = res.user;
+  } catch (err) {
+    setToken(null);
+    currentUser = null;
+    localStorage.removeItem('profileAvatar');
+  }
+  updateUI();
+}
+
+function updateUI() {
+  document.querySelectorAll('[data-logged-in]').forEach((el) => el.style.display = currentUser ? '' : 'none');
+  document.querySelectorAll('[data-logged-out]').forEach((el) => el.style.display = currentUser ? 'none' : '');
+  document.querySelectorAll('[data-admin-only]').forEach((el) => el.style.display = currentUser?.role === 'admin' ? '' : 'none');
+  document.querySelectorAll('[data-user-name]').forEach((el) => el.textContent = currentUser?.name || '');
+  document.querySelectorAll('[data-user-email]').forEach((el) => el.textContent = currentUser?.email || '');
+
+  const avatar = getUserAvatar();
+  document.querySelectorAll('[data-user-avatar]').forEach((img) => img.src = avatar);
+  document.querySelectorAll('img[alt*="User avatar"], img[alt*="User profile"]').forEach((img) => img.src = avatar);
+
+  const nameHeader = document.getElementById('user-name');
+  if (nameHeader && currentUser) nameHeader.textContent = `Welcome back, ${currentUser.name}`;
+
+  const dashboardLink = document.getElementById('dashboard-link');
+  if (dashboardLink) dashboardLink.href = currentUser?.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+}
+
+function getUserAvatar() {
+  if (!currentUser) return DEFAULT_AVATAR;
+  const storageKey = currentUser.role === 'admin' ? 'adminProfileAvatar' : 'profileAvatar';
+  const localAvatar = localStorage.getItem(storageKey);
+  return currentUser.avatar || localAvatar || DEFAULT_AVATAR;
+}
+
+function insertGlobalHeaderFooter() {
+  const page = window.location.pathname.toLowerCase();
+  if (page.includes('dashboard.html') || page.includes('admin-dashboard.html')) return;
+
+  const headerHtml = `
+    <header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+      <div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+        <a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+
+        <nav class="hidden md:flex items-center gap-8">
+          <a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+          <div class="relative group">
+            <input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+          </div>
+        </nav>
+        <div class="flex items-center gap-6">
+          <div class="flex gap-4">
+            <button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+          </div>
+          <button onclick="handleDonateClick()" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed cursor-pointer" data-profile-trigger>
+            <img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background." src="${currentUser ? getUserAvatar() : DEFAULT_AVATAR}" class="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </header>
+  `;
+
+  const footerHtml = `
+    <footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+      <div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+        <div class="max-w-xs">
+          <img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+          <p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+          <div class="flex gap-4">
+            <a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="landing.html" aria-label="Fev Home">
+              <img src="fevicon.png" alt="Fev" class="w-5 h-5" />
+            </a>
+            <button type="button" class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" data-footer-profile-trigger aria-label="Open Profile">
+              <span class="material-symbols-outlined text-sm">person</span>
+            </button>
+            <a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#" aria-label="Share">
+              <span class="material-symbols-outlined text-sm">share</span>
+            </a>
+          </div>
+
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+            <ul class="space-y-4">
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+              <li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+        <p class="text-slate-500 dark:text-slate-400">&copy; 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+      </div>
+    </footer>
+  `;
+
+  const existingHeader = document.querySelector('header') || document.querySelector('nav');
+  const headerContainer = document.createElement('div');
+  headerContainer.innerHTML = headerHtml;
+  const newHeader = headerContainer.firstElementChild;
+  if (existingHeader) {
+    existingHeader.replaceWith(newHeader);
+  } else {
+    document.body.insertBefore(newHeader, document.body.firstChild);
+  }
+
+  const existingFooter = document.querySelector('footer');
+  const footerContainer = document.createElement('div');
+  footerContainer.innerHTML = footerHtml;
+  const newFooter = footerContainer.firstElementChild;
+  if (existingFooter) {
+    existingFooter.replaceWith(newFooter);
+  } else {
+    document.body.appendChild(newFooter);
+  }
+}
+
+function setupNav() {
+  document.querySelectorAll('[data-action="logout"]').forEach((btn) => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      logout();
+    };
+  });
+
+  document.querySelectorAll('a[href="#"]').forEach((a) => {
+    const text = a.textContent.trim().toLowerCase();
+    if (text === 'browse') a.href = 'browse.html';
+    if (text === 'lend' || text === 'give item' || text === 'list new item') a.href = 'list-item.html';
+    if (text === 'home' || text === 'revalue hub' || text === 'communityshare') a.href = 'landing.html';
+    if (text.includes('privacy')) a.href = 'privacy.html';
+    if (text.includes('terms')) a.href = 'terms.html';
+  });
+
+  // Clean up any stale button-bound indices
+  if (!window._buttonInterceptInitialized) {
+    window._buttonInterceptInitialized = true;
+    document.querySelectorAll('button').forEach((button) => {
+      // Only intercept buttons that do NOT already have an onclick attribute
+      // (inline onclick attributes are more specific and should be respected)
+      if (button.getAttribute('onclick')) return;
+
+      const text = button.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
+      
+      // Check for donate-related buttons
+      if (text === 'donate' || text === 'create listing' || text === 'give item' || text === 'start donating' || text === 'donate an item' || text === 'donate now') {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (currentUser) {
+            redirect('list-item.html');
+          } else {
+            localStorage.setItem('postAuthRedirect', 'list-item.html');
+            redirect('register.html');
+          }
+        });
+      }
+      
+      // Check for browse-related buttons
+      if (text === 'browse items' || text === 'browse donations') {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (currentUser) {
+            redirect('browse.html');
+          } else {
+            localStorage.setItem('postAuthRedirect', 'browse.html');
+            redirect('register.html');
+          }
+        });
+      }
+    });
+  }
+}
+
+function setupHeaderActions() {
+  setupNotifications();
+  setupProfileMenu();
+}
+
+function handleDonateClick() {
+  if (!currentUser) {
+    localStorage.setItem('postAuthRedirect', 'list-item.html');
+    redirect('register.html');
+  } else {
+    redirect('list-item.html');
+  }
+}
+
+function handleProfileClick(event) {
+  event.stopPropagation();
+  if (currentUser) {
+    redirect('dashboard.html#profile-panel');
+  } else {
+    redirect('register.html');
+  }
+}
+
+function setupNotifications() {
+  document.querySelectorAll('[data-icon="notifications"]').forEach((icon) => {
+    const button = icon.closest('button') || icon;
+    button.setAttribute('role', 'button');
+    button.setAttribute('tabindex', '0');
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleNotificationPopup(button);
+    });
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleNotificationPopup(button);
+      }
+    });
+  });
+
+  document.addEventListener('click', () => closeFloatingPopups());
+}
+
+function setupProfileMenu() {
+  const seenTriggers = new Set();
+
+  // Triggers:
+  // - header avatar (data-profile-trigger)
+  // - footer profile button (data-footer-profile-trigger)
+  // - any other img with alt containing user avatar/profile text
+  document.querySelectorAll('img[alt*="User avatar"], img[alt*="User profile"], [data-profile-trigger], [data-footer-profile-trigger]').forEach((avatar) => {
+    const trigger = avatar.closest('button') || avatar.parentElement || avatar;
+    if (seenTriggers.has(trigger)) return;
+    seenTriggers.add(trigger);
+
+    trigger.classList.add('cursor-pointer');
+    trigger.setAttribute('role', 'button');
+    trigger.setAttribute('tabindex', '0');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (document.getElementById('settings-section')) {
+        document.getElementById('settings-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('profile-name')?.focus();
+      } else {
+        toggleProfilePopup(trigger);
+      }
+    });
+
+    // Keyboard accessibility
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        trigger.click();
+      }
+    });
+  });
+}
+
+
+function closeFloatingPopups() {
+  document.querySelectorAll('[data-floating-popup]').forEach((popup) => popup.remove());
+}
+
+function placePopup(anchor, popup) {
+  document.body.appendChild(popup);
+  const rect = anchor.getBoundingClientRect();
+  const right = Math.max(16, window.innerWidth - rect.right);
+  popup.style.position = 'fixed';
+  popup.style.top = `${rect.bottom + 12}px`;
+  popup.style.right = `${right}px`;
+  popup.style.zIndex = '80';
+}
+
+async function toggleNotificationPopup(anchor) {
+  const existing = document.getElementById('notification-popup');
+  closeFloatingPopups();
+  if (existing) return;
+
+  const popup = document.createElement('div');
+  popup.id = 'notification-popup';
+  popup.dataset.floatingPopup = 'true';
+  popup.className = 'w-80 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-slate-900 z-50';
+  
+  popup.innerHTML = `
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-bold text-blue-900">Notifications</h3>
+      <span id="notif-popup-count" class="text-xs font-bold text-blue-600 bg-blue-50 rounded-full px-2 py-1">Loading...</span>
+    </div>
+    <div id="notif-list-container" class="space-y-3 max-h-60 overflow-y-auto">
+      <p class="text-xs text-slate-400 text-center py-4">Fetching updates...</p>
+    </div>
+  `;
+  
+  popup.addEventListener('click', (e) => e.stopPropagation());
+  placePopup(anchor, popup);
+  
+  if (!token) {
+    const container = document.getElementById('notif-list-container');
+    if (container) container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Join ReValue Hub to see notifications.</p>';
+    const countSpan = document.getElementById('notif-popup-count');
+    if (countSpan) countSpan.textContent = '0 updates';
+    return;
+  }
+  
+  try {
+    const notifs = await apiRequest('notifications');
+    const container = document.getElementById('notif-list-container');
+    const countSpan = document.getElementById('notif-popup-count');
+    
+    const unreadNotifs = notifs.filter(n => !n.is_read);
+    if (countSpan) countSpan.textContent = `${unreadNotifs.length} new`;
+    
+    if (!notifs.length) {
+      container.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-6 text-slate-400">
+          <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">notifications_off</span>
+          <p class="text-xs font-semibold">You're all caught up!</p>
+        </div>
+      `;
+      return;
+    }
+    
+    container.innerHTML = notifs.map(notif => {
+      const isUnread = !notif.is_read;
+      let icon = 'notifications';
+      let iconBg = 'bg-blue-50 text-blue-600';
+      if (notif.message.toLowerCase().includes('message')) {
+        icon = 'mail';
+        iconBg = 'bg-orange-50 text-orange-600';
+      } else if (notif.message.toLowerCase().includes('request')) {
+        icon = 'inventory_2';
+        iconBg = 'bg-green-50 text-green-700';
+      } else if (notif.message.toLowerCase().includes('profile')) {
+        icon = 'person';
+        iconBg = 'bg-purple-50 text-purple-600';
+      }
+      
+      const timeStr = formatDate(notif.created_at);
+      
+      return `
+        <div class="flex gap-3 items-start p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer ${isUnread ? 'bg-blue-50/30 font-semibold' : ''}" onclick="markNotificationRead(${notif.id}, this)">
+          <span class="material-symbols-outlined rounded-lg p-2 h-10 ${iconBg}">${icon}</span>
+          <div class="flex-grow min-w-0">
+            <p class="text-xs text-slate-800 leading-tight">${escapeHtml(notif.message)}</p>
+            <p class="text-[10px] text-slate-400 mt-1">${timeStr}</p>
+          </div>
+          ${isUnread ? '<span class="w-2.5 h-2.5 rounded-full bg-blue-600 mt-2 shrink-0"></span>' : ''}
+        </div>
+      `;
+    }).join('');
+    
+    if (unreadNotifs.length > 0) {
+      const markAllBtn = document.createElement('button');
+      markAllBtn.className = 'w-full text-center text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline pt-2 mt-2 border-t border-slate-100 block';
+      markAllBtn.textContent = 'Mark all as read';
+      markAllBtn.onclick = async () => {
+        for (const notif of unreadNotifs) {
+          await apiRequest('notifications', {
+            method: 'POST',
+            body: JSON.stringify({ id: notif.id })
+          }).catch(console.error);
+        }
+        checkNotifications();
+        closeFloatingPopups();
+      };
+      container.appendChild(markAllBtn);
+    }
+    
+  } catch (err) {
+    console.error('Error rendering notification popup:', err);
+    const container = document.getElementById('notif-list-container');
+    if (container) container.innerHTML = '<p class="text-xs text-error text-center py-4">Error loading updates.</p>';
+  }
+}
+
+window.markNotificationRead = async (id, element) => {
+  try {
+    await apiRequest('notifications', {
+      method: 'POST',
+      body: JSON.stringify({ id })
+    });
+    element.classList.remove('bg-blue-50/30', 'font-semibold');
+    const dot = element.querySelector('.bg-blue-600');
+    if (dot) dot.remove();
+    checkNotifications();
+    
+    const text = element.querySelector('p')?.textContent || '';
+    if (text.toLowerCase().includes('message')) {
+      closeFloatingPopups();
+      redirect('messages.html');
+    }
+  } catch (err) {
+    console.error('Failed to mark notification read:', err);
+  }
+};
+
+function setupSocialLoginButtons() {
+  // register.html social buttons (UI exists already)
+  const buttons = Array.from(document.querySelectorAll('button'))
+    .filter((b) => /google/i.test(b.textContent) || /facebook/i.test(b.textContent));
+
+  buttons.forEach((btn) => {
+    const provider = /facebook/i.test(btn.textContent) ? 'facebook' : 'google';
+
+    // avoid duplicate binding
+    if (btn.dataset.socialBound === 'true') return;
+    btn.dataset.socialBound = 'true';
+
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        const res = await apiRequest('auth/social-login', {
+          method: 'POST',
+          body: JSON.stringify({ provider })
+        });
+
+        // If configured, backend should return { token, user } similar to /auth/login.
+        if (res?.token && res?.user) {
+          setToken(res.token);
+          currentUser = res.user;
+          redirect(currentUser.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html');
+        } else {
+          alert(res?.message || 'Social login not available yet.');
+        }
+      } catch (err) {
+        alert(err.message || 'Social login failed.');
+      }
+    });
+  });
+}
+
+function openMessageModal(receiverId, receiverName, itemId = null) {
+
+  if (!token) {
+    alert('Join ReValue Hub to message members! Please create an account to continue.');
+    return redirect('register.html');
+  }
+  
+  if (currentUser && parseInt(receiverId) === parseInt(currentUser.id)) {
+    alert('This listing belongs to you!');
+    return;
+  }
+
+  const oldModal = document.getElementById('message-dialog-modal');
+  if (oldModal) oldModal.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'message-dialog-modal';
+  modal.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4';
+  modal.innerHTML = `
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform scale-95 transition-all duration-300 flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center px-8 py-6 border-b border-slate-100">
+        <h3 class="font-bold text-lg text-slate-800">Message ${escapeHtml(receiverName)}</h3>
+        <button onclick="closeMessageModal()" class="material-symbols-outlined text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors">close</button>
+      </div>
+      <div class="px-8 py-6">
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Compose message</label>
+        <textarea id="modal-message-text" class="w-full h-32 px-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm placeholder:text-slate-400" placeholder="Hello! I am interested in your item..."></textarea>
+      </div>
+      <div class="px-8 py-5 bg-slate-50 flex justify-end gap-3 border-t border-slate-100">
+        <button onclick="closeMessageModal()" class="px-5 py-2.5 text-slate-500 font-semibold rounded-xl hover:bg-slate-100 transition-colors text-sm">Cancel</button>
+        <button id="modal-send-btn" onclick="submitMessageModal(${receiverId}, ${itemId ? itemId : 'null'})" class="px-6 py-2.5 bg-primary text-white font-semibold rounded-xl shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all text-sm flex items-center gap-2">
+          Send Message
+          <span class="material-symbols-outlined text-sm">send</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.getElementById('modal-message-text')?.focus();
+  modal.onclick = closeMessageModal;
+}
+
+window.openMessageModal = openMessageModal;
+
+window.closeMessageModal = () => {
+  const modal = document.getElementById('message-dialog-modal');
+  if (modal) modal.remove();
+};
+
+window.submitMessageModal = async (receiverId, itemId) => {
+  const textarea = document.getElementById('modal-message-text');
+  const message = textarea?.value.trim();
+  if (!message) {
+    return alert('Please write a message before sending.');
+  }
+
+  const sendBtn = document.getElementById('modal-send-btn');
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = 'Sending... <span class="material-symbols-outlined text-sm animate-spin">sync</span>';
+  }
+
+  try {
+    await apiRequest('messages', {
+      method: 'POST',
+      body: JSON.stringify({
+        receiver_id: receiverId,
+        message: message,
+        item_id: itemId
+      })
+    });
+    
+    closeMessageModal();
+    redirect(`messages.html?userId=${receiverId}`);
+  } catch (err) {
+    console.error('Error sending modal message:', err);
+    alert(err.message || 'Failed to send message. Please try again.');
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = 'Send Message <span class="material-symbols-outlined text-sm">send</span>';
+    }
+  }
+};
+
+function toggleProfilePopup(anchor) {
+  const existing = document.getElementById('profile-popup');
+  closeFloatingPopups();
+  if (existing) return;
+
+  const popup = document.createElement('div');
+  popup.id = 'profile-popup';
+  popup.dataset.floatingPopup = 'true';
+  popup.className = 'w-72 max-w-[calc(100vw-2rem)] bg-white border border-slate-200 rounded-xl shadow-2xl p-4 text-slate-900';
+  if (currentUser) {
+    popup.innerHTML = `
+      <div class="flex items-center gap-3 mb-4">
+        <img src="${escapeHtml(getUserAvatar())}" alt="Profile avatar" class="w-12 h-12 rounded-full object-cover border border-blue-100">
+        <div>
+          <p class="text-sm font-bold">${escapeHtml(currentUser.name)}</p>
+          <p class="text-xs text-slate-500">${escapeHtml(currentUser.email || 'Profile member')}</p>
+        </div>
+      </div>
+      <a href="dashboard.html#profile-panel" class="block text-center bg-blue-600 text-white rounded-lg py-2 text-sm font-semibold">Open Profile</a>
+    `;
+  } else {
+    popup.innerHTML = `
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+          <span class="material-symbols-outlined">person</span>
+        </div>
+        <div>
+          <p class="text-sm font-bold">Welcome to ReValue Hub</p>
+          <p class="text-xs text-slate-500">Sign in or create an account to start donating and messaging neighbors.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <a href="login.html" class="block text-center bg-slate-900 text-white rounded-lg py-2 text-sm font-semibold">Sign in</a>
+        <a href="register.html" class="block text-center bg-blue-50 text-blue-700 rounded-lg py-2 text-sm font-semibold hover:bg-blue-100">Create Account</a>
+      </div>
+    `;
+  }
+  popup.addEventListener('click', (e) => e.stopPropagation());
+  placePopup(anchor, popup);
+}
+
+async function login(email, password) {
+  const data = await apiRequest('auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password })
+  });
+  setToken(data.token);
+  currentUser = data.user;
+  const postAuthRedirect = localStorage.getItem('postAuthRedirect');
+  if (postAuthRedirect) {
+    localStorage.removeItem('postAuthRedirect');
+    redirect(postAuthRedirect);
+  } else {
+    redirect(currentUser.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html');
+  }
+}
+
+async function register(name, email, password, phone) {
+  const data = await apiRequest('auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ name, email, password, phone })
+  });
+  setToken(data.token);
+  currentUser = data.user;
+  const postAuthRedirect = localStorage.getItem('postAuthRedirect');
+  if (postAuthRedirect) {
+    localStorage.removeItem('postAuthRedirect');
+    redirect(postAuthRedirect);
+  } else {
+    redirect('dashboard.html');
+  }
+}
+
+async function logout() {
+  try {
+    await apiRequest('auth/logout', { method: 'POST' });
+  } catch (err) {
+    // Local logout should still work if the network request fails.
+  }
+  setToken(null);
+  currentUser = null;
+  localStorage.removeItem('userToken');
+  localStorage.removeItem('profileAvatar');
+  localStorage.removeItem('adminProfileAvatar');
+  localStorage.removeItem('admin-theme');
+  redirect('landing.html');
+}
+
+function setupForms() {
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const email = loginForm.elements['email']?.value;
+      const password = loginForm.elements['password']?.value;
+      
+      if (!email || !password) {
+        return alert('Please enter both email and password.');
+      }
+
+      try {
+        await login(email, password);
+      } catch (err) {
+        console.error('Login error:', err);
+        alert(err.message || 'Login failed. Please check your credentials.');
+      }
+    };
+  }
+
+  const regForm = document.getElementById('register-form');
+  if (regForm) {
+    regForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const name = regForm.elements['name']?.value;
+      const email = regForm.elements['email']?.value;
+      const password = regForm.elements['password']?.value;
+      const phone = regForm.elements['phone']?.value;
+
+      if (!name || !email || !password) {
+        return alert('Please fill in all required fields.');
+      }
+
+      if (document.getElementById('terms') && !document.getElementById('terms').checked) {
+        return alert('Please accept the terms to continue.');
+      }
+
+      try {
+        await register(name, email, password, phone);
+      } catch (err) {
+        console.error('Registration error:', err);
+        alert(err.message || 'Registration failed. Please try again.');
+      }
+    };
+  }
+
+  const addItemForm = document.getElementById('add-item-form');
+  if (addItemForm) {
+    // Check if editing existing item
+    const editItemId = new URLSearchParams(window.location.search).get('edit');
+    
+    if (editItemId) {
+      // Load existing item data for editing
+      loadItemForEdit(editItemId);
+    }
+    
+    addItemForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title')?.value;
+      const category = document.getElementById('category')?.value;
+      
+      if (!title || !category) {
+        return alert('Please enter both title and category.');
+      }
+
+      const payload = new FormData();
+      payload.append('title', title);
+      payload.append('category', category);
+      payload.append('description', document.getElementById('description')?.value || '');
+      payload.append('location', document.getElementById('location')?.value || '');
+      payload.append('condition', 'good');
+      
+      if (selectedImageFiles.length > 0) {
+        payload.append('image', selectedImageFiles[0]);
+      }
+
+      if (category === 'medicine') {
+        payload.append('mfgDate', document.getElementById('mfg-date')?.value || '');
+        payload.append('expDate', document.getElementById('exp-date')?.value || '');
+      }
+
+      try {
+        if (editItemId) {
+          // Update existing item
+          payload.append('id', editItemId);
+          await apiRequest('items', { method: 'PUT', body: payload });
+          alert('Item updated successfully!');
+        } else {
+          // Create new item
+          await apiRequest('items', { method: 'POST', body: payload });
+          alert('Item listed successfully!');
+        }
+        selectedImageFiles = [];
+        redirect('dashboard.html');
+      } catch (err) {
+        console.error('Listing error:', err);
+        alert(err.message || err.error || 'Failed to save item');
+      }
+    };
+  }
+
+async function loadItemForEdit(itemId) {
+  try {
+    const item = await apiRequest(`items?id=${encodeURIComponent(itemId)}&t=${Date.now()}`);
+    
+    // Populate form with existing data
+    document.getElementById('title').value = item.title || '';
+    document.getElementById('category').value = item.category || '';
+    document.getElementById('description').value = item.description || '';
+    document.getElementById('location').value = item.location || '';
+    
+    // Update page title
+    document.querySelector('h1').textContent = 'Edit Item';
+    
+    // Handle medicine fields if applicable
+    if (item.category === 'medicine') {
+      document.getElementById('medicine-fields').classList.remove('hidden');
+      document.getElementById('mfg-date').value = item.mfgDate || '';
+      document.getElementById('exp-date').value = item.expDate || '';
+    }
+    
+    // Load existing image if available
+    if (item.image_url) {
+      const previewGrid = document.getElementById('image-preview-grid');
+      previewGrid.innerHTML = `
+        <div class="relative aspect-square rounded-lg overflow-hidden border border-outline-variant">
+          <img src="${item.image_url}" class="w-full h-full object-cover">
+          <button type="button" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" onclick="this.parentElement.remove()">×</button>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error('Error loading item for edit:', err);
+    alert('Failed to load item data');
+    redirect('dashboard.html');
+  }
+}
+
+  // Category change listener for medicine fields
+  const categorySelect = document.getElementById('category');
+  const medicineFields = document.getElementById('medicine-fields');
+  if (categorySelect && medicineFields) {
+    categorySelect.addEventListener('change', () => {
+      if (categorySelect.value === 'medicine') {
+        medicineFields.classList.remove('hidden');
+      } else {
+        medicineFields.classList.add('hidden');
+      }
+    });
+    // Trigger once on load in case it's already selected (e.g. browser back)
+    if (categorySelect.value === 'medicine') medicineFields.classList.remove('hidden');
+  }
+
+  const profileForm = document.getElementById('profile-form');
+  if (profileForm) {
+    profileForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const payload = new FormData();
+      payload.append('name', document.getElementById('profile-name').value);
+      payload.append('email', document.getElementById('profile-email').value);
+      payload.append('bio', document.getElementById('profile-bio')?.value || '');
+      if (profileAvatarFile) payload.append('avatar', profileAvatarFile);
+
+      try {
+        const res = await apiRequest('auth/profile', { method: 'POST', body: payload });
+        currentUser = res.user;
+        localStorage.removeItem('profileAvatar');
+        profileAvatarFile = null;
+        updateUI();
+        setProfileStatus('Profile updated.');
+      } catch (err) {
+        const fallbackAvatar = document.getElementById('profile-avatar-preview')?.src;
+        currentUser = {
+          ...(currentUser || {}),
+          name: document.getElementById('profile-name').value,
+          email: document.getElementById('profile-email').value,
+          avatar: fallbackAvatar
+        };
+        if (fallbackAvatar) localStorage.setItem('profileAvatar', fallbackAvatar);
+        updateUI();
+        setProfileStatus(err.message ? `${err.message}. Preview saved in this browser.` : 'Preview saved in this browser.');
+      }
+    };
+  }
+}
+
+function setupImagePicker() {
+  const uploadBox = document.getElementById('image-drop-zone');
+  const input = document.getElementById('image-input');
+  if (!uploadBox || !input) return;
+
+  uploadBox.addEventListener('click', () => input.click());
+  uploadBox.addEventListener('dragover', (e) => e.preventDefault());
+  uploadBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    addSelectedImages(e.dataTransfer.files);
+  });
+  input.addEventListener('change', () => addSelectedImages(input.files));
+}
+
+function setupLocationPicker() {
+  const input = document.getElementById('location');
+  const preview = document.getElementById('location-map-preview');
+  if (!input || !preview) return;
+
+  let timer;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const val = input.value.trim();
+      if (!val) return;
+      const encoded = encodeURIComponent(val);
+      preview.innerHTML = `
+        <iframe 
+          width="100%" 
+          height="100%" 
+          frameborder="0" 
+          style="border:0" 
+          src="https://maps.google.com/maps?q=${encoded}&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+          allowfullscreen>
+        </iframe>
+      `;
+    }, 800);
+  });
+}
+
+function addSelectedImages(files) {
+  if (!files) return;
+  const maxImages = 10;
+  const currentCount = selectedImageFiles.length;
+  const availableSlots = maxImages - currentCount;
+  const filesToAdd = Array.from(files).slice(0, availableSlots);
+  selectedImageFiles.push(...filesToAdd);
+  updateImagePreviews();
+}
+
+function removeSelectedImage(index) {
+  selectedImageFiles.splice(index, 1);
+  updateImagePreviews();
+}
+
+function updateImagePreviews() {
+  const grid = document.getElementById('image-preview-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  selectedImageFiles.forEach((file, index) => {
+    const div = document.createElement('div');
+    div.className = 'aspect-square rounded-lg bg-surface-container relative overflow-hidden group';
+    div.innerHTML = `
+      <img class="w-full h-full object-cover" src="${URL.createObjectURL(file)}" alt="Preview ${index + 1}">
+      <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <button class="material-symbols-outlined text-white" data-icon="delete" type="button" onclick="removeSelectedImage(${index})">delete</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+
+  // Add empty slots up to 10
+  const totalSlots = 10;
+  const emptySlots = totalSlots - selectedImageFiles.length;
+  for (let i = 0; i < emptySlots; i++) {
+    const div = document.createElement('div');
+    div.className = 'aspect-square rounded-lg border-2 border-dashed border-outline-variant flex items-center justify-center cursor-pointer';
+    div.innerHTML = '<span class="material-symbols-outlined text-outline" data-icon="add">add</span>';
+    div.addEventListener('click', () => document.getElementById('image-input').click());
+    grid.appendChild(div);
+  }
+}
+
+function setupSearchAndFilters() {
+  if (!decodeURIComponent(window.location.pathname).includes('browse.html')) return;
+
+  const searchInput = document.querySelector('nav input[placeholder*="Search"]');
+  const categoryLinks = document.querySelectorAll('aside nav a[data-category]');
+  const resetButton = Array.from(document.querySelectorAll('aside button')).find((btn) => btn.textContent.trim().toLowerCase().includes('reset'));
+  const state = { search: '', category: '', location: '' };
+  let timer;
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        state.search = searchInput.value.trim();
+        loadItems('items-grid', state);
+      }, 250);
+    });
+  }
+
+  const updateCategoryHighlight = (activeCategory = '') => {
+    categoryLinks.forEach((link) => {
+      const isActive = (link.dataset.category || '') === activeCategory;
+      link.classList.toggle('bg-blue-50', isActive);
+      link.classList.toggle('dark:bg-blue-900/20', isActive);
+      link.classList.toggle('text-blue-700', isActive);
+      link.classList.toggle('dark:text-blue-300', isActive);
+      link.classList.toggle('text-slate-500', !isActive);
+      link.classList.toggle('dark:text-slate-400', !isActive);
+      link.classList.toggle('hover:bg-slate-50', !isActive);
+      link.classList.toggle('dark:hover:bg-slate-800', !isActive);
+    });
+  };
+
+  updateCategoryHighlight(state.category);
+
+  categoryLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      state.category = link.dataset.category || '';
+      updateCategoryHighlight(state.category);
+      loadItems('items-grid', state);
+    });
+  });
+
+  if (resetButton) {
+    resetButton.addEventListener('click', () => {
+      state.search = '';
+      state.category = '';
+      state.location = '';
+      if (searchInput) searchInput.value = '';
+      updateCategoryHighlight('');
+      loadItems('items-grid');
+    });
+  }
+}
+
+async function loadItems(containerId, filters = {}) {
+  const container = document.getElementById(containerId);
+  console.log('loadItems called for', containerId);
+  if (!container) return;
+
+  try {
+    const qs = new URLSearchParams(Object.entries(filters).filter(([, value]) => value)).toString();
+    const items = await apiRequest(`/items${qs ? `?${qs}` : ''}`);
+
+    if (!items.length) {
+      container.innerHTML = '<p class="col-span-full text-center text-on-surface-variant">No items found.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map(itemCard).join('');
+    console.log(`loaded ${items.length} items into ${containerId}`);
+
+    // Add delegated click handler so clicking anywhere on a card navigates to details
+    if (!container._cardClickHandlerInstalled) {
+      container.addEventListener('click', (e) => {
+        // ignore clicks on interactive elements
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+        const card = e.target.closest('[data-item-id]');
+        if (card) {
+          const id = card.getAttribute('data-item-id');
+          console.log('card clicked, id=', id);
+          if (id) window.location.href = `item-detail.html?id=${encodeURIComponent(id)}`;
+        }
+      });
+      container._cardClickHandlerInstalled = true;
+      console.log('installed card click delegation on', containerId);
+    }
+  } catch (err) {
+    container.innerHTML = '<p class="col-span-full text-center text-error">Error loading items.</p>';
+  }
+}
+
+function itemCard(item) {
+  const condition = escapeHtml((item.condition || 'good').replace('_', ' '));
+  return `
+    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all group flex flex-col h-full no-underline text-inherit cursor-pointer">
+      <div class="relative aspect-square shrink-0 bg-surface-container-low">
+        <span class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full text-[10px] font-bold text-primary z-10 capitalize">${condition}</span>
+        <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+      </div>
+      <div class="p-2.5 flex flex-col flex-grow">
+        <h4 class="font-headline-md text-sm leading-tight mb-1 line-clamp-2">${escapeHtml(item.title)}</h4>
+        <p class="text-[11px] font-body-sm text-on-surface-variant mb-2 flex items-center gap-1 truncate">
+          <span class="material-symbols-outlined text-xs">location_on</span> ${escapeHtml(item.location || '')}
+        </p>
+        <div class="mt-auto pt-2 border-t border-outline-variant flex items-center gap-1.5">
+          <img src="${escapeHtml(item.donor_avatar || DEFAULT_AVATAR)}" class="w-5 h-5 rounded-full object-cover border border-primary/10 shrink-0">
+          <span class="text-[11px] font-bold text-on-surface truncate">${escapeHtml(item.donor_name || 'Donor')}</span>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+
+async function loadHeroCarousel() {
+  const track = document.getElementById('hero-carousel-track');
+  if (!track) return;
+
+  try {
+    const items = await apiRequest(`items?featured=1&limit=10&t=${Date.now()}`);
+
+    if (!items.length) {
+      track.innerHTML = '<p class="text-body-sm text-on-surface-variant py-4">No listings yet — be the first to donate an item!</p>';
+      return;
+    }
+
+    track.innerHTML = items.map(item => `
+      <a href="item-detail.html?id=${item.id}" class="shrink-0 w-40 sm:w-44 bg-white rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all no-underline text-inherit">
+        <div class="relative aspect-square bg-surface-container-low">
+          <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover">
+        </div>
+        <div class="p-2">
+          <h5 class="text-xs font-bold leading-tight line-clamp-2">${escapeHtml(item.title)}</h5>
+          <p class="text-[10px] text-on-surface-variant truncate mt-0.5">${escapeHtml(item.category || '')}</p>
+        </div>
+      </a>
+    `).join('');
+
+    setupHeroCarouselControls(track);
+  } catch (err) {
+    track.innerHTML = '<p class="text-body-sm text-error py-4">Could not load featured items.</p>';
+  }
+}
+
+function setupHeroCarouselControls(track) {
+  const prevBtn = document.getElementById('hero-carousel-prev');
+  const nextBtn = document.getElementById('hero-carousel-next');
+  const scrollAmount = () => Math.max(track.clientWidth * 0.8, 180);
+
+  const scrollNext = () => {
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + scrollAmount(), behavior: 'smooth' });
+  };
+  const scrollPrev = () => {
+    track.scrollTo({ left: Math.max(0, track.scrollLeft - scrollAmount()), behavior: 'smooth' });
+  };
+
+  if (nextBtn) nextBtn.onclick = scrollNext;
+  if (prevBtn) prevBtn.onclick = scrollPrev;
+
+  // Auto-advance every few seconds, like a Daraz/OLX featured-deals strip.
+  if (track._autoplayInterval) clearInterval(track._autoplayInterval);
+  track._autoplayInterval = setInterval(scrollNext, 4000);
+  track.addEventListener('mouseenter', () => clearInterval(track._autoplayInterval));
+  track.addEventListener('mouseleave', () => {
+    track._autoplayInterval = setInterval(scrollNext, 4000);
+  });
+}
+
+
+async function loadItemDetail() {
+  const itemId = new URLSearchParams(window.location.search).get('id');
+  if (!itemId) return redirect('browse.html');
+
+  try {
+    const item = await apiRequest(`items?id=${encodeURIComponent(itemId)}&t=${Date.now()}`);
+    renderItemDetail(item);
+    
+    const requestBtn = document.getElementById('request-btn');
+    if (requestBtn) {
+      requestBtn.onclick = () => requestItem(itemId);
+    }
+    
+    // Load related items (recent ones for now)
+    loadItems('related-items-grid', { limit: 4 });
+  } catch (err) {
+    alert('Item not found');
+    redirect('browse.html');
+  }
+}
+
+async function requestItem(itemId) {
+  if (!token) {
+    localStorage.setItem('postAuthRedirect', `item-detail.html?id=${itemId}`);
+    alert('Join ReValue Hub to request items! Please create an account to continue.');
+    return redirect('register.html');
+  }
+
+  try {
+    const res = await apiRequest('requests', {
+      method: 'POST',
+      body: JSON.stringify({ item_id: itemId })
+    });
+    alert(res.message || 'Request sent successfully!');
+  } catch (err) {
+    alert(err.message || 'Error sending request');
+  }
+}
+
+async function loadOwnerRequests(itemId) {
+  const panel = document.getElementById('owner-requests-panel');
+  const list = document.getElementById('owner-requests-list');
+  if (!panel || !list) return;
+
+  try {
+    const requests = await apiRequest(`requests?item=${encodeURIComponent(itemId)}&t=${Date.now()}`);
+    const openRequests = requests.filter(r => r.status === 'open');
+
+    if (!openRequests.length) {
+      panel.classList.add('hidden');
+      return;
+    }
+
+    panel.classList.remove('hidden');
+    list.innerHTML = openRequests.map(r => `
+      <div class="flex items-center justify-between gap-3 border border-outline-variant rounded-xl p-3">
+        <div class="flex items-center gap-2 min-w-0">
+          <img src="${escapeHtml(r.requester_avatar || DEFAULT_AVATAR)}" class="w-9 h-9 rounded-full object-cover border border-primary/10 shrink-0">
+          <span class="text-sm font-bold text-on-surface truncate">${escapeHtml(r.requester_name || 'Requester')}</span>
+        </div>
+        <button data-request-id="${r.id}" data-item-id="${itemId}" class="complete-donation-btn shrink-0 bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold hover:opacity-90 transition-all">
+          Donation Complete
+        </button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.complete-donation-btn').forEach(btn => {
+      btn.addEventListener('click', () => completeDonation(btn.dataset.itemId, btn.dataset.requestId, btn));
+    });
+  } catch (err) {
+    panel.classList.add('hidden');
+  }
+}
+
+async function completeDonation(itemId, requestId, btn) {
+  if (!confirm('Mark this donation as complete? The item will be removed from the public feed.')) return;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  try {
+    const res = await apiRequest('complete_donation', {
+      method: 'POST',
+      body: JSON.stringify({ item_id: itemId, request_id: requestId })
+    });
+    alert(res.message || 'Donation marked as complete!');
+    window.location.reload();
+  } catch (err) {
+    alert(err.message || 'Failed to complete donation.');
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+function renderItemDetail(item, isFallback = false) {
+  document.getElementById('detail-title').textContent = item.title || 'Item details';
+  document.getElementById('detail-breadcrumb-current').textContent = item.title || 'Item details';
+  document.getElementById('detail-category').textContent = item.category || 'Category';
+  document.getElementById('detail-status-chip').textContent = (item.condition || 'good').replace('_', ' ');
+  document.getElementById('detail-description').textContent = item.description || 'No description provided yet.';
+  document.getElementById('detail-location').textContent = item.location || 'Location shared after request is accepted.';
+  document.getElementById('detail-owner').textContent = item.donor_name || 'ReValue member';
+  
+  const donorAvatar = document.getElementById('detail-donor-avatar');
+  if (donorAvatar) {
+    donorAvatar.src = item.donor_avatar || DEFAULT_AVATAR;
+  }
+  
+  const viewProfileBtn = document.getElementById('view-profile-btn');
+  if (viewProfileBtn && item.donor_id) {
+    viewProfileBtn.onclick = () => redirect(`profile.html?userId=${item.donor_id}`);
+  }
+
+  const messageDonorBtn = document.getElementById('message-donor-btn');
+  const requestBtn = document.getElementById('request-btn');
+  
+  // Check if current user is the item owner
+  const isOwner = currentUser && parseInt(currentUser.id) === parseInt(item.donor_id);
+  
+  if (isOwner) {
+    // Hide request and message buttons for owner
+    if (requestBtn) requestBtn.style.display = 'none';
+    if (messageDonorBtn) messageDonorBtn.style.display = 'none';
+    
+    // Show edit button for owner (create dynamically if not exists)
+    let editBtn = document.getElementById('edit-item-btn');
+    if (!editBtn) {
+      editBtn = document.createElement('button');
+      editBtn.id = 'edit-item-btn';
+      editBtn.className = 'w-full bg-secondary text-white py-4 rounded-2xl font-headline-md text-headline-md shadow-lg shadow-secondary/20 hover:scale-[1.01] transition-all Active:scale-95 flex items-center justify-center gap-2';
+      editBtn.innerHTML = '<span class="material-symbols-outlined">edit</span> Edit Item';
+      editBtn.onclick = () => redirect(`list-item.html?edit=${item.id}`);
+      requestBtn.parentNode.insertBefore(editBtn, requestBtn);
+    } else {
+      editBtn.style.display = '';
+    }
+
+    if (item.status === 'donated') {
+      editBtn.style.display = 'none';
+      let doneBadge = document.getElementById('donation-complete-badge');
+      if (!doneBadge) {
+        doneBadge = document.createElement('div');
+        doneBadge.id = 'donation-complete-badge';
+        doneBadge.className = 'w-full bg-green-50 text-green-700 border border-green-200 py-4 rounded-2xl font-headline-md text-headline-md flex items-center justify-center gap-2';
+        doneBadge.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Donation Completed';
+        editBtn.parentNode.insertBefore(doneBadge, editBtn);
+      }
+    } else {
+      loadOwnerRequests(item.id);
+    }
+  } else {
+    // Show request and message buttons for other users
+    if (requestBtn) requestBtn.style.display = '';
+    if (messageDonorBtn && item.donor_id) {
+      messageDonorBtn.style.display = '';
+      messageDonorBtn.onclick = () => openMessageModal(item.donor_id, item.donor_name, item.id);
+    }
+    
+    // Hide edit button for non-owners
+    const editBtn = document.getElementById('edit-item-btn');
+    if (editBtn) editBtn.style.display = 'none';
+  }
+
+  document.getElementById('detail-condition').textContent = (item.condition || 'good').replace('_', ' ');
+  document.getElementById('detail-posted').textContent = formatDate(item.created_at);
+
+  const brandRow = document.getElementById('detail-brand-row');
+  const colorRow = document.getElementById('detail-color-row');
+  const brandValue = item.brand || '';
+  const colorValue = item.color || '';
+  document.getElementById('detail-brand').textContent = brandValue || '—';
+  document.getElementById('detail-color').textContent = colorValue || '—';
+  if (brandRow) brandRow.classList.toggle('hidden', !brandValue);
+  if (colorRow) colorRow.classList.toggle('hidden', !colorValue);
+  
+  const imgUrl = item.image_url || PLACEHOLDER_IMAGE;
+  document.getElementById('detail-image').src = imgUrl;
+
+  const thumbContainer = document.getElementById('detail-thumbnails');
+  if (thumbContainer) {
+    thumbContainer.innerHTML = `
+      <div class="aspect-square rounded-2xl overflow-hidden border-2 border-primary cursor-pointer shadow-sm">
+        <img class="w-full h-full object-cover" src="${imgUrl}">
+      </div>
+    `;
+  }
+
+  const mapContainer = document.getElementById('map-container');
+  if (mapContainer && item.location) {
+    const encodedLocation = encodeURIComponent(item.location);
+    mapContainer.innerHTML = `
+      <div class="relative w-full h-full cursor-pointer group" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodedLocation}', '_blank')">
+        <iframe 
+          width="100%" 
+          height="100%" 
+          frameborder="0" 
+          style="border:0; min-height: 160px;" 
+          src="https://maps.google.com/maps?q=${encodedLocation}&hl=en&z=14&output=embed" 
+          allowfullscreen>
+        </iframe>
+        <div class="absolute inset-0 bg-transparent group-hover:bg-black/5 transition-colors"></div>
+        <div class="absolute bottom-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity shadow-sm border border-outline-variant flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px]">open_in_new</span> Click to open Google Maps
+        </div>
+      </div>
+    `;
+  }
+
+  if (requestBtn) {
+    requestBtn.onclick = async () => {
+      if (!currentUser) return redirect('login.html');
+      if (false) {
+        // Removed demo logic
+      }
+      try {
+        await apiRequest('requests', {
+          method: 'POST',
+          body: JSON.stringify({ item_id: item.id })
+        });
+        alert('Request sent successfully!');
+      } catch (err) {
+        alert(err.message || 'Failed to send request.');
+      }
+    };
+  }
+}
+
+async function loadUserDashboard() {
+  try {
+    setupProfilePanel();
+    const items = await apiRequest('items/user');
+    const container = document.getElementById('user-items-grid');
+    if (!container) return;
+
+    updateDashboardCounts(items.length);
+    loadUserRequests();
+
+    if (!items.length) {
+      container.innerHTML = '<p class="col-span-full text-center text-slate-500">No items listed yet.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map(userItemCard).join('') + `
+      <a href="list-item.html" class="border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center p-md text-slate-400 hover:border-blue-300 hover:text-blue-500 hover:bg-blue-50 transition-all cursor-pointer">
+        <span class="material-symbols-outlined text-4xl mb-2" data-icon="add_circle">add_circle</span>
+        <span class="font-label-md">List New Item</span>
+      </a>
+    `;
+    // Delegated click handler for the user items grid
+    if (!container._cardClickHandlerInstalled) {
+      container.addEventListener('click', (e) => {
+        if (e.target.closest('a, button, input, textarea, select, label')) return;
+        const card = e.target.closest('[data-item-id]');
+        if (card) {
+          const id = card.getAttribute('data-item-id');
+          if (id) window.location.href = `item-detail.html?id=${encodeURIComponent(id)}`;
+        }
+      });
+      container._cardClickHandlerInstalled = true;
+    }
+  } catch (err) {
+    console.error('Error loading dashboard items:', err);
+  }
+}
+
+function setupProfilePanel() {
+  const panel = document.getElementById('settings-section');
+  if (!panel) return;
+
+  const nameInput = document.getElementById('profile-name');
+  const emailInput = document.getElementById('profile-email');
+  const preview = document.getElementById('profile-avatar-preview');
+  const input = document.getElementById('profile-avatar-input');
+  const uploadButton = document.getElementById('profile-avatar-button');
+
+  if (nameInput) nameInput.value = currentUser?.name || '';
+  if (emailInput) emailInput.value = currentUser?.email || '';
+  if (preview) preview.src = getUserAvatar();
+
+  uploadButton?.addEventListener('click', () => input?.click());
+  input?.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+    profileAvatarFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const nextSrc = reader.result;
+      if (preview) preview.src = nextSrc;
+      document.querySelectorAll('[data-user-avatar]').forEach((img) => img.src = nextSrc);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function setProfileStatus(message) {
+  const status = document.getElementById('profile-status');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.remove('hidden');
+  window.setTimeout(() => status.classList.add('hidden'), 3500);
+}
+
+async function loadUserRequests() {
+  const tbody = document.getElementById('user-requests-tbody');
+  if (!tbody) return;
+
+  try {
+    const requests = await apiRequest('requests/user');
+    if (!requests.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="px-lg py-4 text-center text-slate-500">No requests yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = requests.map((request) => `
+      <tr class="hover:bg-slate-50/50 transition-colors">
+        <td class="px-lg py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+              <span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+            </div>
+            <span class="font-label-md text-slate-900">${escapeHtml(request.Item?.title || 'Requested item')}</span>
+          </div>
+        </td>
+        <td class="px-lg py-4 text-body-sm text-slate-500">Request</td>
+        <td class="px-lg py-4">
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700">${escapeHtml(request.status)}</span>
+        </td>
+        <td class="px-lg py-4 text-body-sm text-slate-500">${formatDate(request.created_at)}</td>
+        <td class="px-lg py-4 text-right">
+          <a href="item-detail.html?id=${request.Item?.id || ''}" class="text-blue-600 font-label-md hover:underline">Details</a>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error('Error loading requests:', err);
+  }
+}
+
+function updateDashboardCounts(count) {
+  const cards = document.querySelectorAll('section.grid h3');
+  if (cards[0]) cards[0].textContent = String(count).padStart(2, '0');
+}
+
+function userItemCard(item) {
+  return `
+    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all no-underline text-inherit">
+      <div class="h-48 relative overflow-hidden">
+        <img alt="${escapeHtml(item.title)}" class="w-full h-full object-cover" src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}">
+        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-blue-600 shadow-sm">${escapeHtml(item.category)}</div>
+      </div>
+      <div class="p-md">
+        <h5 class="font-headline-md text-slate-900 mb-1">${escapeHtml(item.title)}</h5>
+        <div class="flex items-center gap-2 text-slate-500 mb-4">
+          <span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+          <span class="text-body-sm">${escapeHtml(item.location)}</span>
+        </div>
+        <div class="flex gap-2">
+          <span class="flex-grow bg-blue-50 text-blue-600 font-label-md py-2 rounded-lg text-center">Details</span>
+          <button onclick="deleteItem(${item.id})" class="p-2 border border-slate-200 rounded-lg text-slate-400 hover:text-error hover:border-error transition-colors">
+            <span class="material-symbols-outlined" data-icon="delete">delete</span>
+          </button>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+async function loadAdminDashboard() {
+  try {
+    const stats = await apiRequest('admin/stats');
+    document.getElementById('stat-users').textContent = stats.users;
+    document.getElementById('stat-items').textContent = stats.items;
+
+    const users = await apiRequest('admin/users');
+    const userContainer = document.getElementById('admin-users-tbody');
+    if (userContainer) {
+      userContainer.innerHTML = users.map((user) => `
+        <tr>
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold text-xs text-slate-600">${escapeHtml(user.name).slice(0, 2).toUpperCase()}</div>
+              <div>
+                <p class="text-sm font-semibold text-slate-900">${escapeHtml(user.name)}</p>
+                <p class="text-xs text-slate-500">${escapeHtml(user.email)}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <span class="flex items-center gap-1.5 text-xs font-bold text-secondary">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span> ${escapeHtml(user.role)}
+            </span>
+          </td>
+          <td class="px-6 py-4">${formatDate(user.created_at)}</td>
+          <td class="px-6 py-4 text-right">
+            <button onclick="deleteUser(${user.id})" class="text-error hover:underline text-sm font-medium">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  } catch (err) {
+    console.error('Error loading admin dashboard:', err);
+  }
+}
+
+window.deleteItem = async (id) => {
+  if (!confirm('Are you sure you want to delete this item?')) return;
+  try {
+    await apiRequest(`/items/${id}`, { method: 'DELETE' });
+    loadUserDashboard();
+  } catch (err) {
+    alert(err.message || 'Error deleting item');
+  }
+};
+
+window.deleteUser = async (id) => {
+  if (!confirm('Are you sure you want to delete this user?')) return;
+  try {
+    await apiRequest(`/admin/users/${id}`, { method: 'DELETE' });
+    loadAdminDashboard();
+  } catch (err) {
+    alert(err.message || 'Error deleting user');
+  }
+};
+
+window.ReValue = { login, register, logout, loadItems };
+
+function showSection(sectionId, element) {
+  // Hide all sections
+  document.querySelectorAll('.dashboard-view').forEach(view => view.classList.add('hidden'));
+  
+  // Show target section
+  const target = document.getElementById(sectionId + '-section');
+  if (target) target.classList.remove('hidden');
+  
+  // Update sidebar active state
+  if (element) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('bg-blue-50', 'text-blue-600', 'font-bold');
+      link.classList.add('text-slate-500');
+    });
+    element.classList.add('bg-blue-50', 'text-blue-600', 'font-bold');
+    element.classList.remove('text-slate-500');
+  }
+}
+
+window.showSection = showSection;
+
+async function checkNotifications() {
+  if (!token) return;
+  try {
+    const notifs = await apiRequest('notifications');
+    const unread = notifs.filter(n => !n.is_read).length;
+    const badge = document.getElementById('notif-badge');
+    if (badge) {
+      if (unread > 0) {
+        badge.textContent = unread;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    if (previousNotificationCount !== null && unread > previousNotificationCount) {
+      const newCount = unread - previousNotificationCount;
+      const newMessageNotif = notifs.find(n => !n.is_read && n.message.toLowerCase().includes('message'));
+      if (newMessageNotif) {
+        showNotificationToast(`New message: ${newMessageNotif.message}`);
+      } else if (newCount > 0) {
+        showNotificationToast(`You have ${newCount} new notification${newCount > 1 ? 's' : ''}`);
+      }
+    }
+
+    previousNotificationCount = unread;
+  } catch (err) {
+    console.error('Error checking notifications:', err);
+  }
+}
+
+function showNotificationToast(message) {
+  const existingToast = document.getElementById('notification-toast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'notification-toast';
+  toast.className = 'fixed bottom-4 right-4 max-w-sm bg-slate-950/95 text-white rounded-2xl shadow-2xl p-4 z-50 ring-1 ring-white/10 cursor-pointer';
+  toast.innerHTML = `
+    <div class="flex items-start gap-3">
+      <span class="material-symbols-outlined text-white text-2xl">mail</span>
+      <div class="flex-grow text-sm leading-relaxed">${escapeHtml(message)}</div>
+      <button class="text-slate-300 hover:text-white text-sm" aria-label="Dismiss notification">✕</button>
+    </div>
+  `;
+
+  const dismissButton = toast.querySelector('button');
+  if (dismissButton) {
+    dismissButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toast.remove();
+    });
+  }
+
+  toast.addEventListener('click', () => {
+    toast.remove();
+    redirect('messages.html');
+  });
+
+  document.body.appendChild(toast);
+  window.setTimeout(() => toast.remove(), 7000);
+}
+
+// Check every 30 seconds
+if (token) {
+  checkNotifications();
+  setInterval(checkNotifications, 30000);
+}

@@ -1,0 +1,538 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<title>Become a Volunteer | ReValue Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container": "#ededf9",
+                    "background": "#faf8ff",
+                    "surface": "#faf8ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#434655",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "primary-container": "#2563eb",
+                    "surface-container-high": "#e7e7f3",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3039",
+                    "on-primary-fixed": "#00174b",
+                    "surface-variant": "#e1e2ed",
+                    "surface-dim": "#d9d9e5",
+                    "inverse-primary": "#b4c5ff",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#002109",
+                    "inverse-on-surface": "#f0f0fb",
+                    "secondary-fixed": "#6bff8f",
+                    "surface-tint": "#0053db",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-secondary-container": "#007432",
+                    "tertiary": "#784b00",
+                    "secondary-container": "#6bff8f",
+                    "on-background": "#191b23",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary": "#004ac6",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-surface": "#191b23",
+                    "on-primary-container": "#eeefff",
+                    "secondary": "#006e2f",
+                    "outline-variant": "#c3c6d7",
+                    "outline": "#737686",
+                    "surface-bright": "#faf8ff",
+                    "tertiary-container": "#996100",
+                    "on-secondary-fixed-variant": "#005321",
+                    "surface-container-low": "#f3f3fe",
+                    "secondary-fixed-dim": "#4ae176",
+                    "on-tertiary-container": "#ffeedd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "2xl": "64px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "xl": "40px",
+                    "md": "16px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "display-lg": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-md": ["Manrope"],
+                    "headline-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #faf8ff; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .form-input {
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            box-shadow: 0 0 0 4px rgba(0, 74, 198, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-2xl lg:py-32">
+<div class="max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-xl items-center">
+<div class="z-10">
+<span class="inline-flex items-center gap-2 px-md py-xs bg-primary-fixed text-on-primary-fixed rounded-full font-label-md text-label-md mb-md">
+<span class="material-symbols-outlined text-[18px]">handshake</span>
+                        Become a Volunteer
+                    </span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-md">Help Build Stronger Communities</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-xl">Join our dedicated team of volunteers and play a vital role in fostering sustainability and community support through the power of revaluation.</p>
+<div class="flex flex-wrap gap-md">
+<a class="bg-primary text-on-primary px-xl py-md rounded-lg font-label-md text-label-md hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5" href="#apply">Apply Now</a>
+<button onclick="window.location.href='mission_page.html'" class="border border-outline text-primary px-xl py-md rounded-lg font-label-md text-label-md hover:bg-primary/5 transition-all">Learn More</button>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-12 -left-12 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl"></div>
+<img class="w-full h-auto drop-shadow-2xl rounded-2xl relative z-10" data-alt="A high-quality 3D isometric illustration of diverse, friendly volunteers of different ethnicities helping community members with items like boxes of fresh food, folded clothing, and a wooden chair. The scene is set in a bright, minimalist studio with soft lighting, using a professional corporate palette of primary blue and mint green. The style is modern, polished, and evokes a sense of warmth and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmo7pPNkybv6pcCUcmISjisuCcnAzQQpFcr6wrw4-mFvF3P60GqCBraWDWV3mi7pdjKr32sxB9mxKJ016uuirI_Oc2t0-LbU0xyqMwl5c3sFbJokib4J32whcER0_3nYfKE21Fj0BmB4-KiZ6KRcpvUob95uLzjWSxH-jdE2J-Xw8jwCDKyL3KeNeFLTQl5bgwH97P6y8Z6-nI4AvD6FvIHmQ4gfUyT6HPgGpzXgO7YqMDYruzHJYa">
+</div>
+</div>
+</section>
+<!-- Why Volunteer? Section -->
+<section class="py-2xl bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-gutter text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-sm">Why Volunteer?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Your contribution makes a tangible difference in the world.</p>
+</div>
+<div class="max-w-container-max mx-auto px-gutter grid sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="glass-card p-lg rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">family_restroom</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Help Families</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Directly assist neighbors in need by coordinating essential item transfers.</p>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 bg-secondary-container/30 text-on-secondary-container rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Protect Environment</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Contribute to the circular economy and significantly reduce local waste.</p>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Build Community</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Strengthen social bonds through meaningful interaction and shared goals.</p>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 bg-primary-fixed text-on-primary-fixed-variant rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">Gain Experience</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Develop new leadership, logistics, and communication skills in a professional setting.</p>
+</div>
+</div>
+</section>
+<!-- Volunteer Roles Section -->
+<section class="py-2xl">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="grid lg:grid-cols-2 gap-xl items-center">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-md">Explore Our Roles</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl">Find the perfect way to share your talents. We offer various roles that fit different skill sets and time commitments.</p>
+<div class="space-y-md">
+<div class="flex items-start gap-md p-md rounded-lg border border-outline-variant hover:border-primary transition-colors cursor-default group">
+<div class="bg-primary-container/10 p-sm rounded text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">supervisor_account</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Community Coordinator</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Oversee local exchange hubs and facilitate member interactions.</p>
+</div>
+</div>
+<div class="flex items-start gap-md p-md rounded-lg border border-outline-variant hover:border-primary transition-colors cursor-default group">
+<div class="bg-primary-container/10 p-sm rounded text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Donation Organizer</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Manage the logistics of item drop-offs, quality checks, and storage.</p>
+</div>
+</div>
+<div class="flex items-start gap-md p-md rounded-lg border border-outline-variant hover:border-primary transition-colors cursor-default group">
+<div class="bg-primary-container/10 p-sm rounded text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Support Volunteer</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Provide on-the-ground assistance during community events and distributions.</p>
+</div>
+</div>
+<div class="flex items-start gap-md p-md rounded-lg border border-outline-variant hover:border-primary transition-colors cursor-default group">
+<div class="bg-primary-container/10 p-sm rounded text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">campaign</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Awareness Ambassador</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Spread the word about ReValue Hub in your local area and online.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="space-y-md">
+<div class="h-64 rounded-2xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center" data-alt="A diverse group of cheerful volunteers in matching blue ReValue Hub t-shirts laughing together while organizing boxes of donated books in a bright, modern community center. The lighting is warm and natural, streaming through large industrial windows. The aesthetic is professional yet heartfelt, capturing the joy of teamwork in a clean, minimalist interior environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCFvL1VO-qeKJSs_9KS3J0_o_bXi6IshhvBi2hD7zOG-1zglmnxdoBxpeeHwAoeK1w4SRjLucu02K4jck_LLYF61EdQLi-xGMOOmHUE0RZ2dIXdSQxj9G1Vw20nMrVZfnNe218v7S3BgoR7bzDek5uFD44coXW0TU6pri-ROQuOMJkNrN33og_zgCA7-VgeEKImWTXN3tbGnDEZ5NERwnVPmZdS3FjH0rVrwsuOp39_-UkiF2tmAOoe')"></div>
+</div>
+<div class="h-48 rounded-2xl overflow-hidden shadow-md">
+<div class="w-full h-full bg-cover bg-center" data-alt="A close-up, high-quality shot of a volunteer's hands carefully labeling a package for a family in need. The setting is a organized, modern logistics hub with soft focus on other volunteers in the background. The color palette emphasizes clean whites and deep primary blues, suggesting efficiency and care." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARgB1M06bI_MmqcnW31l0Pf8DWmn_fVQj-QEoSb17G0-Oypk6z_LkMQBg5geaxkYp1UFrlz-4b6XLC8JfgZ8k11XvwovLgNSSo_H8fiVcDGdE3ZN19HtisazvxBaoHdqzSQxID--zAFyYJMXmwvirKhnN4WsFMtienKol0bMVMeJU9PIfA3DuwhTR4xtPEhEd_fr66KDKWMo9ShVIbhtS1LT46MtX1UxgTYCll8xX1H3pQ3QNeBlQ0')"></div>
+</div>
+</div>
+<div class="space-y-md pt-lg">
+<div class="h-48 rounded-2xl overflow-hidden shadow-md">
+<div class="w-full h-full bg-cover bg-center" data-alt="An energetic volunteer speaking passionately to a small group of attentive neighbors in a sun-drenched outdoor park setting. The background features lush greenery and modern architectural details. The atmosphere is vibrant and community-focused, utilizing a palette of corporate blue and soft secondary green." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBuMh_zZeSt0JWOsEbYk05WJBp52HgAYucycJOAmT2fYYCYnQqfMENxMVN9bn7DgWGG2WCc4it56-rXqZVr0--W_ZQUbDeqJD8sbBHs4KA-WsBQ6xtDFWawZ_jvluilPh4XMfLh-IDP_hv0kT2FSq2EpgJm63zYaXvAMtLWn0mGvVhaxDtqwDOLQn-eDxrp6FuBDR6qPoSxjBU3uvnB8fNOCe6_qcRvdvKQV0BgIiErTWxYF1EB0-lI')"></div>
+</div>
+<div class="h-64 rounded-2xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center" data-alt="A focused volunteer using a sleek tablet to coordinate a pickup of furniture donations. The scene is bright and professional, showing a high-tech approach to community service. The lighting is high-key and modern, reflecting a clean, trust-oriented startup atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCmzZRThXFQtSGLYT0RQeUs3NBamVe071sQ-7NDlWu6XKSuM9-I1Ls6UdutDmGV-AtF-K3JNegnjH1rZO2jeTP9dPcEpch7mZsNYgFh5JsOkNFmZqiP7JTJvVX7hkPrqJIfR85FfZC3UvEDbkDmZRyIUTePx3BiUGo_6WkOQj_rL2pxOCA_hP-IzrA5uU88u7gJ6WqT872uBYFDsgSjQGDT63VtO6B224ihfC1-6W2zgYXvTt9ueqA3')"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Benefits Section -->
+<section class="py-2xl bg-surface-container-highest/20">
+<div class="max-w-container-max mx-auto px-gutter text-center">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-xl">Your Impact, Recognized</h2>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-md">
+<div class="flex flex-col items-center gap-sm">
+<div class="w-16 h-16 rounded-full bg-surface shadow-sm flex items-center justify-center text-primary mb-sm">
+<span class="material-symbols-outlined text-[32px]">workspace_premium</span>
+</div>
+<h4 class="font-label-md text-label-md">Official Certificate</h4>
+</div>
+<div class="flex flex-col items-center gap-sm">
+<div class="w-16 h-16 rounded-full bg-surface shadow-sm flex items-center justify-center text-secondary mb-sm">
+<span class="material-symbols-outlined text-[32px]">stars</span>
+</div>
+<h4 class="font-label-md text-label-md">Community Recognition</h4>
+</div>
+<div class="flex flex-col items-center gap-sm">
+<div class="w-16 h-16 rounded-full bg-surface shadow-sm flex items-center justify-center text-tertiary mb-sm">
+<span class="material-symbols-outlined text-[32px]">work_history</span>
+</div>
+<h4 class="font-label-md text-label-md">Professional Experience</h4>
+</div>
+<div class="flex flex-col items-center gap-sm">
+<div class="w-16 h-16 rounded-full bg-surface shadow-sm flex items-center justify-center text-primary mb-sm">
+<span class="material-symbols-outlined text-[32px]">hub</span>
+</div>
+<h4 class="font-label-md text-label-md">Networking Opportunities</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Application Form Section -->
+<section class="py-2xl scroll-mt-24" id="apply">
+<div class="max-w-3xl mx-auto px-gutter">
+<div class="bg-white rounded-2xl shadow-xl shadow-primary/5 p-xl border border-outline-variant/30">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-sm">Join the Team</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Fill out the form below and we'll be in touch shortly.</p>
+</div>
+<form id="volunteer-form" class="space-y-lg">
+<div class="grid sm:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Full Name</label>
+<input id="vol-full-name" class="w-full px-md py-sm rounded-lg border-outline-variant focus:border-primary focus:ring-primary/20 form-input bg-surface-container-low" placeholder="Jane Doe" type="text" required>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Email Address</label>
+<input id="vol-email" class="w-full px-md py-sm rounded-lg border-outline-variant focus:border-primary focus:ring-primary/20 form-input bg-surface-container-low" placeholder="jane@example.com" type="email" required>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Skills</label>
+<div class="flex flex-wrap gap-sm p-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<label class="cursor-pointer">
+<input class="hidden peer" name="vol-skills" type="checkbox" value="Communication">
+<span class="px-md py-xs rounded-full bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-all inline-block">Communication</span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="vol-skills" type="checkbox" value="Logistics">
+<span class="px-md py-xs rounded-full bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-all inline-block">Logistics</span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="vol-skills" type="checkbox" value="Tech">
+<span class="px-md py-xs rounded-full bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-all inline-block">Tech Support</span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="vol-skills" type="checkbox" value="Outreach">
+<span class="px-md py-xs rounded-full bg-white border border-outline-variant text-on-surface-variant font-label-sm text-label-sm peer-checked:bg-primary peer-checked:text-on-primary peer-checked:border-primary transition-all inline-block">Community Outreach</span>
+</label>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Availability</label>
+<select id="vol-availability" class="w-full px-md py-sm rounded-lg border-outline-variant focus:border-primary focus:ring-primary/20 form-input bg-surface-container-low">
+<option>Weekends</option>
+<option>Weekdays</option>
+<option selected>Flexible</option>
+</select>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Why do you want to volunteer?</label>
+<textarea id="vol-motivation" class="w-full px-md py-sm rounded-lg border-outline-variant focus:border-primary focus:ring-primary/20 form-input bg-surface-container-low resize-none" placeholder="Share your motivation and what you hope to achieve..." rows="4" required></textarea>
+</div>
+<div id="vol-form-status" class="hidden text-center font-label-md text-label-md py-2 rounded-lg"></div>
+<button id="vol-submit-btn" class="w-full bg-primary text-on-primary py-md rounded-lg font-label-md text-label-md hover:bg-primary/90 transition-all shadow-lg shadow-primary/20" type="submit">Apply to Volunteer</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Final CTA Section -->
+<section class="py-2xl px-gutter">
+<div class="max-w-container-max mx-auto relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary to-primary-container p-xl lg:p-2xl text-center text-on-primary">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="absolute top-0 left-0 w-96 h-96 bg-secondary rounded-full blur-3xl mix-blend-overlay"></div>
+<div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl mix-blend-overlay"></div>
+</div>
+<div class="relative z-10">
+<h2 class="font-display-lg text-display-lg mb-md">Together We Can Make A Difference</h2>
+<p class="font-body-lg text-body-lg text-primary-fixed mb-xl max-w-2xl mx-auto">Your time is the most valuable gift you can give. Start your journey with ReValue Hub today.</p>
+                <button onclick="window.location.href='#apply'" class="bg-white text-primary px-2xl py-md rounded-lg font-headline-md text-headline-md hover:bg-surface-bright transition-all shadow-xl active:scale-95">Start Your Application</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+</footer>
+    <script>
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Interactive form micro-interactions
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').classList.remove('text-primary');
+            });
+        });
+
+        // Volunteer Application Form Submission
+        const volForm = document.getElementById('volunteer-form');
+        const volStatus = document.getElementById('vol-form-status');
+        const volSubmitBtn = document.getElementById('vol-submit-btn');
+
+        if (volForm) {
+            volForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const fullName = document.getElementById('vol-full-name').value.trim();
+                const email = document.getElementById('vol-email').value.trim();
+                const availability = document.getElementById('vol-availability').value;
+                const motivation = document.getElementById('vol-motivation').value.trim();
+
+                // Collect checked skills
+                const skillCheckboxes = document.querySelectorAll('input[name="vol-skills"]:checked');
+                const skills = Array.from(skillCheckboxes).map(cb => cb.value).join(', ');
+
+                // Validation
+                if (!fullName || !email) {
+                    volStatus.className = 'text-center font-label-md text-label-md py-2 rounded-lg bg-error-container text-on-error-container block';
+                    volStatus.textContent = 'Please fill in your name and email.';
+                    return;
+                }
+
+                // Check if logged in
+                const token = localStorage.getItem('userToken');
+                if (!token) {
+                    volForm.innerHTML = '<p class="text-center text-on-surface-variant font-body-md py-4">Please <a href="login.html" class="text-primary font-bold hover:underline">log in</a> or <a href="register.html" class="text-primary font-bold hover:underline">create an account</a> to submit a volunteer application.</p>';
+                    return;
+                }
+
+                // Disable button during submission
+                volSubmitBtn.disabled = true;
+                volSubmitBtn.textContent = 'Submitting...';
+                volStatus.className = 'hidden';
+
+                try {
+                    // Use the existing apiRequest pattern from app.js
+                    const res = await fetch('api/volunteer/apply.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            full_name: fullName,
+                            email: email,
+                            skills: skills,
+                            availability: availability,
+                            motivation: motivation
+                        })
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        volStatus.className = 'text-center font-label-md text-label-md py-2 rounded-lg bg-secondary-container/30 text-on-secondary-container block';
+                        volStatus.textContent = data.message || 'Application submitted successfully!';
+                        volForm.reset();
+                    } else {
+                        volStatus.className = 'text-center font-label-md text-label-md py-2 rounded-lg bg-error-container text-on-error-container block';
+                        volStatus.textContent = data.message || 'Failed to submit application. Please try again.';
+                    }
+                } catch (err) {
+                    volStatus.className = 'text-center font-label-md text-label-md py-2 rounded-lg bg-error-container text-on-error-container block';
+                    volStatus.textContent = 'Network error. Please check your connection and try again.';
+                    console.error('Volunteer form error:', err);
+                } finally {
+                    volSubmitBtn.disabled = false;
+                    volSubmitBtn.textContent = 'Apply to Volunteer';
+                }
+            });
+        }
+    </script>
+
+
+
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

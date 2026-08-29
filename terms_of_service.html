@@ -1,0 +1,508 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<title>Terms of Service | ReValue Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#996100",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-bright": "#faf8ff",
+                        "secondary-container": "#6bff8f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-tertiary-container": "#ffeedd",
+                        "primary": "#004ac6",
+                        "on-background": "#191b23",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-tertiary": "#ffffff",
+                        "background": "#faf8ff",
+                        "surface-container": "#ededf9",
+                        "on-secondary-container": "#007432",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface-variant": "#e1e2ed",
+                        "outline": "#737686",
+                        "tertiary": "#784b00",
+                        "on-surface": "#191b23",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "on-secondary-fixed": "#002109",
+                        "on-primary-fixed": "#00174b",
+                        "on-primary-container": "#eeefff",
+                        "secondary": "#006e2f",
+                        "error-container": "#ffdad6",
+                        "surface": "#faf8ff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "surface-container-low": "#f3f3fe",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-surface-variant": "#434655",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-tint": "#0053db",
+                        "secondary-fixed": "#6bff8f",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2e3039",
+                        "primary-container": "#2563eb",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "2xl": "64px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "md": "16px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "sans": ["Manrope", "sans-serif"],
+                        "label-sm": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "body-sm": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+        .accordion-active .accordion-content {
+            max-height: 500px;
+            padding-top: 16px;
+        }
+        .accordion-active .chevron-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-sans selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-16">
+<!-- Section 1: Hero -->
+<section class="relative overflow-hidden py-2xl px-6 md:px-10">
+<div class="max-w-[1280px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+<div class="z-10">
+<span class="inline-flex items-center px-4 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md mb-md">
+                        📜 Transparent • Fair • Trusted Platform
+                    </span>
+<h1 class="font-display-lg text-display-lg text-on-background mb-md">Terms of Service</h1>
+<p class="font-body-lg text-body-lg text-outline mb-xl max-w-xl">
+                        Our goal is to build a thriving circular economy. These terms ensure that ReValue Hub remains a safe, respectful, and sustainable environment for everyone in our community.
+                    </p>
+<div class="flex flex-wrap gap-4">
+                        <button onclick="window.location.href='list-item.html'" class="px-8 py-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-95">
+                            Start Donating
+                        </button>
+<button onclick="window.location.href='browse.html'" class="px-8 py-4 bg-surface-container-high text-primary border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-all active:scale-95">
+                            Browse Items
+                        </button>
+</div>
+</div>
+<div class="relative flex justify-center">
+<div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full"></div>
+<img class="w-full h-auto relative z-10 max-w-lg" data-alt="A clean, isometric illustration depicting a group of diverse people collaboratively interacting with a large digital tablet. The tablet displays community guidelines and agreement documents with checkmarks. The scene is bright and airy with soft blue and green accents, reflecting a modern light-mode corporate minimalism and a sense of trust and community agreement." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBKfBZ2YpGuEyXOdsSdaMO3EO_2ikmthT9HuYhWIimdFardYzgEvBMv1XKYESJAOl5AOxA6I1leSXR9k18MLVh-AtfBX4b6nhSLlX6uOXJpkM0xtMEX0Cm9vB0UZ_jbzt0VNEziqyyB4Z38yoFXmpSy1KoHbeeuvCsboDfWWqlzcgjxO04GpamrsNzzMBzQmtHVIYpBL1DOLa3N3XSeUpeVBrtHy687DMRCoU439242zf8Lmdu_erz">
+</div>
+</div>
+</section>
+<!-- Section 2: Quick Overview -->
+<section class="py-2xl px-6 md:px-10 bg-surface-container-low">
+<div class="max-w-[1280px] mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-center mb-2xl">Quick Overview</h2>
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Glass Card 1 -->
+<div class="glass p-lg rounded-xl flex flex-col gap-sm shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-primary text-3xl">handshake</span>
+<h3 class="font-headline-md text-headline-md mt-sm">Platform Purpose</h3>
+<p class="font-body-sm text-body-sm text-outline">ReValue Hub is a marketplace dedicated to re-homing pre-loved items and reducing waste through circularity.</p>
+</div>
+<!-- Glass Card 2 -->
+<div class="glass p-lg rounded-xl flex flex-col gap-sm shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+<h3 class="font-headline-md text-headline-md mt-sm">Free Community</h3>
+<p class="font-body-sm text-body-sm text-outline">Participation is free. We believe sustainability should be accessible to everyone, regardless of their budget.</p>
+</div>
+<!-- Glass Card 3 -->
+<div class="glass p-lg rounded-xl flex flex-col gap-sm shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+<h3 class="font-headline-md text-headline-md mt-sm">Shared Responsibility</h3>
+<p class="font-body-sm text-body-sm text-outline">Users are responsible for the accuracy of their listings and the safety of their physical exchanges.</p>
+</div>
+<!-- Glass Card 4 -->
+<div class="glass p-lg rounded-xl flex flex-col gap-sm shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-primary text-3xl">groups</span>
+<h3 class="font-headline-md text-headline-md mt-sm">Community Trust</h3>
+<p class="font-body-sm text-body-sm text-outline">Our reputation system helps build a reliable network of honest, environmentally conscious individuals.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Terms & Conditions Accordion -->
+<section class="py-2xl px-6 md:px-10">
+<div class="max-w-3xl mx-auto">
+<h2 class="font-headline-xl text-headline-xl mb-xl">Detailed Terms &amp; Conditions</h2>
+<div class="space-y-4">
+<!-- Accordion 1 -->
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-lg text-left hover:bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-headline-md text-headline-md">Account Responsibility</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">You must provide accurate information when creating an account. You are solely responsible for maintaining the security of your credentials and for all activities occurring under your account.</p>
+</div>
+</div>
+<!-- Accordion 2 -->
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-lg text-left hover:bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-headline-md text-headline-md">Item Listings</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">All listed items must be described accurately. Misleading photos or descriptions are strictly prohibited. Items must be in the condition stated and legal for redistribution in your region.</p>
+</div>
+</div>
+<!-- Accordion 3 -->
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-lg text-left hover:bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-headline-md text-headline-md">User Conduct</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Treat all community members with respect. Discrimination, harassment, or offensive language will lead to immediate account review and potential suspension from the platform.</p>
+</div>
+</div>
+<!-- Accordion 4 -->
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-lg text-left hover:bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-headline-md text-headline-md">Donations &amp; Exchanges</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-lg pb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Users are encouraged to meet in public places for exchanges. ReValue Hub is not responsible for any logistical issues or safety concerns arising during physical meetups.</p>
+</div>
+</div>
+<!-- Accordion 5 -->
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-lg text-left hover:bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-headline-md text-headline-md">Prohibited Activities</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">expand_more</span>
+</button>
+<div class="accordion-content px-lg pb-lg">
+<ul class="list-disc list-inside font-body-md text-body-md text-on-surface-variant space-y-2">
+<li class="">Selling items meant for donation</li>
+<li class="">Spamming or advertising external services</li>
+<li class="">Creating multiple accounts to manipulate feedback</li>
+<li class="">Redistributing hazardous or illegal materials</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Platform Responsibilities Comparison -->
+<section class="py-2xl px-6 md:px-10 bg-surface">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid md:grid-cols-2 gap-lg">
+<!-- Left Column -->
+<div class="bg-primary-container p-xl rounded-2xl text-on-primary-container">
+<h3 class="font-headline-lg text-headline-lg mb-lg flex items-center gap-2">
+<span class="material-symbols-outlined">eco</span> ReValue Hub Will
+                        </h3>
+<ul class="space-y-4">
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Maintain a secure digital infrastructure for listing and browsing.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Moderate community reports to ensure platform integrity.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Protect your user data according to our Privacy Policy.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Provide tools to help you track your sustainability impact.</span>
+</li>
+</ul>
+</div>
+<!-- Right Column -->
+<div class="bg-surface-container-high border border-outline-variant p-xl rounded-2xl">
+<h3 class="font-headline-lg text-headline-lg mb-lg flex items-center gap-2">
+<span class="material-symbols-outlined">person</span> Users Must
+                        </h3>
+<ul class="space-y-4">
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-primary">circle</span>
+<span class="font-body-md text-body-md">Act in good faith and with honesty during all interactions.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-primary">circle</span>
+<span class="font-body-md text-body-md">Honour commitments made for item collection or delivery.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-primary">circle</span>
+<span class="font-body-md text-body-md">Communicate clearly and professionally through the app.</span>
+</li>
+<li class="flex gap-sm">
+<span class="material-symbols-outlined text-primary">circle</span>
+<span class="font-body-md text-body-md">Report any suspicious or harmful activity immediately.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Liability Notice -->
+<section class="py-2xl px-6 md:px-10">
+<div class="max-w-4xl mx-auto">
+<div class="bg-error-container p-xl rounded-2xl border border-error/20 flex flex-col md:flex-row gap-lg items-center text-center md:text-left">
+<div class="p-4 bg-error text-on-error rounded-full shrink-0">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">shield</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-error-container mb-2">Notice of Limited Liability</h3>
+<p class="font-body-md text-body-md text-on-error-container/80">
+                            ReValue Hub is a facilitator, not a participant, in user exchanges. We do not inspect items or verify user identities beyond basic account setup. By using this platform, you acknowledge that all exchanges are performed at your own risk. ReValue Hub is not liable for any personal injury, property damage, or financial loss resulting from platform use.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Account Suspension -->
+<section class="py-2xl px-6 md:px-10 bg-surface-container">
+<div class="max-w-[1280px] mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl mb-sm">Account Suspension Grounds</h2>
+<p class="font-body-md text-body-md text-outline">We take platform safety seriously. Violations of these rules may lead to permanent bans.</p>
+</div>
+<div class="grid md:grid-cols-4 gap-md">
+<div class="bg-white p-lg rounded-xl shadow-sm border-l-4 border-error">
+<span class="material-symbols-outlined text-error mb-sm">report</span>
+<h4 class="font-headline-md text-headline-md mb-xs">Fraud</h4>
+<p class="font-body-sm text-body-sm text-outline">Listing items that do not exist or misrepresenting items for gain.</p>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border-l-4 border-error">
+<span class="material-symbols-outlined text-error mb-sm">block</span>
+<h4 class="font-headline-md text-headline-md mb-xs">Harassment</h4>
+<p class="font-body-sm text-body-sm text-outline">Sending unsolicited or aggressive messages to other users.</p>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border-l-4 border-error">
+<span class="material-symbols-outlined text-error mb-sm">cancel</span>
+<h4 class="font-headline-md text-headline-md mb-xs">Fake Listings</h4>
+<p class="font-body-sm text-body-sm text-outline">Repeatedly posting low-quality, misleading, or stock photo-only listings.</p>
+</div>
+<div class="bg-white p-lg rounded-xl shadow-sm border-l-4 border-error">
+<span class="material-symbols-outlined text-error mb-sm">sentiment_very_dissatisfied</span>
+<h4 class="font-headline-md text-headline-md mb-xs">Poor Conduct</h4>
+<p class="font-body-sm text-body-sm text-outline">Consistently failing to show up for scheduled pick-ups.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 7: FAQ Accordion -->
+<section class="py-2xl px-6 md:px-10">
+<div class="max-w-3xl mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-center mb-xl">Frequently Asked Questions</h2>
+<div class="space-y-4">
+<div class="border-b border-outline-variant">
+<button class="w-full flex items-center justify-between py-md text-left group" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-label-md text-label-md group-hover:text-primary transition-colors">Is there a minimum age to use ReValue Hub?</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">add</span>
+</button>
+<div class="accordion-content">
+<p class="font-body-sm text-body-sm pb-md text-on-surface-variant">Yes, you must be at least 18 years old to create an account. Minor usage is only permitted under direct parental supervision.</p>
+</div>
+</div>
+<div class="border-b border-outline-variant">
+<button class="w-full flex items-center justify-between py-md text-left group" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-label-md text-label-md group-hover:text-primary transition-colors">Can I use ReValue Hub for commercial sales?</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">add</span>
+</button>
+<div class="accordion-content">
+<p class="font-body-sm text-body-sm pb-md text-on-surface-variant">No. ReValue Hub is designed for community sharing and circularity. Commercial entities are prohibited from using the platform for retail purposes.</p>
+</div>
+</div>
+<div class="border-b border-outline-variant">
+<button class="w-full flex items-center justify-between py-md text-left group" onclick="this.parentElement.classList.toggle('accordion-active')">
+<span class="font-label-md text-label-md group-hover:text-primary transition-colors">How do I delete my account?</span>
+<span class="material-symbols-outlined chevron-icon transition-transform">add</span>
+</button>
+<div class="accordion-content">
+<p class="font-body-sm text-body-sm pb-md text-on-surface-variant">You can request account deletion through the 'Privacy' section in your account settings. All personal data will be purged within 30 days.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 8: Need Help? Support -->
+<section class="py-2xl px-6 md:px-10 bg-primary/5">
+<div class="max-w-[1280px] mx-auto text-center">
+<h2 class="font-display-lg text-headline-xl mb-md">Still have questions?</h2>
+<p class="font-body-lg text-body-lg text-outline mb-xl">Our support team and community moderators are here to help you navigate our terms.</p>
+<div class="flex flex-wrap justify-center gap-4">
+                <button onclick="window.location.href='contact_us.html'" class="px-8 py-3 bg-primary text-on-primary rounded-full font-label-md text-label-md flex items-center gap-2 hover:shadow-lg transition-all">
+<span class="material-symbols-outlined text-sm">support_agent</span>
+                        Contact Support
+                    </button>
+<button onclick="window.location.href='community_guidelines.html'" class="px-8 py-3 border-2 border-primary text-primary rounded-full font-label-md text-label-md flex items-center gap-2 hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined text-sm">menu_book</span>
+                        Community Guidelines
+                    </button>
+</div>
+</div>
+</section>
+<!-- Section 9: Large Gradient CTA -->
+<section class="py-2xl px-6 md:px-10">
+<div class="max-w-[1280px] mx-auto">
+<div class="relative rounded-3xl overflow-hidden p-2xl text-center bg-gradient-to-br from-blue-600 via-blue-700 to-green-600">
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 32px 32px;"></div>
+<div class="relative z-10">
+<h2 class="font-display-lg text-4xl md:text-5xl text-white mb-lg max-w-2xl mx-auto">Building a Trusted Community Together</h2>
+<p class="font-body-lg text-white/80 mb-xl max-w-xl mx-auto">Join thousands of others making a positive impact. Agree to the terms and start your sustainability journey today.</p>
+<button onclick="window.location.href='register.html'" class="px-10 py-5 bg-white text-blue-600 rounded-xl font-headline-md text-headline-md shadow-2xl shadow-blue-900/20 hover:scale-105 transition-transform active:scale-95">
+                            I Agree &amp; Join Hub
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+</footer>
+<script>
+        // Simple script for basic interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Header scroll effect
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('shadow-xl');
+                } else {
+                    header.classList.remove('shadow-xl');
+                }
+            });
+        });
+    </script>
+
+
+
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

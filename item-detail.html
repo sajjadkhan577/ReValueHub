@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#d9d9e5",
+            "tertiary-fixed": "#ffddb8",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-surface-variant": "#434655",
+            "secondary-fixed-dim": "#4ae176",
+            "secondary-container": "#6bff8f",
+            "surface-container-lowest": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#2e3039",
+            "surface-container": "#ededf9",
+            "surface-bright": "#faf8ff",
+            "on-primary-container": "#eeefff",
+            "surface-variant": "#e1e2ed",
+            "outline-variant": "#c3c6d7",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "primary-container": "#2563eb",
+            "on-background": "#191b23",
+            "secondary-fixed": "#6bff8f",
+            "primary-fixed": "#dbe1ff",
+            "inverse-on-surface": "#f0f0fb",
+            "on-tertiary-fixed-variant": "#653e00",
+            "background": "#faf8ff",
+            "on-primary": "#ffffff",
+            "surface-container-highest": "#e1e2ed",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#00174b",
+            "on-secondary-container": "#007432",
+            "secondary": "#006e2f",
+            "surface": "#faf8ff",
+            "tertiary-container": "#996100",
+            "on-secondary-fixed": "#002109",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-surface": "#191b23",
+            "primary": "#004ac6",
+            "surface-tint": "#0053db",
+            "inverse-primary": "#b4c5ff",
+            "surface-container-high": "#e7e7f3",
+            "on-tertiary-container": "#ffeedd",
+            "on-secondary-fixed-variant": "#005321",
+            "on-tertiary-fixed": "#2a1700",
+            "error": "#ba1a1a",
+            "surface-container-low": "#f3f3fe",
+            "outline": "#737686",
+            "tertiary": "#784b00",
+            "tertiary-fixed-dim": "#ffb95f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "xs": "4px",
+            "container-max": "1280px",
+            "sm": "8px",
+            "2xl": "64px",
+            "base": "4px",
+            "xl": "40px",
+            "md": "16px",
+            "lg": "24px",
+            "gutter": "24px"
+          },
+          "fontFamily": {
+            "display-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-md": ["Manrope"]
+          },
+          "fontSize": {
+            "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+            "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<div class="flex items-center gap-8">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="#">Browse</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-sm w-64" placeholder="Search items..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-slate-50 rounded-lg transition-all duration-200">notifications</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90 transition-all Active:scale-95">Donate</button>
+                <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-outline">person</span>
+                </div>
+</div>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-10 py-12">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-8 text-outline font-label-md text-label-md">
+<a class="hover:text-primary transition-colors" href="browse.html">Browse</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span id="detail-breadcrumb-current" class="text-on-surface">Loading item...</span>
+</nav>
+<!-- Split Screen Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Visual Assets -->
+<div class="lg:col-span-7 space-y-6">
+<div class="rounded-3xl overflow-hidden shadow-sm border border-outline-variant aspect-[4/3] bg-surface-container">
+<img id="detail-image" class="w-full h-full object-cover" alt="Loading item image" src="assets/logo.png?v=2"/>
+</div>
+<div id="detail-thumbnails" class="grid grid-cols-4 gap-4">
+    <!-- Dynamic thumbnails will load here if available -->
+</div>
+</div>
+<!-- Right Column: Details & Actions -->
+<div class="lg:col-span-5 space-y-8">
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span id="detail-category" class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Loading category...</span>
+<span id="detail-status-chip" class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-label-sm">Loading status...</span>
+</div>
+<h1 id="detail-title" class="font-display-lg text-display-lg text-on-surface">Loading item details...</h1>
+<p id="detail-description" class="text-outline font-body-lg text-body-lg">Loading description...</p>
+</div>
+<!-- Donor Profile Card -->
+<div class="p-6 rounded-2xl bg-surface-container-low border border-outline-variant flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+                <img id="detail-donor-avatar" class="w-12 h-12 rounded-full object-cover" alt="Loading donor avatar" src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%23f8fafc%22/%3E%3Ccircle cx=%2240%22 cy=%2224%22 r=%2214%22 fill=%22%23cbd5e1%22/%3E%3Cpath d=%22M24 60c0-10 12-13 16-13s16 3 16 13%22 stroke=%22%239ca3af%22 stroke-width=%226%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E"/>
+<div>
+<p id="detail-owner" class="font-headline-md text-headline-md text-on-surface">Loading donor...</p>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-md text-label-sm">Verified Donor • 4.9 Rating</span>
+</div>
+</div>
+</div>
+<button id="view-profile-btn" class="text-primary font-label-md text-label-md hover:underline">View Profile</button>
+</div>
+<!-- Description & Specs -->
+<div class="space-y-6">
+<div class="border-t border-outline-variant pt-6">
+<h3 class="font-headline-md text-headline-md mb-4">Item Details</h3>
+<ul class="space-y-3 text-on-surface-variant font-body-md text-body-md">
+<li class="flex justify-between">
+<span class="text-outline">Condition</span>
+<span id="detail-condition" class="font-semibold capitalize">Loading...</span>
+</li>
+<li id="detail-brand-row" class="flex justify-between hidden">
+<span class="text-outline">Brand</span>
+<span id="detail-brand" class="font-semibold">—</span>
+</li>
+<li id="detail-color-row" class="flex justify-between hidden">
+<span class="text-outline">Color</span>
+<span id="detail-color" class="font-semibold">—</span>
+</li>
+<li class="flex justify-between">
+<span class="text-outline">Posted</span>
+<span id="detail-posted" class="font-semibold">Loading...</span>
+</li>
+</ul>
+</div>
+<div class="border-t border-outline-variant pt-6">
+<h3 class="font-headline-md text-headline-md mb-4">Pick-up Location</h3>
+<div id="map-container" class="rounded-2xl overflow-hidden h-40 relative shadow-sm border border-outline-variant z-10">
+</div>
+<p class="mt-3 text-body-sm text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">info</span>
+              Exact address will be shared after request is accepted. (<span id="detail-location">Loading location...</span>)
+            </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4">
+<button id="request-btn" class="w-full bg-primary text-on-primary py-4 rounded-2xl font-headline-md text-headline-md shadow-lg shadow-primary/20 hover:scale-[1.01] transition-all Active:scale-95">Request Item</button>
+<button id="message-donor-btn" class="w-full border-2 border-primary text-primary py-4 rounded-2xl font-headline-md text-headline-md hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">mail</span>
+            Message Donor
+          </button>
+<!-- Owner-only: requesters for this item, with a button to mark the donation complete -->
+<div id="owner-requests-panel" class="hidden bg-white border border-outline-variant rounded-2xl p-4">
+<h4 class="font-headline-sm text-headline-sm mb-3">People who requested this item</h4>
+<div id="owner-requests-list" class="space-y-3"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Related Items Section -->
+<section class="mt-2xl">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">You might also like</h2>
+<p class="text-outline font-body-md text-body-md">Other items recently donated in your area</p>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+          Browse All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div id="related-items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- Dynamic related items will load here -->
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 w-full py-16">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="space-y-4 max-w-sm">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="font-manrope text-sm leading-relaxed text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing. Every item shared is a step toward a greener planet.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-12">
+<div class="space-y-4">
+<h4 class="font-bold text-slate-900 dark:text-white">Platform</h4>
+<ul class="space-y-2 font-manrope text-sm text-slate-500 dark:text-slate-400">
+<li class="hover:text-blue-600 transition-colors cursor-pointer">Our Mission</li>
+<li class="hover:text-blue-600 transition-colors cursor-pointer">Community Guidelines</li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-slate-900 dark:text-white">Legal</h4>
+<ul class="space-y-2 font-manrope text-sm text-slate-500 dark:text-slate-400">
+<li class="hover:text-blue-600 transition-colors cursor-pointer">Safety</li>
+<li class="hover:text-blue-600 transition-colors cursor-pointer">Terms</li>
+<li class="hover:text-blue-600 transition-colors cursor-pointer">Privacy</li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

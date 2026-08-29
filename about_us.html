@@ -1,0 +1,471 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "surface-container": "#ededf9",
+                        "primary-container": "#2563eb",
+                        "tertiary-container": "#996100",
+                        "surface-container-high": "#e7e7f3",
+                        "on-secondary-fixed-variant": "#005321",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-bright": "#faf8ff",
+                        "surface": "#faf8ff",
+                        "secondary-container": "#6bff8f",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-surface": "#191b23",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-container": "#eeefff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#434655",
+                        "outline": "#737686",
+                        "on-primary-fixed": "#00174b",
+                        "on-tertiary-container": "#ffeedd",
+                        "secondary": "#006e2f",
+                        "surface-variant": "#e1e2ed",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#faf8ff",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f0fb",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-fixed": "#002109",
+                        "on-secondary-container": "#007432",
+                        "error": "#ba1a1a",
+                        "tertiary": "#784b00",
+                        "surface-tint": "#0053db",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e2ed",
+                        "on-background": "#191b23",
+                        "surface-dim": "#d9d9e5",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-surface": "#2e3039",
+                        "secondary-fixed-dim": "#4ae176"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xl": "40px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "2xl": "64px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-sm": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #FAF8FF; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .text-gradient { background: linear-gradient(135deg, #004ac6 0%, #007432 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-bg { background: linear-gradient(135deg, #004ac6 0%, #0053db 100%); }
+    </style>
+</head>
+<body class="text-on-background"><header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-2xl pb-2xl px-gutter max-w-container-max mx-auto">
+<div class="grid lg:grid-cols-2 gap-xl items-center">
+<div class="space-y-md">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-primary-fixed text-primary font-label-md text-label-md">
+                    🌍 About ReValue Hub
+                </span>
+<h1 class="font-display-lg text-display-lg text-on-surface leading-tight">
+                    Giving Every Item a <span class="text-primary">Second Life</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                    We're building a world where waste doesn't exist. ReValue Hub connects generous neighbors with those in need, fostering a circular economy that prioritizes community support and environmental stewardship.
+                </p>
+<div class="flex flex-wrap gap-md pt-4">
+<button onclick="window.location.href='list-item.html'" class="px-8 py-4 bg-primary text-on-primary rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all shadow-lg hover:scale-105 active:scale-95">
+                        Donate Now
+                    </button>
+<button onclick="window.location.href='browse.html'" class="px-8 py-4 bg-white border border-outline-variant text-primary rounded-xl font-label-md text-label-md hover:bg-surface-container transition-all">
+                        Browse Items
+                    </button>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-10 -left-10 w-48 h-48 bg-secondary/10 rounded-full blur-2xl"></div>
+<div class="relative rounded-3xl overflow-hidden shadow-2xl">
+<img class="w-full aspect-square object-cover" data-alt="A high-end 3D isometric digital illustration showing a diverse community of people happily sharing and exchanging items like modern furniture, stacked books, electronics, and folded clothing. The art style is minimalist and clean with a palette of deep blues, soft greens, and crisp whites. Soft global illumination creates a premium, professional tech-startup aesthetic consistent with a modern circular economy platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc4AuxE-TBaelVt_8ZimeP2dsyH2pnFrWs8TEsqSf0MjhH9sQk4vG9q5HicRXyRx2qsk2Ni2o_A6fvOLosZ9MhzID7xfo8-3BKZsOimKSgaFAKhVgRXwdMJ7MicQg-PqHCuI_3LUJaVM5vLRqFyX3MMpW26LlytdqusKHoVx99l2bfuysUUtsB0YLmAsw1sd9I_QWzwHAZBS2LoXUvUGU-1mLZvqHzFdAtkemcrhqIhlNM4Hb64XkO">
+</div>
+</div>
+</div>
+</section>
+<!-- Our Story Section -->
+<section class="py-2xl bg-surface-container-low px-gutter">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-xs">Our Story</h2>
+<div class="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="relative grid md:grid-cols-3 gap-lg mt-xl">
+<!-- Connectors for desktop -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant -translate-y-1/2 z-0"></div>
+<!-- Problem -->
+<div class="relative z-10 glass p-lg rounded-2xl shadow-sm text-center group hover:shadow-md transition-all">
+<div class="w-16 h-16 bg-error-container text-error rounded-full flex items-center justify-center mx-auto mb-md border-4 border-white">
+<span class="material-symbols-outlined text-3xl">delete_outline</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">The Problem</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Millions of perfectly functional items end up in landfills every day while neighbors nearby struggle to afford them.</p>
+</div>
+<!-- Idea -->
+<div class="relative z-10 glass p-lg rounded-2xl shadow-sm text-center group hover:shadow-md transition-all">
+<div class="w-16 h-16 bg-tertiary-fixed text-tertiary rounded-full flex items-center justify-center mx-auto mb-md border-4 border-white">
+<span class="material-symbols-outlined text-3xl">lightbulb</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">The Idea</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">What if we created a digital bridge? A hub where revaluing items is as easy as sending a message to a friend.</p>
+</div>
+<!-- Solution -->
+<div class="relative z-10 glass p-lg rounded-2xl shadow-sm text-center group hover:shadow-md transition-all">
+<div class="w-16 h-16 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center mx-auto mb-md border-4 border-white">
+<span class="material-symbols-outlined text-3xl">hub</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-sm">The Solution</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">ReValue Hub was born—a community-first platform that turns surplus into support and waste into wealth.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Mission, Vision & Values -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="grid md:grid-cols-3 gap-lg">
+<div class="glass p-lg rounded-3xl border-primary/10 hover:border-primary/30 transition-all">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-sm">Mission</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">To empower communities to reduce waste by making item donation and exchange seamless, transparent, and rewarding.</p>
+</div>
+<div class="glass p-lg rounded-3xl border-primary/10 hover:border-primary/30 transition-all">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-sm">Vision</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">A global network of local hubs where zero-waste living is the standard and neighborly kindness is the currency.</p>
+</div>
+<div class="glass p-lg rounded-3xl border-primary/10 hover:border-primary/30 transition-all">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-sm">Values</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">We value Radical Generosity, Environmental Responsibility, and Building Trust through verified community actions.</p>
+</div>
+</div>
+</section>
+<!-- Impact Stats -->
+<section class="py-2xl bg-primary text-on-primary overflow-hidden relative">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_0%,transparent_50%)]"></div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter relative z-10">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-xl text-center">
+<div class="space-y-xs">
+<div class="font-display-lg text-display-lg">50,000,+</div>
+<div class="font-label-md text-label-md uppercase tracking-widest opacity-80">Items Reused</div>
+</div>
+<div class="space-y-xs">
+<div class="font-display-lg text-display-lg">12,000,+</div>
+<div class="font-label-md text-label-md uppercase tracking-widest opacity-80">Active Members</div>
+</div>
+<div class="space-y-xs">
+<div class="font-display-lg text-display-lg">20 Tons</div>
+<div class="font-label-md text-label-md uppercase tracking-widest opacity-80">Waste Reduced</div>
+</div>
+<div class="space-y-xs">
+<div class="font-display-lg text-display-lg">500+</div>
+<div class="font-label-md text-label-md uppercase tracking-widest opacity-80">Families Helped</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-xs">Why ReValue Hub?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Built for people, designed for the planet.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">money_off</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">100% Free</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Every item listed is free of charge. We believe the best things in life are shared.</p>
+</div>
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Eco Friendly</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Every exchange prevents carbon emissions and keeps usable goods out of landfills.</p>
+</div>
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Trusted Community</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Verified profiles and community ratings ensure a safe and respectful experience for all.</p>
+</div>
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Easy Donations</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Snap a photo, add a description, and your item is ready for its new home in seconds.</p>
+</div>
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">security</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Secure</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Encrypted messaging keeps your private details safe until you're ready to meet.</p>
+</div>
+<div class="p-lg bg-white rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl transition-all hover:-translate-y-1">
+<div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Community Driven</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Run for the community, by the community. Join local groups and make new friends.</p>
+</div>
+</div>
+</section>
+<!-- The Flow Diagram -->
+<section class="py-2xl bg-surface-container overflow-hidden">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-2xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-xs">How it Works</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">The seamless journey from surplus to support.</p>
+</div>
+<div class="relative">
+<!-- Decorative Path -->
+<svg class="hidden lg:block absolute top-1/2 left-0 w-full -translate-y-1/2 overflow-visible pointer-events-none" viewBox="0 0 1000 100">
+<path d="M50 50 Q 250 10, 500 50 T 950 50" fill="none" stroke="url(#gradient-path)" stroke-dasharray="8 12" stroke-width="4"></path>
+<defs>
+<linearGradient id="gradient-path">
+<stop offset="0%" stop-color="#004ac6"></stop>
+<stop offset="100%" stop-color="#007432"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="grid lg:grid-cols-3 gap-xl relative z-10">
+<!-- Donor -->
+<div class="flex flex-col items-center text-center space-y-md">
+<div class="w-24 h-24 rounded-full bg-white shadow-xl flex items-center justify-center relative border-4 border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary">person_add</span>
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">1</div>
+</div>
+<h5 class="font-headline-md text-headline-md">The Donor</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Lists an unused item. Electronics, furniture, or clothes that still have value.</p>
+</div>
+<!-- Platform -->
+<div class="flex flex-col items-center text-center space-y-md">
+<div class="w-32 h-32 rounded-3xl bg-primary shadow-2xl flex items-center justify-center relative border-4 border-white/20 -rotate-3 scale-110">
+<span class="material-symbols-outlined text-5xl text-white">hub</span>
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-xs font-bold">2</div>
+</div>
+<h5 class="font-headline-md text-headline-md mt-4">ReValue Hub</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Our platform matches the item with local neighbors who actually need it right now.</p>
+</div>
+<!-- Recipient -->
+<div class="flex flex-col items-center text-center space-y-md">
+<div class="w-24 h-24 rounded-full bg-white shadow-xl flex items-center justify-center relative border-4 border-secondary/20">
+<span class="material-symbols-outlined text-4xl text-secondary">handshake</span>
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-xs font-bold">3</div>
+</div>
+<h5 class="font-headline-md text-headline-md">The Recipient</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Picks up the item and gives it a new purpose. Community gratitude is exchanged.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-gutter pt-2xl pb-2xl">
+<div class="max-w-container-max mx-auto">
+<div class="gradient-bg rounded-[40px] p-xl lg:p-2xl text-center text-on-primary relative overflow-hidden shadow-2xl">
+<!-- Abstract patterns -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary-fixed/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl"></div>
+<div class="relative z-10 max-w-3xl mx-auto space-y-md">
+<h2 class="font-display-lg text-display-lg">Ready to make an impact?</h2>
+<p class="font-body-lg text-body-lg opacity-90 pb-md">Join thousands of neighbors in the movement to revalue, reuse, and reconnect. Your unwanted item could be exactly what someone else is looking for.</p>
+<div class="flex flex-wrap justify-center gap-md">
+                            <button onclick="window.location.href='list-item.html'" class="px-10 py-5 bg-white text-primary rounded-2xl font-label-md text-label-md hover:bg-surface-container transition-all shadow-xl hover:scale-105 active:scale-95">
+                            Donate Item
+                        </button>
+<button onclick="window.location.href='browse.html'" class="px-10 py-5 bg-primary-fixed-dim/20 backdrop-blur-md border border-white/30 text-white rounded-2xl font-label-md text-label-md hover:bg-white/20 transition-all">
+                            Browse Donations
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<script>
+        // Simple micro-interaction for stats counting
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const countTo = parseInt(target.innerText.replace(/[^0-9]/g, ''));
+                        let current = 0;
+                        const increment = Math.ceil(countTo / 50);
+                        const suffix = target.innerText.replace(/[0-9]/g, '');
+                        
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= countTo) {
+                                target.innerText = countTo.toLocaleString() + suffix;
+                                clearInterval(timer);
+                            } else {
+                                target.innerText = current.toLocaleString() + suffix;
+                            }
+                        }, 30);
+                        observer.unobserve(target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.font-display-lg').forEach(stat => {
+                // Only observe stats section
+                if (stat.closest('section').classList.contains('bg-primary')) {
+                    observer.observe(stat);
+                }
+            });
+        });
+    </script>
+
+
+
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

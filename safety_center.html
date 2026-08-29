@@ -1,0 +1,536 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<title>Safety Center | ReValue Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-fixed": "#ffddb8",
+                "primary-fixed": "#dbe1ff",
+                "on-primary": "#ffffff",
+                "inverse-primary": "#b4c5ff",
+                "surface-dim": "#d9d9e5",
+                "surface-container-highest": "#e1e2ed",
+                "surface-container": "#ededf9",
+                "on-secondary-fixed": "#002109",
+                "surface-variant": "#e1e2ed",
+                "secondary-container": "#6bff8f",
+                "secondary-fixed": "#6bff8f",
+                "background": "#faf8ff",
+                "surface-container-low": "#f3f3fe",
+                "on-primary-fixed": "#00174b",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#2a1700",
+                "on-primary-container": "#eeefff",
+                "outline-variant": "#c3c6d7",
+                "error": "#ba1a1a",
+                "tertiary": "#784b00",
+                "surface-bright": "#faf8ff",
+                "primary": "#004ac6",
+                "secondary": "#006e2f",
+                "tertiary-container": "#996100",
+                "on-secondary": "#ffffff",
+                "on-error": "#ffffff",
+                "tertiary-fixed-dim": "#ffb95f",
+                "on-tertiary-fixed-variant": "#653e00",
+                "on-primary-fixed-variant": "#003ea8",
+                "on-error-container": "#93000a",
+                "outline": "#737686",
+                "error-container": "#ffdad6",
+                "on-surface-variant": "#434655",
+                "primary-container": "#2563eb",
+                "on-tertiary": "#ffffff",
+                "surface-tint": "#0053db",
+                "surface": "#faf8ff",
+                "secondary-fixed-dim": "#4ae176",
+                "on-background": "#191b23",
+                "on-surface": "#191b23",
+                "on-tertiary-container": "#ffeedd",
+                "inverse-on-surface": "#f0f0fb",
+                "surface-container-high": "#e7e7f3",
+                "primary-fixed-dim": "#b4c5ff",
+                "on-secondary-fixed-variant": "#005321",
+                "on-secondary-container": "#007432",
+                "inverse-surface": "#2e3039"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xl": "40px",
+                "base": "4px",
+                "md": "16px",
+                "lg": "24px",
+                "gutter": "24px",
+                "xs": "4px",
+                "2xl": "64px",
+                "container-max": "1280px",
+                "sm": "8px"
+            },
+            "fontFamily": {
+                "headline-xl": ["Manrope"],
+                "body-lg": ["Manrope"],
+                "label-sm": ["Manrope"],
+                "headline-md": ["Manrope"],
+                "body-md": ["Manrope"],
+                "label-md": ["Manrope"],
+                "body-sm": ["Manrope"],
+                "headline-lg": ["Manrope"],
+                "display-lg": ["Manrope"]
+            },
+            "fontSize": {
+                "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.5); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .timeline-step::after { content: ''; position: absolute; top: 24px; left: 100%; width: 100%; height: 2px; background: #e2e8f0; z-index: -1; }
+        .timeline-step:last-child::after { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar (Shared Component Reference) -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- 1. Hero Section -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl items-center">
+<div>
+<span class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md mb-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+                        🛡 Trust • Security • Safe Community
+                    </span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-lg">Your Safety Comes First</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-xl">
+                        ReValue Hub is built on trust. We provide the tools and guidelines to ensure every exchange in our community is secure, respectful, and transparent.
+                    </p>
+<div class="flex gap-md">
+                <button onclick="window.location.href='report_an_issue.html'" class="bg-primary text-on-primary px-xl py-md rounded-lg font-headline-md text-headline-md hover:shadow-lg transition-all">Report an Issue</button>
+<button onclick="window.location.href='community_guidelines.html'" class="border border-outline text-primary px-xl py-md rounded-lg font-headline-md text-headline-md hover:bg-surface-container-low transition-all">Learn More</button>
+</div>
+</div>
+<div class="relative">
+<div class="rounded-2xl overflow-hidden shadow-2xl">
+<img class="w-full h-[400px] object-cover" data-alt="A diverse group of friendly neighbors meeting in a bright, sunlit public park square for a safe item exchange. The scene is clean and modern, with high-end photography style, soft natural lighting, and a feeling of community trust. The color palette features soft blues and greens consistent with a professional startup aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgLXT_ccPeUzi1JjcF6dMsVSoTnLaJNbc1tcjUrnyJbY1OyfG_o_j8Pu4-85u73pCcXYLY20PmiYteDENWE5swOfQ2mitv160BM3R_h_F9qJgU7KthkhD-VQYOS7rVlnAx_7YCFAmxvxRLvjJ9cxsQ9ewGJ-wKpZxf9r9H_fXEoNWdUqSjh2br1SUgzoFKIZ51APWTQEVGVP7Yr4HmKh5fHFBPTKauy215PHhhdechcdyOWeU3_9Up">
+</div>
+<div class="absolute -bottom-6 -left-6 glass p-lg rounded-xl shadow-xl flex items-center gap-md max-w-xs animate-bounce-slow">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface">Verified Exchange Zone Active</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Checklist Section -->
+<section class="bg-surface-container-lowest py-2xl">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-2xl">
+<h2 class="font-headline-xl text-headline-xl mb-md">Safety Checklist</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Follow these essential steps for a worry-free experience.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Cards -->
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Public locations</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Always meet in well-lit, busy public areas like coffee shops or community centers.</p>
+</div>
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Inspect items</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Thoroughly check the item’s condition before finalizing the exchange.</p>
+</div>
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Bring a friend</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Whenever possible, bring a companion to the meeting for extra peace of mind.</p>
+</div>
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Platform communication</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Keep all conversations within ReValue Hub to ensure a record exists.</p>
+</div>
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Respect times</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Be punctual and respectful of other members' schedules and boundaries.</p>
+</div>
+<div class="bg-surface p-lg rounded-xl border border-outline-variant hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-secondary mb-md text-[32px]">check_circle</span>
+<h3 class="font-headline-md text-headline-md mb-sm">Report activity</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Let us know immediately if you encounter any suspicious behavior or listings.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Privacy Section -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-2xl items-center">
+<div class="order-2 lg:order-1">
+<img class="rounded-3xl shadow-xl w-full h-[500px] object-cover" data-alt="A clean, minimalist 3D render of a modern smartphone displaying a secure shield icon on its screen. The background is a soft, professional gradient of light blue and white. High-key lighting emphasizes pristine surfaces and a tech-forward startup aesthetic focused on digital privacy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ-mauL3W-bFqbetZIL1JmTMwoLhhAOVrP2yLbLKZil7325_MgOUhRJchVFovkLElMNuH5tAMYmr53Gk1EDft5WElOFJhEVtyq6T8DejCiIkm4BBOpSfATZlcGkscW3Uw4HDpKbevjYXZN32M_G3qTJVMk28jy-6jXMn85no-bDmvU6AIzNKiZWLWpndfhMFhfrqQ4rbb1Xqk-EBgp9ocYcTQRpfM9MF3_3G4VdiIDVAKT764hLxvn">
+</div>
+<div class="order-1 lg:order-2">
+<h2 class="font-headline-xl text-headline-xl mb-md">Your Privacy, Protected</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl">We use industry-leading encryption and strict data policies to keep your information safe. Here is what we never share:</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+<div class="glass p-lg rounded-xl">
+<span class="material-symbols-outlined text-primary mb-sm">lock</span>
+<h4 class="font-label-md text-label-md mb-xs">Passwords</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Encrypted and never visible to our staff or other users.</p>
+</div>
+<div class="glass p-lg rounded-xl">
+<span class="material-symbols-outlined text-primary mb-sm">account_balance</span>
+<h4 class="font-label-md text-label-md mb-xs">Bank info</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">We never store full payment details on our local servers.</p>
+</div>
+<div class="glass p-lg rounded-xl">
+<span class="material-symbols-outlined text-primary mb-sm">forum</span>
+<h4 class="font-label-md text-label-md mb-xs">Internal chat</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Conversations are private between you and the other party.</p>
+</div>
+<div class="glass p-lg rounded-xl">
+<span class="material-symbols-outlined text-primary mb-sm">contact_page</span>
+<h4 class="font-label-md text-label-md mb-xs">Contact info</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Your email and phone number are hidden until you choose to share.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Suspicious Activity Section -->
+<section class="bg-error-container/10 py-2xl">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="flex items-center gap-md mb-xl">
+<span class="material-symbols-outlined text-error text-[40px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-error-container">Know the Red Flags</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">If you see any of these, stop the interaction and report it immediately.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Warning Cards -->
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Fake listings</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Photos that look like stock images or prices that seem too good to be true.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Money requests</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Asking for deposits, wire transfers, or gift cards before meeting.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Off-platform chat</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Insisting on moving the conversation to WhatsApp, Telegram, or email.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Threats</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Any form of aggressive language, intimidation, or harassment.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Scams</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Offering "overpayment" by check or asking for your account credentials.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl border-l-4 border-error shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-sm">Document requests</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Asking for copies of your ID, passport, or utility bills.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Meeting Tips -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-center mb-2xl">Meeting Safety Tips</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-lg text-center">
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">light_mode</span>
+</div>
+<p class="font-label-md text-label-md">Daylight</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">groups</span>
+</div>
+<p class="font-label-md text-label-md">Public places</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">share</span>
+</div>
+<p class="font-label-md text-label-md">Tell someone</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">person_off</span>
+</div>
+<p class="font-label-md text-label-md">Avoid isolation</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">search</span>
+</div>
+<p class="font-label-md text-label-md">Check item</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary text-[32px]">handshake</span>
+</div>
+<p class="font-label-md text-label-md">Respect</p>
+</div>
+</div>
+</section>
+<!-- 6. Reporting Timeline -->
+<section class="bg-surface-container-low py-2xl overflow-hidden">
+<div class="px-gutter max-w-container-max mx-auto">
+<h2 class="font-headline-xl text-headline-xl text-center mb-2xl">How to Report an Issue</h2>
+<div class="relative flex flex-col md:flex-row justify-between gap-xl md:gap-0">
+<!-- Step 1 -->
+<div class="flex-1 flex flex-col items-center text-center px-md timeline-step relative">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-md z-10 relative">1</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Profile</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Go to the user's profile or item page.</p>
+</div>
+<!-- Step 2 -->
+<div class="flex-1 flex flex-col items-center text-center px-md timeline-step relative">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-md z-10 relative">2</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Click Report</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Select the "Report" button on the listing.</p>
+</div>
+<!-- Step 3 -->
+<div class="flex-1 flex flex-col items-center text-center px-md timeline-step relative">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-md z-10 relative">3</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Select Reason</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Choose the category that best fits the issue.</p>
+</div>
+<!-- Step 4 -->
+<div class="flex-1 flex flex-col items-center text-center px-md timeline-step relative">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold mb-md z-10 relative">4</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Submit</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Provide details and submit for review.</p>
+</div>
+<!-- Step 5 -->
+<div class="flex-1 flex flex-col items-center text-center px-md">
+<div class="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold mb-md z-10 relative">5</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Moderation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Our team reviews and takes action within 24h.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. Safety Commitment -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<h2 class="font-headline-xl text-headline-xl mb-xl">Our Commitment to You</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="p-lg bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="material-symbols-outlined text-primary mb-md">verified</span>
+<h4 class="font-headline-md text-headline-md mb-sm">Verified Community</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Multi-factor authentication and identity verification options.</p>
+</div>
+<div class="p-lg bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="material-symbols-outlined text-primary mb-md">visibility</span>
+<h4 class="font-headline-md text-headline-md mb-sm">Active Moderation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI-powered filtering and human moderators working 24/7.</p>
+</div>
+<div class="p-lg bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="material-symbols-outlined text-primary mb-md">security_update_good</span>
+<h4 class="font-headline-md text-headline-md mb-sm">Secure Messaging</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Built-in chat that filters links and detects common scam patterns.</p>
+</div>
+<div class="p-lg bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<span class="material-symbols-outlined text-primary mb-md">volunteer_activism</span>
+<h4 class="font-headline-md text-headline-md mb-sm">Community Trust</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Transparent rating system based on verified interactions.</p>
+</div>
+</div>
+</section>
+<!-- 8. FAQ Section -->
+<section class="bg-surface-container-lowest py-2xl">
+<div class="px-gutter max-w-container-max mx-auto max-w-3xl">
+<h2 class="font-headline-xl text-headline-xl text-center mb-2xl">Frequently Asked Questions</h2>
+<div class="space-y-md">
+<details class="group p-lg border border-outline-variant rounded-xl cursor-pointer bg-surface">
+<summary class="flex justify-between items-center font-headline-md text-headline-md list-none">
+                            How do I report a suspicious listing?
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-md font-body-md text-body-md text-on-surface-variant">Navigate to the item page and look for the 'Report' icon. Select the reason for reporting and our team will investigate within 24 hours.</p>
+</details>
+<details class="group p-lg border border-outline-variant rounded-xl cursor-pointer bg-surface">
+<summary class="flex justify-between items-center font-headline-md text-headline-md list-none">
+                            Can I block a user?
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-md font-body-md text-body-md text-on-surface-variant">Yes. From any chat or profile page, click 'Options' and select 'Block'. This will prevent them from seeing your listings or messaging you.</p>
+</details>
+<details class="group p-lg border border-outline-variant rounded-xl cursor-pointer bg-surface">
+<summary class="flex justify-between items-center font-headline-md text-headline-md list-none">
+                            Someone is asking for money via bank transfer.
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-md font-body-md text-body-md text-on-surface-variant">Never send money outside of the platform’s recommended payment methods or before seeing the item. Report these users immediately.</p>
+</details>
+<details class="group p-lg border border-outline-variant rounded-xl cursor-pointer bg-surface">
+<summary class="flex justify-between items-center font-headline-md text-headline-md list-none">
+                            What happens after I file a report?
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-md font-body-md text-body-md text-on-surface-variant">Our trust and safety team will review the evidence. If the user violated community guidelines, they may be warned or permanently banned.</p>
+</details>
+<details class="group p-lg border border-outline-variant rounded-xl cursor-pointer bg-surface">
+<summary class="flex justify-between items-center font-headline-md text-headline-md list-none">
+                            What if I feel unsafe during a meeting?
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-md font-body-md text-body-md text-on-surface-variant">Your safety is priority. Leave the area immediately to a secure public place and call local emergency services if necessary.</p>
+</details>
+</div>
+</div>
+</section>
+<!-- 9. Emergency Section -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto">
+<div class="bg-primary-container text-on-primary-container p-2xl rounded-3xl flex flex-col md:flex-row items-center gap-xl shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-lg opacity-10">
+<span class="material-symbols-outlined text-[120px]">shield</span>
+</div>
+<div class="z-10">
+<h2 class="font-headline-xl text-headline-xl mb-lg">If You Feel Unsafe</h2>
+<ul class="space-y-md font-body-md text-body-md">
+<li class="flex items-start gap-md"><span class="material-symbols-outlined">call</span> Trust your instincts: if a situation feels wrong, leave immediately.</li>
+<li class="flex items-start gap-md"><span class="material-symbols-outlined">map</span> Head to the nearest police station or busy public establishment.</li>
+<li class="flex items-start gap-md"><span class="material-symbols-outlined">emergency_share</span> Call local emergency services (911 or equivalent) if you are in immediate danger.</li>
+<li class="flex items-start gap-md"><span class="material-symbols-outlined">history</span> Contact ReValue Hub safety team once you are in a safe location.</li>
+</ul>
+</div>
+<div class="flex-shrink-0 z-10">
+                <button onclick="window.location.href='contact_us.html'" class="bg-surface text-primary px-xl py-lg rounded-xl font-headline-md text-headline-md hover:shadow-lg transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined">support_agent</span> Get Urgent Support
+                    </button>
+</div>
+</div>
+</section>
+<!-- 10. Final CTA -->
+<section class="py-2xl px-gutter max-w-container-max mx-auto text-center">
+<div class="bg-gradient-to-br from-primary to-primary-container p-2xl rounded-3xl text-on-primary">
+<h2 class="font-display-lg text-display-lg mb-lg">A Safe Community Starts With Everyone</h2>
+<p class="font-body-lg text-body-lg mb-xl opacity-90 max-w-2xl mx-auto">By following these guidelines and looking out for one another, we can keep ReValue Hub the best place for sustainable community exchange.</p>
+<div class="flex flex-col sm:flex-row gap-md justify-center">
+                <button onclick="window.location.href='community_guidelines.html'" class="bg-secondary-container text-on-secondary-container px-2xl py-md rounded-lg font-headline-md text-headline-md hover:scale-105 transition-transform">Pledge for Safety</button>
+<button onclick="window.location.href='community_guidelines.html'" class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-2xl py-md rounded-lg font-headline-md text-headline-md hover:bg-white/20 transition-all">Read Guidelines</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component Reference) -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('details').forEach((el) => {
+          el.addEventListener('toggle', (e) => {
+            if (el.open) {
+              document.querySelectorAll('details').forEach((other) => {
+                if (other !== el) other.removeAttribute('open');
+              });
+            }
+          });
+        });
+    </script>
+
+
+
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>

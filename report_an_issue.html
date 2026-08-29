@@ -1,0 +1,377 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2" />
+<title>Report an Issue | CommUnity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f3fe",
+                    "on-surface": "#191b23",
+                    "on-surface-variant": "#434655",
+                    "on-primary-container": "#eeefff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "outline": "#737686",
+                    "tertiary": "#784b00",
+                    "surface-bright": "#faf8ff",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d9d9e5",
+                    "on-primary-fixed": "#00174b",
+                    "inverse-on-surface": "#f0f0fb",
+                    "surface-variant": "#e1e2ed",
+                    "surface-tint": "#0053db",
+                    "on-secondary-fixed-variant": "#005321",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "primary-container": "#2563eb",
+                    "inverse-primary": "#b4c5ff",
+                    "tertiary-container": "#996100",
+                    "background": "#faf8ff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#004ac6",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e7e7f3",
+                    "on-background": "#191b23",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "secondary": "#006e2f",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3039",
+                    "surface-container": "#ededf9",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#6bff8f",
+                    "on-tertiary-container": "#ffeedd",
+                    "surface": "#faf8ff",
+                    "on-secondary-container": "#007432",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-container": "#6bff8f",
+                    "secondary-fixed-dim": "#4ae176",
+                    "outline-variant": "#c3c6d7",
+                    "on-secondary-fixed": "#002109",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-highest": "#e1e2ed"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "8px",
+                    "xl": "12px",
+                    "2xl": "16px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xs": "4px",
+                    "2xl": "64px",
+                    "gutter": "24px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "display-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "label-sm": ["Manrope"],
+                    "headline-md": ["Manrope"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-xl": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #FAF8FF; color: #191B23; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .step-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e1e2ed;
+            z-index: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none" style="background-color: rgba(255, 255, 255, 0.8);">
+<div class="flex justify-between items-center h-16 px-10 max-w-[1280px] mx-auto">
+<a href="landing.html" class="flex items-center gap-2 font-semibold text-primary"><img src="assets/logo.png?v=2" alt="ReValue Hub" class="h-14 w-auto object-contain" /></a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold pb-1 font-manrope font-medium text-sm" href="browse.html">Browse</a>
+<div class="relative group">
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-full border-none focus:ring-2 focus:ring-primary text-sm w-64 transition-all" placeholder="Search treasures..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+</div>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-all" data-icon="notifications">notifications</button>
+</div>
+<button onclick="window.location.href='list-item.html'" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95">Donate</button>
+<div data-profile-trigger class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User avatar" data-alt="A professional headshot of a friendly individual with a warm smile, set against a soft-focus office background. The lighting is bright and even, reflecting a clean and trustworthy persona consistent with a modern corporate community platform. The individual has a neat appearance, emphasizing reliability and professionalism in a high-trust digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI-HFehCtLkJSt7sK1hLtY3JgBkTsuIoyrCGMPNe_AU9qpz6LrKbqX6yUqe5o_o20bCXtt-YS94oMQj4AB1bQUc3OMrNDiBZaQ4OKI6raDBX8HTRCL67GmpO6r4mGnrikqlvlEt9npxYwzCE3ckQCyR1lOiMfn41tGoad3qbRsl9ezGz888zcfGQROPhWgjoRf7Pxt2GX5yxy9D7ACF6z1cIi4M9rrcLLMHG8D2s0Kr_31hdGPGBkiu4CH2pV4CsOawt-bYM_-dcU"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-lg md:px-xl py-2xl space-y-2xl">
+<!-- Hero Section -->
+<section class="text-center space-y-md max-w-3xl mx-auto">
+<span class="inline-flex items-center gap-xs px-md py-xs bg-error-container text-on-error-container rounded-full font-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">report</span>
+                Report an Issue
+            </span>
+<h1 class="font-display-lg text-display-lg text-on-surface">Help Us Improve ReValue Hub</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Our community's safety and satisfaction are our top priorities. If you've encountered a bug, a fake listing, or any form of harassment, please let us know so we can take action immediately.</p>
+</section>
+<!-- Two-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl items-start">
+<!-- Left Column: Form -->
+<div class="lg:col-span-7 glass-panel rounded-2xl p-xl shadow-sm">
+<form class="space-y-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant ml-xs">Issue Type</label>
+<select class="w-full bg-surface border border-outline-variant rounded-xl p-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none">
+<option>Bug</option>
+<option>Fake Listing</option>
+<option>Harassment</option>
+<option>Technical Problem</option>
+<option>Feature Request</option>
+<option>Other</option>
+</select>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant ml-xs">Issue Title</label>
+<input class="w-full bg-surface border border-outline-variant rounded-xl p-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Brief summary of the issue" type="text">
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant ml-xs">Description</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-xl p-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" placeholder="Please provide as much detail as possible..." rows="5"></textarea>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant ml-xs">Upload Screenshot</label>
+<div class="w-full border-2 border-dashed border-outline-variant rounded-2xl p-xl flex flex-col items-center justify-center gap-sm bg-surface/50 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-[48px] text-outline group-hover:text-primary transition-colors">cloud_upload</span>
+<p class="font-body-md text-on-surface-variant">Drag and drop images or <span class="text-primary font-bold">Browse</span></p>
+<p class="font-label-sm text-outline">Supports JPG, PNG up to 10MB</p>
+</div>
+</div>
+<button class="w-full py-md bg-primary text-on-primary font-headline-md rounded-xl shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all active:scale-95" type="submit">
+                        Submit Report
+                    </button>
+</form>
+</div>
+<!-- Right Column: Info -->
+<div class="lg:col-span-5 space-y-lg">
+<div class="relative w-full aspect-square rounded-2xl overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A premium 3D isometric illustration of a digital security shield and a magnifying glass, floating in a clean white space with soft ambient shadows. Corporate minimalist style with Deep Blue and soft Green accents, high-end tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6yzEDbkRMnUuQfOQpe-aKG4LAiEqn1VFLpa0bOcnbKaj8t4RDMV5iD11nYONUPwhe8SYmkWeo9AeSMIgCMweZBgBcmepROEhM1kIIdQhy2SgVLa787Uo4PoeZGDrRNJCpuexuelHq5BhVnoZKfzfGnmQTmTukh0iAPUtqwQVrE5vnfXSL_NzYpfXpmRoaHR1LVKySeh0deek_jz0Y_tg18IVl2HG6k98DezL5dvkTx40ZF_KFEzCs">
+</div>
+<div class="grid gap-md">
+<!-- Response Time -->
+<div class="p-lg bg-surface-container-lowest border border-outline-variant/30 rounded-2xl flex items-start gap-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">schedule</span>
+</div>
+<div>
+<h3 class="font-headline-md text-on-surface">Response Time</h3>
+<p class="font-body-sm text-on-surface-variant">We aim to respond to all reports within 24 Hours.</p>
+</div>
+</div>
+<!-- Community Moderation -->
+<div class="p-lg bg-surface-container-lowest border border-outline-variant/30 rounded-2xl flex items-start gap-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">gavel</span>
+</div>
+<div>
+<h3 class="font-headline-md text-on-surface">Community Moderation</h3>
+<p class="font-body-sm text-on-surface-variant">Our team of dedicated moderators reviews every flag to ensure a fair and safe environment.</p>
+</div>
+</div>
+<!-- Secure Reporting -->
+<div class="p-lg bg-surface-container-lowest border border-outline-variant/30 rounded-2xl flex items-start gap-md shadow-sm">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed/50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary">lock_person</span>
+</div>
+<div>
+<h3 class="font-headline-md text-on-surface">Secure Reporting</h3>
+<p class="font-body-sm text-on-surface-variant">Your identity is protected. We take privacy and whistleblower safety seriously.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Issue Process Section -->
+<section class="py-xl">
+<div class="text-center mb-xl">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">How It Works</h2>
+<p class="font-body-md text-on-surface-variant">From submission to resolution, here is what happens after you report.</p>
+</div>
+<div class="relative flex flex-col md:flex-row justify-between items-center md:items-start gap-xl max-w-4xl mx-auto px-md">
+<div class="hidden md:block absolute top-8 left-0 right-0 h-0.5 bg-outline-variant/30 -z-10"></div>
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center space-y-sm bg-background px-md">
+<div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg font-headline-md border-4 border-background">1</div>
+<div>
+<h4 class="font-headline-md text-on-surface">Submit</h4>
+<p class="font-label-sm text-on-surface-variant max-w-[150px]">You submit the report with details</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center space-y-sm bg-background px-md">
+<div class="w-16 h-16 rounded-full bg-primary-container text-primary flex items-center justify-center shadow-md font-headline-md border-4 border-background">2</div>
+<div>
+<h4 class="font-headline-md text-on-surface">Review</h4>
+<p class="font-label-sm text-on-surface-variant max-w-[150px]">Our team analyzes the details provided</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center space-y-sm bg-background px-md">
+<div class="w-16 h-16 rounded-full bg-primary-container text-primary flex items-center justify-center shadow-md font-headline-md border-4 border-background">3</div>
+<div>
+<h4 class="font-headline-md text-on-surface">Investigation</h4>
+<p class="font-label-sm text-on-surface-variant max-w-[150px]">We look into the reported user or bug</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center space-y-sm bg-background px-md">
+<div class="w-16 h-16 rounded-full bg-primary-container text-primary flex items-center justify-center shadow-md font-headline-md border-4 border-background">4</div>
+<div>
+<h4 class="font-headline-md text-on-surface">Resolution</h4>
+<p class="font-label-sm text-on-surface-variant max-w-[150px]">We take action and update you</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-fixed-variant p-2xl text-center text-on-primary shadow-xl">
+<div class="relative z-10 space-y-md">
+<h2 class="font-headline-xl text-headline-xl">Thank you for helping us keep our community safe.</h2>
+<p class="font-body-lg text-body-lg opacity-90 max-w-2xl mx-auto">Your vigilance helps ReValue Hub remain a trusted space for everyone. We appreciate your contribution to our sustainability mission.</p>
+<div class="pt-md">
+<button onclick="window.location.href='browse.html'" class="bg-surface-container-lowest text-primary px-xl py-md rounded-xl font-headline-md hover:bg-on-primary hover:text-primary transition-all active:scale-95 shadow-md">Back to Dashboard</button>
+</div>
+</div>
+<!-- Decorative circle -->
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-16 border-t border-slate-200 dark:border-slate-800" style="background-color: #f8fafc;">
+<div class="max-w-[1280px] mx-auto px-10 flex flex-col lg:flex-row justify-between items-start gap-12 font-manrope text-sm leading-relaxed">
+<div class="max-w-xs">
+<img src="assets/logo.png?v=2" alt="ReValue Hub Logo" class="h-14 w-auto object-contain mb-4">
+<p class="text-slate-500 dark:text-slate-400 mb-6">Empowering communities through sustainable sharing. We believe every item has a future and every neighbor has something to offer.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 flex-1 justify-end w-full lg:w-auto">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="browse.html">Browse Items</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="list-item.html">Donate</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="how_it_works.html">How it Works</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Community</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="mission_page.html">Our Mission</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="become_a_volunteer.html">Become a Volunteer</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="about_us.html">About Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="terms_of_service.html">Terms of Service</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="privacy_policy.html">Privacy Policy</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="community_guidelines.html">Guidelines</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="safety_center.html">Safety Center</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="contact_us.html">Contact Us</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="help_center.html">Help Center</a></li>
+<li><a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="report_an_issue.html">Report an Issue</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-10 mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center md:text-left">
+<p class="text-slate-500 dark:text-slate-400">© 2024 ReValue Hub. Empowering communities through sustainable sharing.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Submitting...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Report Submitted';
+                btn.classList.replace('bg-primary', 'bg-secondary');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-secondary', 'bg-primary');
+                    btn.disabled = false;
+                    e.target.reset();
+                }, 3000);
+            }, 1500);
+        });
+    </script>
+
+
+
+<script src="js/app.js?v=20260609-7"></script>
+</body></html>
