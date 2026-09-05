@@ -391,6 +391,37 @@
 </div>
 </main>
 
+<!-- Request Management Modal -->
+<div id="request-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+            <div>
+                <p id="request-modal-id" class="text-xs font-bold uppercase tracking-wider text-primary">Request</p>
+                <h3 class="text-xl font-bold text-slate-900">Manage item request</h3>
+            </div>
+            <button type="button" onclick="closeRequestModal()" aria-label="Close request modal" class="p-2 rounded-full hover:bg-slate-100 text-slate-500">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="px-6 py-5 space-y-4">
+            <div><p class="text-xs uppercase font-bold text-slate-400">Requester</p><p id="request-modal-requester" class="font-semibold text-slate-900"></p></div>
+            <div><p class="text-xs uppercase font-bold text-slate-400">Item</p><p id="request-modal-item" class="font-semibold text-slate-900"></p></div>
+            <div><p class="text-xs uppercase font-bold text-slate-400">Submitted</p><p id="request-modal-date" class="text-sm text-slate-600"></p></div>
+            <label class="block"><span class="text-xs uppercase font-bold text-slate-400">Status</span>
+                <select id="request-modal-status" class="mt-2 w-full rounded-lg border-slate-200 text-sm focus:ring-primary">
+                    <option value="open">Open</option>
+                    <option value="closed">Closed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </label>
+        </div>
+        <div class="flex gap-3 px-6 py-5 border-t border-slate-100">
+            <button type="button" onclick="closeRequestModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50">Cancel</button>
+            <button type="button" onclick="saveRequestStatus()" class="flex-1 py-3 rounded-xl bg-primary text-white font-bold hover:opacity-90">Save status</button>
+        </div>
+    </div>
+</div>
+
 <!-- Item Detail Modal -->
 <div id="item-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden overflow-y-auto py-6 px-4">
     <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[calc(100vh-4rem)]">

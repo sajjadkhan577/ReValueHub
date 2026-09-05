@@ -387,6 +387,7 @@ async function fetchAdminRequests() {
             return;
         }
 
+        window.adminRequestsById = Object.fromEntries(requests.map(req => [String(req.id), req]));
         tbody.innerHTML = requests.map(req => `
             <tr>
                 <td class="px-6 py-4">
@@ -399,13 +400,61 @@ async function fetchAdminRequests() {
                     <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase">${req.status}</span>
                 </td>
                 <td class="px-6 py-4 text-right">
-                    <button class="text-primary hover:underline text-xs font-bold">Manage</button>
+                    <button type="button" data-request-id="${req.id}" class="manage-request-btn text-primary hover:underline text-xs font-bold">Manage</button>
                 </td>
             </tr>
         `).join('');
+        tbody.querySelectorAll('.manage-request-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const request = window.adminRequestsById?.[String(button.dataset.requestId)];
+                if (request) openRequestModal(request);
+            });
+        });
     } catch (error) {
         console.error('Error fetching requests:', error);
         tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-error">Failed to load requests.</td></tr>';
+    }
+}
+
+function openRequestModal(request) {
+    const modal = document.getElementById('request-modal');
+    if (!modal) return;
+
+    modal.dataset.requestId = request.id;
+    document.getElementById('request-modal-id').textContent = `Request #${request.id}`;
+    document.getElementById('request-modal-requester').textContent = request.requester_name || `User #${request.requester_id}`;
+    document.getElementById('request-modal-item').textContent = request.item_title || `Item #${request.item_id}`;
+    document.getElementById('request-modal-date').textContent = request.created_at ? new Date(request.created_at).toLocaleString() : 'Unknown';
+    document.getElementById('request-modal-status').value = request.status || 'open';
+    modal.classList.remove('hidden');
+}
+
+function closeRequestModal() {
+    document.getElementById('request-modal')?.classList.add('hidden');
+}
+
+async function saveRequestStatus() {
+    const modal = document.getElementById('request-modal');
+    const requestId = modal?.dataset.requestId;
+    const status = document.getElementById('request-modal-status')?.value;
+    if (!requestId || !status) return;
+
+    try {
+        const response = await fetch('api/requests.php', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+            },
+            body: JSON.stringify({ id: requestId, status })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to update request');
+        closeRequestModal();
+        fetchAdminRequests();
+        fetchStats();
+    } catch (error) {
+        alert(error.message || 'Unable to update request.');
     }
 }
 

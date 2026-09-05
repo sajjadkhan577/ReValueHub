@@ -116,4 +116,30 @@ elseif ($method === 'POST') {
         echo json_encode(['message' => 'Database error: ' . $mysqli->error]);
     }
 }
+elseif ($method === 'PATCH') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $requestId = intval($input['id'] ?? 0);
+    $status = $input['status'] ?? '';
+    $allowedStatuses = ['open', 'closed', 'cancelled'];
+
+    if (!$userId || !$requestId || !in_array($status, $allowedStatuses, true)) {
+        http_response_code(400);
+        die(json_encode(['message' => 'Valid request ID and status are required']));
+    }
+
+    $adminResult = $mysqli->query("SELECT role FROM users WHERE id = $userId LIMIT 1");
+    $admin = $adminResult ? $adminResult->fetch_assoc() : null;
+    if (!$admin || $admin['role'] !== 'admin') {
+        http_response_code(403);
+        die(json_encode(['message' => 'Administrator access required']));
+    }
+
+    $statusE = $mysqli->real_escape_string($status);
+    if ($mysqli->query("UPDATE requests SET status = '$statusE' WHERE id = $requestId")) {
+        echo json_encode(['message' => 'Request status updated', 'status' => $status]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['message' => 'Database error: ' . $mysqli->error]);
+    }
+}
 ?>

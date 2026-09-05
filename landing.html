@@ -106,6 +106,23 @@
   </script>
 <style>
     body { font-family: 'Manrope', sans-serif; }
+    .hero-visual { transform: translateY(-18px); }
+    .hero-here-label { animation: heroHereFloat 3.5s ease-in-out infinite; }
+    .featured-rail {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(195, 198, 215, 0.8);
+      box-shadow: 0 18px 45px rgba(25, 27, 35, 0.08);
+    }
+    .featured-rail-track { scrollbar-width: none; scroll-snap-type: x proximity; }
+    .featured-rail-track::-webkit-scrollbar { display: none; }
+    .featured-rail-track > a { scroll-snap-align: start; }
+    @keyframes heroHereFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-here-label { animation: none; }
+    }
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
@@ -171,9 +188,19 @@
 </div>
 <p class="text-label-md font-label-md text-on-surface-variant">Joined by 8.5k+ locals this month</p>
 </div>
+</div>
+<div class="relative hero-visual">
+<div class="absolute -top-10 -right-10 w-64 h-64 bg-secondary-fixed-dim/20 rounded-full blur-3xl animate-pulse"></div>
+<div class="absolute -bottom-10 -left-10 w-64 h-64 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+<img class="rounded-[32px] shadow-2xl relative z-10 w-full object-cover aspect-[4/3]" data-alt="A high-quality, candid photograph of a diverse group of neighbors happily exchanging a box of household items and a vintage lamp in a sunny, green suburban neighborhood." src="uploads/hero-community.jpg" onerror="this.onerror=null;this.src='assets/logo.png?v=2'"/>
+</div>
+</div>
+</section>
 <!-- Featured Right Now: live, auto-rotating listings pulled from the database -->
-<div class="mt-xl">
-<div class="flex items-center justify-between mb-sm">
+<section class="pb-2xl -mt-lg relative z-20">
+<div class="max-w-[1280px] mx-auto px-10">
+<div class="featured-rail rounded-2xl p-md sm:p-lg">
+<div class="flex items-center justify-between mb-md">
 <div class="flex items-center gap-2">
 <span class="relative flex h-2.5 w-2.5">
 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -181,25 +208,18 @@
 </span>
 <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide">Featured right now</span>
 </div>
-<div class="flex gap-2">
-<button id="hero-carousel-prev" aria-label="Previous" class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors">
+</div>
+<div id="hero-carousel-track" class="featured-rail-track flex gap-3 overflow-x-hidden scroll-smooth">
+<p class="text-body-sm text-on-surface-variant py-4">Loading featured items...</p>
+</div>
+<div class="flex justify-center items-center gap-3 mt-md">
+<button id="hero-carousel-prev" aria-label="Previous featured items" class="w-9 h-9 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors">
 <span class="material-symbols-outlined text-lg">chevron_left</span>
 </button>
-<button id="hero-carousel-next" aria-label="Next" class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors">
+<button id="hero-carousel-next" aria-label="Next featured items" class="w-9 h-9 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors">
 <span class="material-symbols-outlined text-lg">chevron_right</span>
 </button>
 </div>
-</div>
-<div id="hero-carousel-track" class="flex gap-3 overflow-x-hidden scroll-smooth">
-<!-- Dynamic featured item cards injected by js/app.js -->
-<p class="text-body-sm text-on-surface-variant py-4">Loading featured items…</p>
-</div>
-</div>
-</div>
-<div class="relative">
-<div class="absolute -top-10 -right-10 w-64 h-64 bg-secondary-fixed-dim/20 rounded-full blur-3xl animate-pulse"></div>
-<div class="absolute -bottom-10 -left-10 w-64 h-64 bg-primary-fixed/20 rounded-full blur-3xl"></div>
-<img class="rounded-[32px] shadow-2xl relative z-10 w-full object-cover aspect-[4/3]" data-alt="A high-quality, candid photograph of a diverse group of neighbors happily exchanging a box of household items and a vintage lamp in a sunny, green suburban neighborhood. The lighting is bright and natural, creating a warm, inviting atmosphere. The style is modern lifestyle photography, capturing a genuine moment of community connection and sustainable living." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWKxodB9_Ttksj4P8P6Ax4K7dpvVHMww34KXRa34diJ4vVFqGpryXN7VkW-TeqTBDjotXH6XYCGwgK0m8fRokbg9IuVS005_MgzC_qq4C4e6BiOtMnsF12ikD59L0h1602H3akyVb8fLQokB1kwyFc2w1CFLINDEd6KXcGhKa3J4uvI5fGTpTWNc6pCQXK5Uf7aghJ9F6Vc7gFtf_yudqcMA1PdvXBLp-TltWIYyWCQyD_zDR2u8cmHtxybxZrTkxI7L7eQumtr7o"/>
 </div>
 </div>
 </section>
@@ -231,56 +251,6 @@
 </div>
 <h3 class="font-headline-md text-headline-md mb-sm">Share</h3>
 <p class="text-body-md font-body-md text-on-surface-variant">Arrange a secure pickup through our platform and complete the cycle of revaluing treasures.</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Categories Section (Bento Style) -->
-<section class="py-2xl">
-<div class="max-w-[1280px] mx-auto px-10">
-<div class="flex justify-between items-end mb-xl">
-<div>
-<h2 class="font-headline-xl text-headline-xl text-on-surface">Explore Categories</h2>
-<p class="text-body-lg font-body-lg text-on-surface-variant">Find exactly what you're looking for.</p>
-</div>
-<button onclick="window.location.href='browse.html'" class="text-primary font-label-md text-label-md flex items-center gap-xs hover:gap-sm transition-all">View all <span class="material-symbols-outlined">arrow_forward</span></button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-md h-[500px]">
-<div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl cursor-pointer">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A beautifully styled home interior featuring modern furniture and soft lighting. The scene highlights premium furniture pieces like a sleek wooden coffee table and a minimalist sofa. The overall atmosphere is serene, high-end, and perfectly aligned with the ReValue Hub's aesthetic of professional yet warm living spaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4f83yGKrv7c7-0bfgp2ycKE2srMd0FytN5dTaA3XqR804zib_M9ZtNuYzfA3V4LuYthdImJII5_jXet_280-PzL-HkbcxzlwiwEXRG4iVuPaskmlExwya1v2EhIe4Yy8xyMt7R4C3E3ZC8d4rUmP26qZ2JSA73Q-fzRs_5UjxqmtMyeXdLPsJHuGI0ukjNtQZMKC1QnjdeAxSFvbEJo2ZYFUrGUxfE8yePRA6Z78ohXVupVg2YuZWnV_J1TydDhQ317LEL7Hwej0"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
-<div class="absolute bottom-6 left-6 text-white">
-<h3 class="font-headline-lg text-headline-lg">Home &amp; Garden</h3>
-<p class="font-body-sm text-body-sm opacity-90">2,400+ items available</p>
-</div>
-</div>
-<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of modern gadgets and electronics, including a stylish watch and sleek headphones, arranged on a clean white surface. The lighting is crisp and bright, reflecting a high-tech, minimalist vibe. This image represents the electronics category with a focus on quality and modern design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjWm9dYJ4pLcPrsNeBN6UGPDQwvg-3ow2zE0sPTCIjzf2NiGvFqzUWvWVYAkK_9Jz3J0woqVG4xgwgT1bixXDTOwJ4zv373hpY0m2QZD7yWKJSQHpTcCw4-A2RuoTGK-WLNOxzxeDNc1L6jSS2p5yYpOqSjT3Vo9Fm4ThSKzz4WJW2ba_FV8PyvuAnM6IGLtz7Olw4vK2PJWk7GpeIDzQnnb4-t_UvbXCD_I2Q8Ie3xiXQlb_QS-mXqDbfbjUXzodT8cj_daW6Jqc"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4 text-white">
-<h3 class="font-headline-md text-headline-md">Electronics</h3>
-</div>
-</div>
-<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A curated selection of high-quality apparel hanging on a wooden rack in a brightly lit boutique-style setting. The clothes are in soft neutral tones, emphasizing the brand's commitment to sustainable, high-value fashion exchanges within the community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP1B5DEBcIHccmyEKft3mBYm9rB77cE6oGUjQ8bOXqFzRe1eiAeo-OWd0FFKFQdat8CwZ4v-R2TYNrQh9fd_2WnRMGuAsEjXeE7y-r-hq_Ilio6WJIShpNGxUW9SP3gHH-ls_LXaQGxoqrrUWlhY8e0_WJKVYXOSsTlp0Y-O1lH3VeT-Rwkti0_v80hKrpBIoK8f1ntJPSs4Vs3B0-YwvkHXJlVMffbmGFFzLAlA4quvu_zrpLHT3QBPUVf8rKa6gztRNKOGIYJyY"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4 text-white">
-<h3 class="font-headline-md text-headline-md">Clothes</h3>
-</div>
-</div>
-<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A cozy reading nook with stacks of hardcover books and a comfortable chair, illuminated by soft lamp light. The scene evokes a sense of knowledge sharing and community wisdom. The lighting is warm and inviting, highlighting the textures of the book spines and the peaceful atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA33j4bUC5jFoNg62EX2dyBw6QZvNonLgFhe5g7ZlLe_3Bkc58lOAw8Phs651l-iEk0SW0DqfIYG7PNbkfHnxFhmKaq8O-xtwQaB4hEh7BYb3jQZenZZ-Kw_-FLjWuwwriGGycMm1Uk7vDwVqmj1qbJjTRFzF-eX6p_E5M6ClaJNRY_qSoJt6sqGHcsay592oHbv_pNR9ytPcmZj2Ifp61jouTGaKxy6dYGnavr5TentTqjXaSZE8bphvvf1BJ-NEWb3SVPpnQPETA"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4 text-white">
-<h3 class="font-headline-md text-headline-md">Books &amp; Media</h3>
-</div>
-</div>
-<div class="relative group overflow-hidden rounded-2xl cursor-pointer">
-<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A clean, minimalist arrangement of wellness products like yoga mats, essential oils, and organic supplements on a white wooden surface. The lighting is bright and natural, creating a peaceful and health-conscious vibe. This represents the health and personal care category with a focus on holistic well-being." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHX1k2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0"/>
-<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4 text-white">
-<h3 class="font-headline-md text-headline-md">Health</h3>
-</div>
 </div>
 </div>
 </div>

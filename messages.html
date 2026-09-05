@@ -49,12 +49,23 @@
         border-radius: 1.5rem 1.5rem 0.75rem 1.5rem;
     }
 
-    .message-row.incoming { justify-content: flex-start; }
-    .message-row.outgoing { justify-content: flex-end; }
+    .message-row.incoming { justify-content: flex-start !important; }
+    .message-row.outgoing { justify-content: flex-end !important; }
+    .message-row { display: flex !important; width: 100%; }
+    .message-row.incoming .message-group { align-items: flex-start; }
+    .message-row.outgoing .message-group { align-items: flex-end; }
+    .message-row.incoming .message-group { margin-right: auto; }
+    .message-row.outgoing .message-group { margin-left: auto; }
+    .message-group { display: flex; flex-direction: column; width: fit-content; max-width: min(70%, 34rem); }
+    .message-text { width: fit-content; max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
     .message-avatar { width: 2rem; height: 2rem; border-radius: 9999px; object-fit: cover; border: 1px solid rgba(148,163,184,.25); }
     .message-time { font-size: 0.7rem; color: #94a3b8; display: inline-flex; align-items: center; gap: 0.35rem; }
     .message-status { font-size: 0.9rem; color: #cbd5e1; }
     .message-status.read { color: #bae6fd; }
+    .typing-dots span { animation: typingDot 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: .15s; }
+    .typing-dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes typingDot { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
 
     .chat-bubble-incoming, .chat-bubble-outgoing { position: relative; }
     .chat-bubble-incoming::after,
@@ -115,6 +126,13 @@
         <h1 class="text-xl font-bold text-slate-800">Inbox Messages</h1>
         <span id="unread-conversations-badge" class="hidden text-xs bg-orange-500 text-white font-bold rounded-full px-2.5 py-0.5 shadow-sm">0 new</span>
       </div>
+            <div class="p-4 border-b border-slate-100 bg-white">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+                    <input id="message-user-search" class="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:ring-primary" placeholder="Search people..." autocomplete="off" />
+                </div>
+                <div id="message-search-results" class="hidden mt-2 space-y-1"></div>
+            </div>
       
       <!-- Conversations scroll area -->
       <div id="conversations-list" class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
@@ -134,7 +152,7 @@
           </div>
           <div>
             <h2 id="chat-header-name" class="font-bold text-slate-800 text-base leading-tight">Chat Partner</h2>
-            <p class="text-xs text-slate-400 font-medium">ReValue Community Member</p>
+            <p id="chat-header-status" class="text-xs text-slate-400 font-medium">ReValue Community Member</p>
           </div>
         </div>
         
@@ -146,10 +164,16 @@
       <div id="messages-container" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30 no-scrollbar">
         <!-- Dynamic chat history bubbles will render here -->
       </div>
+            <div id="typing-indicator" class="hidden px-6 pb-2 text-xs text-slate-400">
+                <span class="typing-dots inline-flex gap-1 mr-1"><span>●</span><span>●</span><span>●</span></span> typing...
+            </div>
       
       <!-- Send Message form -->
-      <form id="message-form" class="p-4 border-t border-slate-100 bg-white flex gap-3 items-center">
-        <textarea id="message-input" class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none h-12 no-scrollbar placeholder:text-slate-400" placeholder="Type a message..."></textarea>
+            <form id="message-form" class="p-4 border-t border-slate-100 bg-white flex gap-2 items-center">
+                <button type="button" id="emoji-button" class="p-2 text-slate-500 hover:text-primary rounded-xl" aria-label="Add emoji"><span class="material-symbols-outlined">sentiment_satisfied</span></button>
+                <label for="message-attachment" class="p-2 text-slate-500 hover:text-primary rounded-xl cursor-pointer" aria-label="Attach image or PDF"><span class="material-symbols-outlined">attach_file</span></label>
+                <input id="message-attachment" type="file" accept="image/*,application/pdf" class="hidden" />
+                <textarea id="message-input" class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none h-12 no-scrollbar placeholder:text-slate-400" placeholder="Type a message..."></textarea>
         <button type="submit" class="bg-primary text-white p-3 rounded-2xl hover:opacity-95 shadow-md shadow-primary/15 active:scale-95 transition-all flex items-center justify-center shrink-0">
           <span class="material-symbols-outlined text-xl">send</span>
         </button>
@@ -174,12 +198,34 @@ let activePartnerId = null;
 let activePartnerName = '';
 let activePartnerAvatar = '';
 let messagePolling = null;
+let messageUserId = 0;
+let typingTimer = null;
 // DEFAULT_AVATAR is already defined in app.js — do not redeclare
 
+async function resolveMessageUser() {
+    const token = localStorage.getItem('userToken');
+    if (!token) return false;
+
+    try {
+        const response = await fetch('api/auth/me.php', {
+            headers: { 'Authorization': `Bearer ${token}` },
+            cache: 'no-store'
+        });
+        const data = await response.json();
+        if (!response.ok || !data.user?.id) return false;
+        messageUserId = Number(data.user.id);
+        if (typeof currentUser !== 'undefined') currentUser = data.user;
+        return true;
+    } catch (error) {
+        console.error('Failed to resolve chat user:', error);
+        return false;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Wait briefly to let App Auth complete
+    // Resolve identity before rendering messages so sender and receiver sides are deterministic.
     setTimeout(async () => {
-        if (!localStorage.getItem('userToken')) {
+        if (!(await resolveMessageUser())) {
             alert('Please login or create an account to access messages.');
             window.location.href = 'register.html';
             return;
@@ -224,13 +270,53 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Handle enter key on textarea to send message (instead of manual newline)
     const textarea = document.getElementById('message-input');
+    textarea.addEventListener('input', () => {
+        if (!activePartnerId) return;
+        clearTimeout(typingTimer);
+        sendTypingState(true);
+        typingTimer = setTimeout(() => sendTypingState(false), 1200);
+    });
     textarea.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             form.requestSubmit();
         }
     });
+
+    const searchInput = document.getElementById('message-user-search');
+    let searchTimer;
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => searchUsers(searchInput.value.trim()), 250);
+    });
+    document.getElementById('emoji-button')?.addEventListener('click', () => {
+        textarea.value += (textarea.value ? ' ' : '') + '🙂';
+        textarea.focus();
+    });
 });
+
+async function searchUsers(query) {
+    const results = document.getElementById('message-search-results');
+    if (!results) return;
+    if (!query) { results.classList.add('hidden'); results.innerHTML = ''; return; }
+    try {
+        const users = await apiRequest(`messages?search=${encodeURIComponent(query)}`);
+        results.innerHTML = users.length ? users.map(user => `
+            <button type="button" data-search-user="${user.id}" class="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 text-left">
+                <img src="${escapeHtml(user.avatar || DEFAULT_AVATAR)}" class="w-8 h-8 rounded-full object-cover" alt="">
+                <span class="text-sm font-semibold text-slate-700">${escapeHtml(user.name)}</span>
+            </button>`).join('') : '<p class="p-2 text-xs text-slate-400">No people found.</p>';
+        results.classList.remove('hidden');
+        results.querySelectorAll('[data-search-user]').forEach(button => button.addEventListener('click', async () => {
+            const user = users.find(candidate => String(candidate.id) === button.dataset.searchUser);
+            if (user) {
+                results.classList.add('hidden');
+                document.getElementById('message-user-search').value = '';
+                setupTemporaryChatPartner(user);
+            }
+        }));
+    } catch (error) { console.error('User search failed:', error); }
+}
 
 async function loadInbox() {
     try {
@@ -306,6 +392,9 @@ function renderConversationItem(conv, isActive) {
     
     // Truncate latest message
     const msgPreview = conv.latest_message ? conv.latest_message.substring(0, 45) + (conv.latest_message.length > 45 ? '...' : '') : '';
+    const latestReceipt = Number(conv.latest_sender_id) === messageUserId
+        ? `<span class="material-symbols-outlined align-middle text-sm ${conv.latest_is_read ? 'text-sky-500' : 'text-slate-400'}">${conv.latest_is_read ? 'done_all' : 'done'}</span> `
+        : '';
     
     return `
         <div onclick="selectConversation(${conv.partner.id}, '${escapeHtml(conv.partner.name)}', '${avatar}')" 
@@ -317,11 +406,20 @@ function renderConversationItem(conv, isActive) {
                     <h4 class="text-sm font-bold text-slate-800 truncate">${escapeHtml(conv.partner.name)}</h4>
                     <span class="text-[10px] text-slate-400 font-medium whitespace-nowrap">${timeStr}</span>
                 </div>
-                <p class="text-xs truncate ${fontClass} leading-tight">${escapeHtml(msgPreview)}</p>
+                <p class="text-xs truncate ${fontClass} leading-tight">${latestReceipt}${escapeHtml(msgPreview)}</p>
             </div>
             ${unreadBadge}
         </div>
     `;
+}
+
+function getMessageUserId() {
+    if (messageUserId) return messageUserId;
+    const sharedUserId = Number(window.currentUser?.id || (typeof currentUser !== 'undefined' && currentUser?.id));
+    if (sharedUserId) return sharedUserId;
+    const token = localStorage.getItem('userToken') || '';
+    const match = token.match(/(?:dummy-token-)?(\d+)$/);
+    return match ? Number(match[1]) : 0;
 }
 
 function setupTemporaryChatPartner(user) {
@@ -385,8 +483,14 @@ async function selectConversation(partnerId, name, avatar) {
 async function fetchActiveThread() {
     if (!activePartnerId) return;
     try {
-        const thread = await apiRequest(`messages?userId=${activePartnerId}`);
+        const response = await apiRequest(`messages?userId=${activePartnerId}`);
+        const thread = Array.isArray(response) ? response : (response.messages || []);
+        const presence = Array.isArray(response) ? null : response.presence;
         const container = document.getElementById('messages-container');
+        const status = document.getElementById('chat-header-status');
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (status) status.textContent = presence?.online ? 'Online' : (presence?.last_seen ? `Last seen ${new Date(presence.last_seen).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'ReValue Community Member');
+        if (typingIndicator) typingIndicator.classList.toggle('hidden', !presence?.typing);
         
         if (!thread.length) {
             container.innerHTML = `
@@ -399,8 +503,9 @@ async function fetchActiveThread() {
         }
         
         let html = '';
+        const currentMessageUserId = getMessageUserId();
         thread.forEach(msg => {
-            const isMe = Number(msg.sender_id) === Number(currentUser?.id);
+            const isMe = Number(msg.sender_id) === currentMessageUserId;
             const bubbleClass = isMe 
                 ? 'chat-bubble-outgoing px-5 py-3 text-sm shadow-sm leading-relaxed break-words'
                 : 'chat-bubble-incoming px-5 py-3 text-sm shadow-sm leading-relaxed break-words';
@@ -412,11 +517,15 @@ async function fetchActiveThread() {
             const time = new Date(msg.created_at);
             const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
+            const attachment = msg.attachment_url ? (msg.message_type === 'image'
+                ? `<a href="${escapeHtml(msg.attachment_url)}" target="_blank" rel="noopener"><img src="${escapeHtml(msg.attachment_url)}" alt="${escapeHtml(msg.attachment_name || 'Image')}" class="max-w-full max-h-64 rounded-xl mb-2 object-cover"></a>`
+                : `<a href="${escapeHtml(msg.attachment_url)}" target="_blank" rel="noopener" class="flex items-center gap-2 underline"><span class="material-symbols-outlined">picture_as_pdf</span>${escapeHtml(msg.attachment_name || 'Attachment')}</a>`
+            ) : '';
             html += `
-                <div class="${rowClass}">
+                <div class="${rowClass}" data-direction="${isMe ? 'outgoing' : 'incoming'}">
                     ${!isMe ? `<img class="message-avatar" src="${avatarSrc}" alt="${senderName}" />` : ''}
-                    <div class="max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                        <div class="${bubbleClass}">${escapeHtml(msg.message)}</div>
+                    <div class="message-group">
+                        <div class="message-text ${bubbleClass}">${attachment}${escapeHtml(msg.message)}</div>
                         <span class="message-time mt-1 ${textAlign}">
                             ${timeStr}
                             ${isMe ? `<span class="message-status ${msg.is_read ? 'read' : 'sent'} material-symbols-outlined">${msg.is_read ? 'done_all' : 'done'}</span>` : ''}
@@ -442,20 +551,20 @@ async function fetchActiveThread() {
 
 async function handleSendMessage() {
     const input = document.getElementById('message-input');
+    const attachmentInput = document.getElementById('message-attachment');
     const messageText = input.value.trim();
-    if (!messageText || !activePartnerId) return;
+    if ((!messageText && !attachmentInput?.files?.length) || !activePartnerId) return;
     
     // Clear input immediately to make it feel fast
     input.value = '';
     
     try {
-        await apiRequest('messages', {
-            method: 'POST',
-            body: JSON.stringify({
-                receiver_id: activePartnerId,
-                message: messageText
-            })
-        });
+        const payload = new FormData();
+        payload.append('receiver_id', activePartnerId);
+        payload.append('message', messageText);
+        if (attachmentInput?.files?.[0]) payload.append('attachment', attachmentInput.files[0]);
+        await apiRequest('messages', { method: 'POST', body: payload });
+        if (attachmentInput) attachmentInput.value = '';
         
         // Refresh conversations & thread list
         await fetchActiveThread();
@@ -465,6 +574,15 @@ async function handleSendMessage() {
         alert('Failed to send message. Please try again.');
         input.value = messageText; // Restore text
     }
+}
+
+async function sendTypingState(typing) {
+    if (!activePartnerId) return;
+    const payload = new FormData();
+    payload.append('action', 'typing');
+    payload.append('receiver_id', String(activePartnerId));
+    payload.append('typing', typing ? '1' : '0');
+    try { await apiRequest('messages', { method: 'POST', body: payload }); } catch (error) { console.debug('Typing state unavailable', error); }
 }
 
 function closeActiveChat() {

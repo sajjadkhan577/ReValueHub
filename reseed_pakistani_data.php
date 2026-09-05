@@ -7,6 +7,43 @@ header('Content-Type: text/html; charset=utf-8');
 $passwordHash = '$2y$10$iidRIBiWR7IiPckTZgtWT.7ECWE5KYECS.rOaENfZ3TqwwXozEZGW'; // password123
 $adminHash    = '$2y$10$Plv7wapx4diNcV2aeqz2COq..yrBR4j/Hjl55/89UWoqbf2KZpEpa'; // admin123
 
+function downloadLocalImage($url, $prefix) {
+    if (!$url || strpos($url, 'http') !== 0) return $url;
+
+    $extension = 'jpg';
+    $path = parse_url($url, PHP_URL_PATH);
+    $pathExtension = strtolower(pathinfo($path ?: '', PATHINFO_EXTENSION));
+    if (in_array($pathExtension, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
+        $extension = $pathExtension;
+    }
+
+    $fileName = $prefix . '_' . sha1($url) . '.' . $extension;
+    $relativePath = 'uploads/' . $fileName;
+    $absolutePath = __DIR__ . '/' . $relativePath;
+    if (file_exists($absolutePath) && filesize($absolutePath) > 0) return $relativePath;
+
+    $context = stream_context_create(['http' => ['timeout' => 30, 'follow_location' => true]]);
+    $contents = @file_get_contents($url, false, $context);
+    if ($contents === false || @getimagesizefromstring($contents) === false) {
+        return '';
+    }
+
+    file_put_contents($absolutePath, $contents);
+    return $relativePath;
+}
+
+$offlineItemImages = [];
+$offlineAvatarImages = [];
+foreach (glob(__DIR__ . '/uploads/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE) as $imagePath) {
+    $imageName = basename($imagePath);
+    $relativePath = 'uploads/' . $imageName;
+    if (strpos($imageName, 'avatar_') === 0) {
+        $offlineAvatarImages[] = $relativePath;
+    } elseif (strpos($imageName, 'item_') !== 0) {
+        $offlineItemImages[] = $relativePath;
+    }
+}
+
 echo "<h2>🧹 Clearing old data...</h2>";
 
 $mysqli->query("DELETE FROM donations");
@@ -43,9 +80,7 @@ foreach ($pakistaniUsers as $user) {
     $emailE = $mysqli->real_escape_string($email);
     $bioE = $mysqli->real_escape_string($bio);
 
-    $avatarUrl = 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=' .
-        urlencode("Professional headshot portrait of a Pakistani $name, friendly smiling face, formal casual attire, soft natural lighting, high quality photo") .
-        '&image_size=square_hd';
+    $avatarUrl = $offlineAvatarImages ? $offlineAvatarImages[array_rand($offlineAvatarImages)] : '';
     $avatarE = $mysqli->real_escape_string($avatarUrl);
 
     $sql = "INSERT INTO users (name, email, password, role, status, avatar, bio) 
@@ -176,6 +211,7 @@ foreach ($itemsData as $category => $items) {
 
     foreach ($items as $item) {
         [$title, $description, $imageUrl, $condition] = $item;
+        $imageUrl = $offlineItemImages ? $offlineItemImages[$totalItems % count($offlineItemImages)] : '';
         $titleE = $mysqli->real_escape_string($title);
         $descE = $mysqli->real_escape_string($description);
         $condE = $mysqli->real_escape_string($condition);

@@ -27,6 +27,7 @@ if ($method === 'GET') {
     $category = $_GET['category'] ?? '';
     $search = $_GET['search'] ?? '';
     $limit = intval($_GET['limit'] ?? 50);
+    $offset = max(0, intval($_GET['offset'] ?? 0));
 
     if ($id) {
         $sql = "SELECT i.*, u.name as donor_name, u.avatar as donor_avatar, u.id as donor_id FROM items i JOIN users u ON i.donor_id = u.id WHERE i.id = $id";
@@ -48,13 +49,23 @@ if ($method === 'GET') {
     }
     if ($category) $sql .= " AND i.category = '" . $mysqli->real_escape_string($category) . "'";
     if ($search) $sql .= " AND (i.title LIKE '%" . $mysqli->real_escape_string($search) . "%' OR i.description LIKE '%" . $mysqli->real_escape_string($search) . "%')";
+    if (isset($_GET['count']) && $_GET['count'] === '1') {
+        $countResult = $mysqli->query(str_replace(
+            "SELECT i.*, u.name as donor_name, u.avatar as donor_avatar, u.id as donor_id",
+            "SELECT COUNT(*) AS total",
+            $sql
+        ));
+        $countRow = $countResult ? $countResult->fetch_assoc() : ['total' => 0];
+        echo json_encode(['count' => intval($countRow['total'])]);
+        exit;
+    }
     if ($featured) {
         // Deterministic shuffle that changes every 3 hours, so the homepage
         // spotlight rotates through different listings automatically over the day.
         $seed = intdiv(time(), 10800);
         $sql .= " ORDER BY RAND($seed) LIMIT $limit";
     } else {
-        $sql .= " ORDER BY i.created_at DESC LIMIT $limit";
+        $sql .= " ORDER BY i.created_at DESC LIMIT $limit OFFSET $offset";
     }
 
     $result = $mysqli->query($sql);

@@ -74,11 +74,26 @@ CREATE TABLE IF NOT EXISTS messages (
     receiver_id INT NOT NULL,
     item_id INT DEFAULT NULL,
     message TEXT NOT NULL,
+    message_type VARCHAR(20) NOT NULL DEFAULT 'text',
+    attachment_url VARCHAR(255) DEFAULT NULL,
+    attachment_name VARCHAR(255) DEFAULT NULL,
+    attachment_mime VARCHAR(100) DEFAULT NULL,
     is_read BOOLEAN DEFAULT FALSE,
+    delivered_at DATETIME DEFAULT NULL,
+    read_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- Online and typing state for private chat polling
+CREATE TABLE IF NOT EXISTS user_presence (
+    user_id INT PRIMARY KEY,
+    last_seen DATETIME NOT NULL,
+    typing_to INT DEFAULT NULL,
+    typing_at DATETIME DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Volunteer applications table (submitted via become_a_volunteer.html)

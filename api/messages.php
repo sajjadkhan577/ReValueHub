@@ -27,13 +27,34 @@ if (!$userId) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+$mysqli->query("INSERT INTO user_presence (user_id, last_seen) VALUES ($userId, NOW()) ON DUPLICATE KEY UPDATE last_seen = NOW()");
+
+function isMessageParticipant($mysqli, $userId, $otherId) {
+    $result = $mysqli->query("SELECT id FROM messages WHERE (sender_id = $userId AND receiver_id = $otherId) OR (sender_id = $otherId AND receiver_id = $userId) LIMIT 1");
+    return $result && $result->num_rows > 0;
+}
+
 if ($method === 'GET') {
+    if (isset($_GET['search'])) {
+        $search = $mysqli->real_escape_string(trim($_GET['search']));
+        $result = $mysqli->query("SELECT id, name, avatar FROM users WHERE id != $userId AND role = 'user' AND status = 'Active' AND (name LIKE '%$search%' OR email LIKE '%$search%') ORDER BY name LIMIT 20");
+        $users = [];
+        while ($result && ($row = $result->fetch_assoc())) $users[] = $row;
+        echo json_encode($users);
+        exit;
+    }
     // Check if we want a specific chat thread or the inbox list
     if (isset($_GET['userId'])) {
         $otherId = intval($_GET['userId']);
+
+        $otherUser = $mysqli->query("SELECT id FROM users WHERE id = $otherId AND status = 'Active' LIMIT 1");
+        if ($otherId <= 0 || $otherId === $userId || !$otherUser || !$otherUser->num_rows) {
+            http_response_code(403);
+            die(json_encode(['message' => 'Conversation access denied']));
+        }
         
         // 1. Mark received messages from this user as read
-        $mysqli->query("UPDATE messages SET is_read = 1 WHERE sender_id = $otherId AND receiver_id = $userId AND is_read = 0");
+        $mysqli->query("UPDATE messages SET is_read = 1, read_at = NOW() WHERE sender_id = $otherId AND receiver_id = $userId AND is_read = 0");
         
         // 2. Fetch the message thread
         $sql = "SELECT m.*, 
@@ -57,13 +78,27 @@ if ($method === 'GET') {
                     'item_id' => $row['item_id'] ? intval($row['item_id']) : null,
                     'message' => $row['message'],
                     'is_read' => intval($row['is_read']) === 1,
+                    'delivered_at' => $row['delivered_at'] ?? null,
+                    'read_at' => $row['read_at'] ?? null,
+                    'message_type' => $row['message_type'] ?? 'text',
+                    'attachment_url' => $row['attachment_url'] ?? null,
+                    'attachment_name' => $row['attachment_name'] ?? null,
                     'created_at' => $row['created_at'],
                     'sender_name' => $row['sender_name'],
                     'sender_avatar' => $row['sender_avatar']
                 ];
             }
         }
-        echo json_encode($thread);
+        $presenceResult = $mysqli->query("SELECT last_seen, typing_to, typing_at FROM user_presence WHERE user_id = $otherId LIMIT 1");
+        $presence = $presenceResult ? $presenceResult->fetch_assoc() : null;
+        echo json_encode([
+            'messages' => $thread,
+            'presence' => $presence ? [
+                'online' => strtotime($presence['last_seen']) >= time() - 20,
+                'typing' => intval($presence['typing_to']) === $userId && strtotime($presence['typing_at']) >= time() - 5,
+                'last_seen' => $presence['last_seen']
+            ] : ['online' => false, 'typing' => false]
+        ]);
         exit;
     } else {
         // Fetch Inbox/Conversations list
@@ -86,7 +121,7 @@ if ($method === 'GET') {
                 $partnerRes = $mysqli->query("SELECT id, name, avatar FROM users WHERE id = $partnerId");
                 if ($partnerRes && $partner = $partnerRes->fetch_assoc()) {
                     // Fetch latest message
-                    $msgRes = $mysqli->query("SELECT message, created_at, sender_id 
+                    $msgRes = $mysqli->query("SELECT message, created_at, sender_id, is_read
                                               FROM messages 
                                               WHERE (sender_id = $userId AND receiver_id = $partnerId) 
                                                  OR (sender_id = $partnerId AND receiver_id = $userId) 
@@ -107,6 +142,7 @@ if ($method === 'GET') {
                         ],
                         'latest_message' => $latestMsg ? $latestMsg['message'] : '',
                         'latest_sender_id' => $latestMsg ? intval($latestMsg['sender_id']) : 0,
+                        'latest_is_read' => $latestMsg ? intval($latestMsg['is_read']) === 1 : false,
                         'created_at' => $latestMsg ? $latestMsg['created_at'] : '',
                         'unread_count' => $unreadCount
                     ];
@@ -124,13 +160,26 @@ if ($method === 'GET') {
     }
 } 
 elseif ($method === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true);
+    $input = $_POST ?: (json_decode(file_get_contents('php://input'), true) ?: []);
     if (!$input) {
         // Fallback for regular POST data
         $input = $_POST;
     }
     
     $receiverId = intval($input['receiver_id'] ?? 0);
+
+    if (($input['action'] ?? '') === 'typing') {
+        $recipient = $mysqli->query("SELECT id FROM users WHERE id = $receiverId AND status = 'Active' LIMIT 1");
+        if (!$receiverId || $receiverId === $userId || !$recipient || !$recipient->num_rows) {
+            http_response_code(403);
+            die(json_encode(['message' => 'Conversation access denied']));
+        }
+        $typingTo = intval($input['typing'] ?? 0) === 1 ? $receiverId : 'NULL';
+        $mysqli->query("UPDATE user_presence SET typing_to = $typingTo, typing_at = NOW(), last_seen = NOW() WHERE user_id = $userId");
+        echo json_encode(['message' => 'Presence updated']);
+        exit;
+    }
+
     $message = $mysqli->real_escape_string(trim($input['message'] ?? ''));
     $itemId = isset($input['item_id']) && $input['item_id'] ? intval($input['item_id']) : null;
     
@@ -143,11 +192,50 @@ elseif ($method === 'POST') {
         http_response_code(400);
         die(json_encode(['message' => 'You cannot send a message to yourself']));
     }
+
+    $recipient = $mysqli->query("SELECT id FROM users WHERE id = $receiverId AND status = 'Active' LIMIT 1");
+    if (!$recipient || !$recipient->num_rows) {
+        http_response_code(403);
+        die(json_encode(['message' => 'Recipient not found']));
+    }
+
+    $attachmentUrl = null;
+    $attachmentName = null;
+    $attachmentMime = null;
+    $messageType = 'text';
+    if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+        if ($_FILES['attachment']['size'] > 10 * 1024 * 1024) {
+            http_response_code(400);
+            die(json_encode(['message' => 'Attachments must be 10MB or smaller']));
+        }
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+        $mime = mime_content_type($_FILES['attachment']['tmp_name']);
+        if (!in_array($mime, $allowedMimes, true)) {
+            http_response_code(400);
+            die(json_encode(['message' => 'Only images and PDF files are supported']));
+        }
+        $directory = __DIR__ . '/../uploads/messages/';
+        if (!is_dir($directory)) mkdir($directory, 0777, true);
+        $extension = strtolower(pathinfo($_FILES['attachment']['name'], PATHINFO_EXTENSION));
+        $fileName = bin2hex(random_bytes(12)) . '.' . $extension;
+        if (!move_uploaded_file($_FILES['attachment']['tmp_name'], $directory . $fileName)) {
+            http_response_code(500);
+            die(json_encode(['message' => 'Could not save attachment']));
+        }
+        $attachmentUrl = 'uploads/messages/' . $fileName;
+        $attachmentName = basename($_FILES['attachment']['name']);
+        $attachmentMime = $mime;
+        $messageType = strpos($mime, 'image/') === 0 ? 'image' : 'file';
+    }
     
     // Insert into messages table
     $itemVal = $itemId ? $itemId : "NULL";
-    $sql = "INSERT INTO messages (sender_id, receiver_id, item_id, message) 
-            VALUES ($userId, $receiverId, $itemVal, '$message')";
+        $attachmentUrlSql = $attachmentUrl ? "'" . $mysqli->real_escape_string($attachmentUrl) . "'" : 'NULL';
+        $attachmentNameSql = $attachmentName ? "'" . $mysqli->real_escape_string($attachmentName) . "'" : 'NULL';
+        $attachmentMimeSql = $attachmentMime ? "'" . $mysqli->real_escape_string($attachmentMime) . "'" : 'NULL';
+        $typeSql = $mysqli->real_escape_string($messageType);
+        $sql = "INSERT INTO messages (sender_id, receiver_id, item_id, message, message_type, attachment_url, attachment_name, attachment_mime, delivered_at)
+            VALUES ($userId, $receiverId, $itemVal, '$message', '$typeSql', $attachmentUrlSql, $attachmentNameSql, $attachmentMimeSql, NOW())";
             
     if ($mysqli->query($sql)) {
         $msgId = $mysqli->insert_id;

@@ -1152,7 +1152,9 @@ function setupSearchAndFilters() {
   const searchInput = document.querySelector('nav input[placeholder*="Search"]');
   const categoryLinks = document.querySelectorAll('aside nav a[data-category]');
   const resetButton = Array.from(document.querySelectorAll('aside button')).find((btn) => btn.textContent.trim().toLowerCase().includes('reset'));
-  const state = { search: '', category: '', location: '' };
+  const browseContainer = document.getElementById('items-grid');
+  const state = { search: '', category: '', location: '', status: 'all', page: 1, limit: 50 };
+  if (browseContainer) browseContainer._browseState = state;
   let timer;
 
   if (searchInput) {
@@ -1160,6 +1162,7 @@ function setupSearchAndFilters() {
       clearTimeout(timer);
       timer = setTimeout(() => {
         state.search = searchInput.value.trim();
+        state.page = 1;
         loadItems('items-grid', state);
       }, 250);
     });
@@ -1185,6 +1188,7 @@ function setupSearchAndFilters() {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       state.category = link.dataset.category || '';
+      state.page = 1;
       updateCategoryHighlight(state.category);
       loadItems('items-grid', state);
     });
@@ -1195,11 +1199,49 @@ function setupSearchAndFilters() {
       state.search = '';
       state.category = '';
       state.location = '';
+      state.page = 1;
       if (searchInput) searchInput.value = '';
       updateCategoryHighlight('');
       loadItems('items-grid');
     });
   }
+}
+
+function renderBrowsePagination(total, state) {
+  const pagination = document.getElementById('browse-pagination');
+  if (!pagination) return;
+
+  const totalPages = Math.max(1, Math.ceil(total / state.limit));
+  state.page = Math.min(Math.max(1, state.page), totalPages);
+  const nav = pagination.querySelector('nav');
+  if (!nav) return;
+
+  const button = (label, page, disabled = false, icon = '') => `
+    <button type="button" data-page="${page}" ${disabled ? 'disabled' : ''}
+      class="w-10 h-10 flex items-center justify-center rounded-lg ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-surface-container'} ${icon ? 'border border-outline-variant' : 'font-label-md'} transition-colors ${page === state.page ? 'bg-primary text-on-primary' : 'text-on-surface'}">
+      ${icon ? `<span class="material-symbols-outlined">${icon}</span>` : page}
+    </button>`;
+
+  let pages = '';
+  let ellipsisAdded = false;
+  for (let page = 1; page <= totalPages; page++) {
+    if (totalPages <= 7 || page === 1 || page === totalPages || Math.abs(page - state.page) <= 1) {
+      pages += button('', page);
+      ellipsisAdded = false;
+    } else if (!ellipsisAdded) {
+      pages += '<span class="w-10 h-10 flex items-center justify-center text-outline" data-pagination-ellipsis>...</span>';
+      ellipsisAdded = true;
+    }
+  }
+
+  nav.innerHTML = button('', state.page - 1, state.page === 1, 'chevron_left') + pages + button('', state.page + 1, state.page === totalPages, 'chevron_right');
+  nav.querySelectorAll('button[data-page]').forEach((control) => {
+    control.addEventListener('click', () => {
+      state.page = Number(control.dataset.page);
+      loadItems('items-grid', state);
+      document.getElementById('items-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 }
 
 async function loadItems(containerId, filters = {}) {
@@ -1208,8 +1250,23 @@ async function loadItems(containerId, filters = {}) {
   if (!container) return;
 
   try {
-    const qs = new URLSearchParams(Object.entries(filters).filter(([, value]) => value)).toString();
+    const browseState = containerId === 'items-grid' ? (container._browseState || { page: 1, limit: 50 }) : null;
+    const effectiveFilters = browseState ? { ...browseState, ...filters } : filters;
+    if (browseState) {
+      effectiveFilters.offset = (effectiveFilters.page - 1) * effectiveFilters.limit;
+    }
+    const qs = new URLSearchParams(Object.entries(effectiveFilters).filter(([key, value]) => value && !['page'].includes(key))).toString();
     const items = await apiRequest(`/items${qs ? `?${qs}` : ''}`);
+
+    if (browseState) {
+      const countFilters = { ...effectiveFilters };
+      delete countFilters.page;
+      delete countFilters.limit;
+      delete countFilters.offset;
+      const countQs = new URLSearchParams(Object.entries(countFilters).filter(([, value]) => value)).toString();
+      const countResult = await apiRequest(`/items?count=1${countQs ? `&${countQs}` : ''}`);
+      renderBrowsePagination(Number(countResult.count || 0), browseState);
+    }
 
     if (!items.length) {
       container.innerHTML = '<p class="col-span-full text-center text-on-surface-variant">No items found.</p>';
@@ -1245,7 +1302,7 @@ function itemCard(item) {
     <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all group flex flex-col h-full no-underline text-inherit cursor-pointer">
       <div class="relative aspect-square shrink-0 bg-surface-container-low">
         <span class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full text-[10px] font-bold text-primary z-10 capitalize">${condition}</span>
-        <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       </div>
       <div class="p-2.5 flex flex-col flex-grow">
         <h4 class="font-headline-md text-sm leading-tight mb-1 line-clamp-2">${escapeHtml(item.title)}</h4>
@@ -1253,7 +1310,7 @@ function itemCard(item) {
           <span class="material-symbols-outlined text-xs">location_on</span> ${escapeHtml(item.location || '')}
         </p>
         <div class="mt-auto pt-2 border-t border-outline-variant flex items-center gap-1.5">
-          <img src="${escapeHtml(item.donor_avatar || DEFAULT_AVATAR)}" class="w-5 h-5 rounded-full object-cover border border-primary/10 shrink-0">
+          <img src="${escapeHtml(item.donor_avatar || DEFAULT_AVATAR)}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'" class="w-5 h-5 rounded-full object-cover border border-primary/10 shrink-0">
           <span class="text-[11px] font-bold text-on-surface truncate">${escapeHtml(item.donor_name || 'Donor')}</span>
         </div>
       </div>
@@ -1277,7 +1334,7 @@ async function loadHeroCarousel() {
     track.innerHTML = items.map(item => `
       <a href="item-detail.html?id=${item.id}" class="shrink-0 w-40 sm:w-44 bg-white rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all no-underline text-inherit">
         <div class="relative aspect-square bg-surface-container-low">
-          <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover">
+          <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'" class="w-full h-full object-cover">
         </div>
         <div class="p-2">
           <h5 class="text-xs font-bold leading-tight line-clamp-2">${escapeHtml(item.title)}</h5>
@@ -1295,7 +1352,10 @@ async function loadHeroCarousel() {
 function setupHeroCarouselControls(track) {
   const prevBtn = document.getElementById('hero-carousel-prev');
   const nextBtn = document.getElementById('hero-carousel-next');
-  const scrollAmount = () => Math.max(track.clientWidth * 0.8, 180);
+  const scrollAmount = () => {
+    const card = track.querySelector('a');
+    return card ? card.getBoundingClientRect().width + 12 : Math.max(track.clientWidth * 0.8, 180);
+  };
 
   const scrollNext = () => {
     const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
@@ -1308,13 +1368,15 @@ function setupHeroCarouselControls(track) {
   if (nextBtn) nextBtn.onclick = scrollNext;
   if (prevBtn) prevBtn.onclick = scrollPrev;
 
-  // Auto-advance every few seconds, like a Daraz/OLX featured-deals strip.
-  if (track._autoplayInterval) clearInterval(track._autoplayInterval);
-  track._autoplayInterval = setInterval(scrollNext, 4000);
+  const startAutoplay = () => {
+    clearInterval(track._autoplayInterval);
+    track._autoplayInterval = setInterval(scrollNext, 3500);
+  };
   track.addEventListener('mouseenter', () => clearInterval(track._autoplayInterval));
-  track.addEventListener('mouseleave', () => {
-    track._autoplayInterval = setInterval(scrollNext, 4000);
-  });
+  track.addEventListener('mouseleave', startAutoplay);
+  track.addEventListener('focusin', () => clearInterval(track._autoplayInterval));
+  track.addEventListener('focusout', startAutoplay);
+  startAutoplay();
 }
 
 

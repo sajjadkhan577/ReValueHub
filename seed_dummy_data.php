@@ -60,7 +60,7 @@ echo "<br>Total donor pool: " . count($userIds) . " users<br><br>";
 $uploadImages = glob('uploads/*.{jpg,jpeg,png,gif}', GLOB_BRACE);
 $itemImages = [];
 foreach ($uploadImages as $img) {
-    if (strpos($img, 'avatar_') === false) {
+    if (strpos(basename($img), 'avatar_') !== 0 && strpos(basename($img), 'item_') !== 0) {
         $itemImages[] = str_replace('\\', '/', $img);
     }
 }
