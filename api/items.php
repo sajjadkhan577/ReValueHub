@@ -45,7 +45,11 @@ if ($method === 'GET') {
     $featured = isset($_GET['featured']) && $_GET['featured'] === '1';
     $sql = "SELECT i.*, u.name as donor_name, u.avatar as donor_avatar, u.id as donor_id FROM items i JOIN users u ON i.donor_id = u.id WHERE 1=1";
     if ($status !== 'all') {
-        $sql .= " AND i.status = '" . $mysqli->real_escape_string($status) . "'";
+        if ($status === 'approved') {
+            $sql .= " AND i.status IN ('approved', 'donated')";
+        } else {
+            $sql .= " AND i.status = '" . $mysqli->real_escape_string($status) . "'";
+        }
     }
     if ($category) $sql .= " AND i.category = '" . $mysqli->real_escape_string($category) . "'";
     if ($search) $sql .= " AND (i.title LIKE '%" . $mysqli->real_escape_string($search) . "%' OR i.description LIKE '%" . $mysqli->real_escape_string($search) . "%')";
@@ -63,9 +67,9 @@ if ($method === 'GET') {
         // Deterministic shuffle that changes every 3 hours, so the homepage
         // spotlight rotates through different listings automatically over the day.
         $seed = intdiv(time(), 10800);
-        $sql .= " ORDER BY RAND($seed) LIMIT $limit";
+        $sql .= " ORDER BY CASE WHEN i.status = 'donated' THEN 1 ELSE 0 END ASC, RAND($seed) LIMIT $limit";
     } else {
-        $sql .= " ORDER BY i.created_at DESC LIMIT $limit OFFSET $offset";
+        $sql .= " ORDER BY CASE WHEN i.status = 'donated' THEN 1 ELSE 0 END ASC, i.created_at DESC LIMIT $limit OFFSET $offset";
     }
 
     $result = $mysqli->query($sql);

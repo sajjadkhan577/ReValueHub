@@ -83,7 +83,7 @@
 <aside class="fixed left-0 top-0 h-screen w-64 border-r border-slate-200 bg-white shadow-sm flex flex-col p-4 z-50 transition-colors duration-300 overflow-y-auto">
 <div class="mb-10 px-4">
 <a href="landing.html" class="flex items-center">
-    <img src="assets/logo.png" alt="ReValue Hub" class="h-30 w-auto object-contain" />
+    <img src="assets/logo.png" alt="ReValue Hub" class="h-20 w-auto object-contain" />
 </a>
 </div>
 <nav id="admin-nav" class="flex-1 space-y-1">
@@ -206,7 +206,7 @@
 <div id="users-view" class="admin-view hidden space-y-6">
     <div class="flex justify-between items-center">
         <h3 class="text-2xl font-bold">User Management</h3>
-        <button class="bg-primary text-white px-4 py-2 rounded-lg font-bold">Export Users</button>
+        <button id="export-users-btn" type="button" class="bg-primary text-white px-4 py-2 rounded-lg font-bold disabled:opacity-60 disabled:cursor-not-allowed">Export Users</button>
     </div>
     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
         <table class="w-full text-left">
@@ -226,7 +226,16 @@
 
 <!-- Items View -->
 <div id="items-view" class="admin-view hidden space-y-6">
-    <h3 class="text-2xl font-bold">Global Inventory</h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h3 class="text-2xl font-bold">Global Inventory</h3>
+        <div class="flex flex-wrap gap-2">
+            <button onclick="filterAdminItems('all', this)" class="admin-filter-btn px-4 py-2 rounded-lg text-sm font-bold transition-all bg-primary text-white">All</button>
+            <button onclick="filterAdminItems('pending', this)" class="admin-filter-btn px-4 py-2 rounded-lg text-sm font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200">Pending</button>
+            <button onclick="filterAdminItems('approved', this)" class="admin-filter-btn px-4 py-2 rounded-lg text-sm font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200">Approved</button>
+            <button onclick="filterAdminItems('rejected', this)" class="admin-filter-btn px-4 py-2 rounded-lg text-sm font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200">Rejected</button>
+            <button onclick="filterAdminItems('donated', this)" class="admin-filter-btn px-4 py-2 rounded-lg text-sm font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200">Donated</button>
+        </div>
+    </div>
     <div id="admin-items-grid" class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- Dynamic items will load here -->
     </div>

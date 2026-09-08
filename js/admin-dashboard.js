@@ -1,4 +1,5 @@
 let currentEditingItemId = null;
+let currentAdminItemFilter = 'all';
 
 
 
@@ -35,6 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Auth error:', err);
         window.location.href = 'admin-login.html';
         return;
+    }
+
+    const exportButton = document.getElementById('export-users-btn');
+    if (exportButton) {
+        exportButton.addEventListener('click', exportUsers);
     }
 
     applyTheme();
@@ -89,7 +95,21 @@ function showAdminSection(sectionId, element) {
         element.classList.remove('text-slate-600');
     }
 
-    if (sectionId === 'items') fetchAdminInventory();
+    if (sectionId === 'items') {
+        currentAdminItemFilter = 'all';
+        // Reset filter buttons styling
+        document.querySelectorAll('.admin-filter-btn').forEach(btn => {
+            btn.classList.remove('bg-primary', 'text-white');
+            btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+        });
+        // Set first button as active
+        const firstFilterBtn = document.querySelector('.admin-filter-btn');
+        if (firstFilterBtn) {
+            firstFilterBtn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            firstFilterBtn.classList.add('bg-primary', 'text-white');
+        }
+        fetchAdminInventory();
+    }
     if (sectionId === 'requests') fetchAdminRequests();
     if (sectionId === 'users') fetchAllUsers();
 }
@@ -180,7 +200,18 @@ async function fetchPendingItems() {
 
 async function fetchAllUsers() {
     try {
-        const response = await fetch(`api/admin/users.php?t=${Date.now()}`);
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`api/admin/users.php?t=${Date.now()}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.message || 'Failed to load users');
+        }
+
         const users = await response.json();
         const tbody = document.getElementById('admin-users-tbody');
         if (!tbody) return;
@@ -196,6 +227,65 @@ async function fetchAllUsers() {
         `).join('');
     } catch (error) {
         console.error('Error fetching users:', error);
+        const tbody = document.getElementById('admin-users-tbody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-error">Unable to load users.</td></tr>';
+        }
+    }
+}
+
+async function exportUsers() {
+    const button = document.getElementById('export-users-btn');
+    if (!button) return;
+
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        alert('Admin session expired. Please sign in again.');
+        window.location.href = 'admin-login.html';
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Preparing export...';
+
+    try {
+        const response = await fetch('api/admin/export-users.php', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            let message = 'Unable to export users.';
+            const contentType = response.headers.get('Content-Type') || '';
+            if (contentType.includes('application/json')) {
+                const data = await response.json().catch(() => ({}));
+                message = data.message || message;
+            } else {
+                const text = await response.text().catch(() => '');
+                if (text) {
+                    message = text.trim().slice(0, 200);
+                }
+            }
+            throw new Error(message);
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        const dateStamp = new Date().toISOString().slice(0, 10);
+        link.download = `revaluehub_users_${dateStamp}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('User export failed:', error);
+        alert(error.message || 'Failed to export users.');
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Export Users';
     }
 }
 
@@ -229,17 +319,39 @@ async function fetchAdminInventory() {
     if (!grid) return;
 
     try {
-        const res = await fetch(`api/items.php?status=all&t=${Date.now()}`);
+        const statusParam = currentAdminItemFilter === 'all' ? 'all' : currentAdminItemFilter;
+        const res = await fetch(`api/items.php?status=${statusParam}&t=${Date.now()}`);
         let dbItems = [];
         try { dbItems = await res.json(); } catch(e) {}
         
         const allItems = dbItems;
 
-        grid.innerHTML = allItems.map(item => `
+        if (allItems.length === 0) {
+            const emptyMessages = {
+                'all': 'No items found.',
+                'pending': 'No pending items found.',
+                'approved': 'No approved items found.',
+                'rejected': 'No rejected items found.',
+                'donated': 'No donated items found.'
+            };
+            grid.innerHTML = `<p class="col-span-full text-center text-slate-500 py-8">${emptyMessages[currentAdminItemFilter] || 'No items found.'}</p>`;
+            return;
+        }
+
+        grid.innerHTML = allItems.map(item => {
+            const statusColors = {
+                'approved': 'bg-green-500 text-white',
+                'pending': 'bg-blue-500 text-white',
+                'rejected': 'bg-red-500 text-white',
+                'donated': 'bg-slate-500 text-white'
+            };
+            const statusColor = statusColors[item.status] || 'bg-slate-500 text-white';
+            
+            return `
             <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm cursor-pointer hover:shadow-md transition-all" onclick="openItemModal('${item.id}')">
                 <div class="relative h-32">
                     <img class="w-full h-full object-cover" src="${item.image_url || 'assets/placeholder.png'}">
-                    <div class="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.status === 'approved' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'}">
+                    <div class="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${statusColor}">
                         ${item.status}
                     </div>
                 </div>
@@ -248,10 +360,26 @@ async function fetchAdminInventory() {
                     <p class="text-xs text-slate-500">${item.category}</p>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     } catch (err) {
         grid.innerHTML = '<p class="col-span-full text-center text-error">Failed to load items.</p>';
     }
+}
+
+function filterAdminItems(status, button) {
+    currentAdminItemFilter = status;
+    
+    // Update button styling
+    document.querySelectorAll('.admin-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+    });
+    
+    button.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+    button.classList.add('bg-primary', 'text-white');
+    
+    // Reload items with new filter
+    fetchAdminInventory();
 }
 
 async function openItemModal(itemId) {

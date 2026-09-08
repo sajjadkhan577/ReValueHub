@@ -35,7 +35,8 @@ ReValue Hub is a **peer-to-peer community reuse marketplace** that empowers loca
 | 💬 **Messaging** | Peer-to-peer inbox • Auto-polling for new messages • Message threads per item • Unread indicators |
 | 🔔 **Notifications** | Database-stored notification system for requests, approvals, and volunteer status • Read/unread tracking |
 | 🧑‍💼 **User Dashboard** | My donations / My requests / Inbox shortcuts • Personal donation impact tracker • Profile editing |
-| 🛡️ **Admin Panel** | System stats at a glance • Pending item approval queue (Approve / Reject / Delete) • Full user management (View / Flag / Delete) • Volunteer application review • Invite other administrators |
+| 🛡️ **Admin Panel** | System stats at a glance • Pending item approval queue (Approve / Reject / Delete) • Full user management (View / Flag / Delete) • Volunteer application review • Invite other administrators • Admin users can export user records from the Users Management page as an Excel-compatible file. |
+| 🌍 **Browse Feed** | Approved items remain available first, while donated items remain visible at the bottom of the feed as a DONATED status and successful donation history rather than disappearing. |
 | 🫱‍🫲 **Volunteers** | Public "Become a Volunteer" application form with skills + availability + motivation fields |
 | 📱 **Responsive UI** | Fully responsive Tailwind CSS design • Works on phones, tablets, and desktops • Smooth animations & glassmorphism styling |
 

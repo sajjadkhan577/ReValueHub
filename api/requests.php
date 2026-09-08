@@ -78,10 +78,18 @@ elseif ($method === 'POST') {
     }
 
     // Check if item exists and get donor
-    $itemResult = $mysqli->query("SELECT donor_id FROM items WHERE id = $itemId");
+    $itemResult = $mysqli->query("SELECT donor_id, status, title FROM items WHERE id = $itemId");
     if (!$itemResult || !$item = $itemResult->fetch_assoc()) {
         http_response_code(404);
         die(json_encode(['message' => 'Item not found']));
+    }
+
+    if (($item['status'] ?? '') === 'donated') {
+        http_response_code(409);
+        die(json_encode([
+            'success' => false,
+            'message' => 'This item has already been donated and is no longer available.'
+        ]));
     }
 
     if ($item['donor_id'] == $userId) {

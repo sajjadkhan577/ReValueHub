@@ -322,9 +322,6 @@ function insertGlobalHeaderFooter() {
             <button type="button" class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" data-footer-profile-trigger aria-label="Open Profile">
               <span class="material-symbols-outlined text-sm">person</span>
             </button>
-            <a class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center hover:bg-primary hover:text-white transition-all" style="background-color: #e2e8f0; color: #191b23;" href="#" aria-label="Share">
-              <span class="material-symbols-outlined text-sm">share</span>
-            </a>
           </div>
 
         </div>
@@ -1298,10 +1295,12 @@ async function loadItems(containerId, filters = {}) {
 
 function itemCard(item) {
   const condition = escapeHtml((item.condition || 'good').replace('_', ' '));
+  const isDonated = String(item.status || '').toLowerCase() === 'donated';
   return `
-    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block bg-white rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all group flex flex-col h-full no-underline text-inherit cursor-pointer">
+    <a href="item-detail.html?id=${item.id}" data-item-id="${item.id}" onclick="if(!event.target.closest('button,input,textarea,select,label')) window.location.href='item-detail.html?id=${item.id}'" class="block ${isDonated ? 'bg-slate-100 opacity-80 border-slate-300' : 'bg-white border-outline-variant'} rounded-xl overflow-hidden border hover:shadow-lg transition-all group flex flex-col h-full no-underline text-inherit cursor-pointer">
       <div class="relative aspect-square shrink-0 bg-surface-container-low">
         <span class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full text-[10px] font-bold text-primary z-10 capitalize">${condition}</span>
+        ${isDonated ? '<span class="absolute top-2 right-2 bg-slate-700 text-white px-2 py-0.5 rounded-full text-[10px] font-bold z-10">DONATED</span>' : ''}
           <img src="${escapeHtml(item.image_url || PLACEHOLDER_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMAGE}'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       </div>
       <div class="p-2.5 flex flex-col flex-grow">
@@ -1474,10 +1473,18 @@ async function completeDonation(itemId, requestId, btn) {
 }
 
 function renderItemDetail(item, isFallback = false) {
+  const isDonated = String(item.status || '').toLowerCase() === 'donated';
+  const statusChip = document.getElementById('detail-status-chip');
+  if (statusChip) {
+    statusChip.textContent = isDonated ? 'DONATED' : (item.condition || 'good').replace('_', ' ');
+    statusChip.className = isDonated
+      ? 'bg-slate-200 text-slate-700 border border-slate-300 px-3 py-1 rounded-full font-label-md text-label-sm'
+      : 'bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-label-sm';
+  }
+
   document.getElementById('detail-title').textContent = item.title || 'Item details';
   document.getElementById('detail-breadcrumb-current').textContent = item.title || 'Item details';
   document.getElementById('detail-category').textContent = item.category || 'Category';
-  document.getElementById('detail-status-chip').textContent = (item.condition || 'good').replace('_', ' ');
   document.getElementById('detail-description').textContent = item.description || 'No description provided yet.';
   document.getElementById('detail-location').textContent = item.location || 'Location shared after request is accepted.';
   document.getElementById('detail-owner').textContent = item.donor_name || 'ReValue member';
@@ -1516,25 +1523,49 @@ function renderItemDetail(item, isFallback = false) {
       editBtn.style.display = '';
     }
 
-    if (item.status === 'donated') {
+    if (isDonated) {
       editBtn.style.display = 'none';
       let doneBadge = document.getElementById('donation-complete-badge');
       if (!doneBadge) {
         doneBadge = document.createElement('div');
         doneBadge.id = 'donation-complete-badge';
-        doneBadge.className = 'w-full bg-green-50 text-green-700 border border-green-200 py-4 rounded-2xl font-headline-md text-headline-md flex items-center justify-center gap-2';
-        doneBadge.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Donation Completed';
+        doneBadge.className = 'w-full bg-slate-100 text-slate-700 border border-slate-200 py-4 rounded-2xl font-headline-md text-headline-md flex items-center justify-center gap-2';
+        doneBadge.innerHTML = '<span class="material-symbols-outlined">check_circle</span> DONATED';
         editBtn.parentNode.insertBefore(doneBadge, editBtn);
       }
     } else {
       loadOwnerRequests(item.id);
     }
   } else {
-    // Show request and message buttons for other users
-    if (requestBtn) requestBtn.style.display = '';
+    if (requestBtn) {
+      requestBtn.style.display = '';
+      requestBtn.disabled = isDonated;
+      requestBtn.textContent = isDonated ? 'DONATED' : 'Request Item';
+      requestBtn.className = isDonated
+        ? 'w-full bg-slate-200 text-slate-600 py-4 rounded-2xl font-headline-md text-headline-md cursor-not-allowed opacity-80'
+        : 'w-full bg-primary text-on-primary py-4 rounded-2xl font-headline-md text-headline-md shadow-lg shadow-primary/20 hover:scale-[1.01] transition-all Active:scale-95';
+      requestBtn.onclick = isDonated ? null : () => requestItem(item.id);
+    }
+
     if (messageDonorBtn && item.donor_id) {
-      messageDonorBtn.style.display = '';
-      messageDonorBtn.onclick = () => openMessageModal(item.donor_id, item.donor_name, item.id);
+      messageDonorBtn.style.display = isDonated ? 'none' : '';
+      if (!isDonated) {
+        messageDonorBtn.onclick = () => openMessageModal(item.donor_id, item.donor_name, item.id);
+      }
+    }
+
+    if (isDonated) {
+      const donatedNotice = document.getElementById('donated-item-note');
+      if (!donatedNotice) {
+        const note = document.createElement('div');
+        note.id = 'donated-item-note';
+        note.className = 'w-full bg-slate-100 border border-slate-200 text-slate-700 py-3 px-4 rounded-2xl text-sm font-semibold';
+        note.textContent = 'This item has already been successfully donated.';
+        requestBtn.parentNode.appendChild(note);
+      }
+    } else {
+      const donatedNotice = document.getElementById('donated-item-note');
+      if (donatedNotice) donatedNotice.remove();
     }
     
     // Hide edit button for non-owners

@@ -74,7 +74,7 @@ $recipientId = intval($request['requester_id']);
 $mysqli->begin_transaction();
 $ok = true;
 
-// Mark item as donated so it disappears from the live feed (browse defaults to status=approved)
+// Mark item as donated while keeping the original item visible as donation history
 $stmt = $mysqli->prepare("UPDATE items SET status = 'donated' WHERE id = ?");
 $stmt->bind_param("i", $itemId);
 $ok = $ok && $stmt->execute();
